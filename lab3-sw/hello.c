@@ -1,7 +1,10 @@
 /*
  * Userspace program that communicates with the vga_ball device driver
  * through ioctls
- * Amanda Jenkins (alj2155); Swapnil Banerjee (sb5041)
+ * Stephen A. Edwards
+ * Columbia University
+ * 
+ * Amanda Jenkins (alj2155); Swapnil Banerjee(sb5041)
  */
 
 #include <stdio.h>
@@ -10,46 +13,56 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <string.h>
 #include <unistd.h>
 
 int vga_ball_fd;
 
-void set_ball_position(int x, int y) {
+/* Read and print the background color */
+void print_background_color() {
   vga_ball_arg_t vla;
-  vla.position.x = x;
-  vla.position.y = y;
-  if (ioctl(vga_ball_fd, VGA_BALL_WRITE_POSITION, &vla)) {
-    perror("ioctl(VGA_BALL_WRITE_POSITION) failed");
+  if (ioctl(vga_ball_fd, VGA_BALL_READ_BACKGROUND, &vla)) {
+    perror("ioctl(VGA_BALL_READ_BACKGROUND) failed");
+    return;
+  }
+  printf("%02x %02x %02x\n",
+         vla.background.red, vla.background.green, vla.background.blue);
+}
+
+/* Set the background color */
+void set_background_color(const vga_ball_color_t *c) {
+  vga_ball_arg_t vla;
+  vla.background = *c;
+  if (ioctl(vga_ball_fd, VGA_BALL_WRITE_BACKGROUND, &vla)) {
+    perror("ioctl(VGA_BALL_SET_BACKGROUND) failed");
+    return;
   }
 }
 
-int main()
-{
+int main() {
+  vga_ball_arg_t vla;
   static const char filename[] = "/dev/vga_ball";
-  int x = 0;
-  int y = 240; // Fixed vertical center
-  int vx = 2;  // Move 2 pixels per frame
 
-  if ((vga_ball_fd = open(filename, O_RDWR)) == -1) {
-    perror("Could not open /dev/vga_ball");
-    return -1;
-  }
+  int x = 300;
+  int y = 300;
+  int vx = 1;
+  int vy = 1;
+  int r = 16;
+  int i = 0;
 
-  printf("VGA ball Userspace program started (Sideways Movement Only)\n");
+  static vga_ball_color_t colors[] = {
+    { 0xff, 0xb3, 0xba, 0x9f, 0x00, 0x9f, 0x00, 0x01 },
+    { 0xb3, 0xff, 0xb3, 0x9f, 0x00, 0x9f, 0x00, 0x01 },
+    { 0xb3, 0xd1, 0xff, 0x9f, 0x00, 0x9f, 0x00, 0x01 },
+    { 0xff, 0xf7, 0xb3, 0x9f, 0x00, 0x9f, 0x00, 0x01 },
+    { 0xd1, 0xb3, 0xff, 0x9f, 0x00, 0x9f, 0x00, 0x01 },
+    { 0xff, 0xc2, 0x99, 0x9f, 0x00, 0x9f, 0x00, 0x01 },
+    { 0xcc, 0xff, 0xff, 0x9f, 0x00, 0x9f, 0x00, 0x01 },
+    { 0xff, 0xff, 0xff, 0x9f, 0x00, 0x9f, 0x00, 0x01 },
+    { 0xe6, 0xe6, 0xfa, 0x9f, 0x00, 0x9f, 0x00, 0x01 }
+  };
+  #define COLORS 9
 
-  while (1) {
-    set_ball_position(x, y);
+  printf("VGA ball Userspace program started\n");
 
-    x += vx;
-
-    if (x >= 639 || x <= 0) {
-      vx = -vx; // Bounce off walls
-    }
-
-    usleep(10000); // Delay ~10 ms for smooth animation
-  }
-
-  close(vga_ball_fd);
-  printf("VGA ball Userspace program terminated\n");
-  return 0;
-}
+  if ((vga_ball_fd = open
