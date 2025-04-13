@@ -83,17 +83,17 @@ int main() {
     set_background_color(&colors[i % COLORS]);
 
     x += vx;
-    y += vy;
+    //y += vy;
 
     if (x - r <= 0 || x + r >= 639) {
       vx = -vx;
       if (r > 16) r--;
     }
 
-   // if (y - r <= 0 || y + r >= 479) {
-   //   vy = -vy;
-   //   if (r > 16) r--;
-   // }
+    if (y - r <= 0 || y + r >= 479) {
+      vy = -vy;
+      if (r > 16) r--;
+    }
 
     usleep(10000);
     i++;
