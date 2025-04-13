@@ -90,10 +90,10 @@ int main() {
       if (r > 16) r--;
     }
 
-    if (y - r <= 0 || y + r >= 479) {
-      vy = -vy;
-      if (r > 16) r--;
-    }
+   # if (y - r <= 0 || y + r >= 479) {
+   #   vy = -vy;
+   #   if (r > 16) r--;
+   # }
 
     usleep(10000);
     i++;
