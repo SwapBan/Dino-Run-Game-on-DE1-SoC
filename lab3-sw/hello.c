@@ -65,4 +65,40 @@ int main() {
 
   printf("VGA ball Userspace program started\n");
 
-  if ((vga_ball_fd = open
+  if ((vga_ball_fd = open(filename, O_RDWR)) == -1) {
+    fprintf(stderr, "could not open %s\n", filename);
+    return -1;
+  }
+
+  printf("initial state: ");
+  print_background_color();
+
+  while (1) {
+    colors[i % COLORS].x_down = x;
+    colors[i % COLORS].x_up = (x >> 5);
+    colors[i % COLORS].y_down = y;
+    colors[i % COLORS].y_up = (y >> 5);
+    colors[i % COLORS].red = r;
+
+    set_background_color(&colors[i % COLORS]);
+
+    x += vx;
+    y += vy;
+
+    if (x - r <= 0 || x + r >= 639) {
+      vx = -vx;
+      if (r > 16) r--;
+    }
+
+    if (y - r <= 0 || y + r >= 479) {
+      vy = -vy;
+      if (r > 16) r--;
+    }
+
+    usleep(10000);
+    i++;
+  }
+
+  printf("VGA BALL Userspace program terminating\n");
+  return 0;
+}
