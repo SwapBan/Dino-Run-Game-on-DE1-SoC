@@ -1,4 +1,3 @@
-
 DEPTH =  256;
 WIDTH = 16;
 ADDRESS_RADIX = HEX;
