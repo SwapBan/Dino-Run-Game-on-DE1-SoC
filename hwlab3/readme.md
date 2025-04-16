@@ -1,11 +1,16 @@
 /*
- * Simple VGA module that displays a Dino sprite at a fixed position
+ * VGA module with Avalon-MM interface and Dino sprite display
  * Author: Swapnil
  */
 
 module vga_ball(
     input logic         clk,
     input logic         reset,
+    input logic [31:0]  writedata,
+    input logic         write,
+    input               chipselect,
+    input logic [8:0]   address,
+
     output logic [7:0]  VGA_R, VGA_G, VGA_B,
     output logic        VGA_CLK, VGA_HS, VGA_VS,
                         VGA_BLANK_n,
@@ -22,14 +27,22 @@ module vga_ball(
    // VGA color output
    logic [7:0] a, b, c;
 
-   // Fixed position for Dino
-   localparam DINO_X = 100;
-   localparam DINO_Y = 100;
+   // Dino position controlled through Avalon-MM
+   logic [7:0] dino_x;
+   logic [7:0] dino_y;
 
    // Instantiate counters
-   vga_counters counters(.clk50(clk), .reset(reset), .hcount(hcount), .vcount(vcount),
-                         .VGA_CLK(VGA_CLK), .VGA_HS(VGA_HS), .VGA_VS(VGA_VS),
-                         .VGA_BLANK_n(VGA_BLANK_n), .VGA_SYNC_n(VGA_SYNC_n));
+   vga_counters counters(
+       .clk50(clk),
+       .reset(reset),
+       .hcount(hcount),
+       .vcount(vcount),
+       .VGA_CLK(VGA_CLK),
+       .VGA_HS(VGA_HS),
+       .VGA_VS(VGA_VS),
+       .VGA_BLANK_n(VGA_BLANK_n),
+       .VGA_SYNC_n(VGA_SYNC_n)
+   );
 
    // Instantiate Dino ROM (make sure this points to your MIF-backed ROM)
    dino_sprite_rom dino_rom(
@@ -39,14 +52,25 @@ module vga_ball(
    );
 
    always_ff @(posedge clk) begin
-      if (VGA_BLANK_n) begin
-         if (hcount >= DINO_X && hcount < DINO_X + 32 && vcount >= DINO_Y && vcount < DINO_Y + 32) begin
-            dino_sprite_addr <= (hcount - DINO_X) / 2 + ((vcount - DINO_Y) * 16);
+      if (reset) begin
+         dino_x <= 8'd100;
+         dino_y <= 8'd100;
+         a <= 8'hFF;
+         b <= 8'hFF;
+         c <= 8'hFF;
+      end else if (chipselect && write) begin
+         case (address)
+            9'd0: dino_x <= writedata[7:0];
+            9'd1: dino_y <= writedata[7:0];
+         endcase
+      end else if (VGA_BLANK_n) begin
+         if (hcount >= dino_x && hcount < dino_x + 32 && vcount >= dino_y && vcount < dino_y + 32) begin
+            dino_sprite_addr <= (hcount - dino_x) + ((vcount - dino_y) * 32);
             a <= {dino_sprite_output[15:11], 3'b000};
             b <= {dino_sprite_output[10:5],  2'b00};
             c <= {dino_sprite_output[4:0],   3'b000};
          end else begin
-            a <= 8'hFF; // white background
+            a <= 8'hFF;
             b <= 8'hFF;
             c <= 8'hFF;
          end
