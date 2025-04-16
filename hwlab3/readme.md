@@ -51,6 +51,7 @@ Error (12006): Node instance "dino_rom" instantiates undefined entity "dino_spri
 \
 
 
-scp as7525@micro31.ee.columbia.edu:lab4-hw/output_files/soc_system.rbf /mnt
+scp as7525@micro31.ee.columbia.edu:lab3-hw/output_files/soc_system.rbf /mnt
+scp as7525@micro31.ee.columbia.edu:lab4-hw/soc_system.dtb /mnt
 
 
