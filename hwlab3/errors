@@ -47,3 +47,44 @@ Error (11802): Can't fit design in device. Modify your design to reduce resource
 Error (10852): Verilog HDL error at dino_sprite.hex(1): illegal character 'x' in hexadecimal number File: /homes/user/stud/spring25/as7525/Music/lab4-hw/dino_sprite.hex Line: 1
 Error (10170): Verilog HDL syntax error at dino_sprite.hex(1) near text: x. Check for and fix any syntax errors that appear immediately before or at the specified keyword. The Intel FPGA Knowledge Database contains many articles with specific details on how to resolve this error. Visit the Knowledge Database at https://www.altera.com/support/support-resources/knowledge-base/search.html and search for this specific error message number. File: /homes/user/stud/spring25/as7525/Music/lab4-hw/dino_sprite.hex Line: 1
 Error (12152): Can't elaborate user hierarchy "soc_system:soc_system0|vga_ball:vga_ball_0|dino_sprite_rom:dino_rom" File: /homes/user/stud/spring25/as7525/Music/lab4-hw/soc_system/synthesis/submodules/vga_ball.sv Line: 52
+
+
+
+
+
+
+
+
+
+
+Internal Error: Sub-system: CUT, File: /quartus/db/cut/cut_util.cpp, Line: 1325
+Cannot load library libdb_bpm.so: libdb_bpm.so: cannot open shared object file: No such file or directory
+Stack Trace:
+   0x48901b: CUT_UTIL::get_boundary_port_manager(bool) + 0x9b (db_cut)
+    0xd758f: QTK_PR_UTILITY_IMPL::QTK_PR_UTILITY_IMPL() + 0x6f (db_qtk)
+    0xd85c3: QTK_PR_UTILITY::get_instance(bool) + 0xa3 (db_qtk)
+    0x8170e: qtk_db_util_delete_incremental_db + 0x26e (db_qtk)
+    0x7cc2a: pjc_project_new(Tcl_Interp*, char const*, char const*, char const*, bool, char const*, char const*, char const*, bool) + 0x7da (sys_pjc)
+    0x7da5c: pjc_project_new20 + 0x15d (sys_pjc)
+    0x48119: TclInvokeStringCommand + 0x79 (tcl8.6)
+    0x4c987: TclNRRunCallbacks + 0x47 (tcl8.6)
+    0x4e1da: TclEvalEx + 0x96a (tcl8.6)
+    0xf68d6: Tcl_FSEvalFileEx + 0x266 (tcl8.6)
+    0xf69de: Tcl_EvalFile + 0x2e (tcl8.6)
+    0x11aa0: qexe_evaluate_tcl_script(std::string const&) + 0x3c9 (comp_qexe)
+    0x1703d: qexe_do_tcl(QEXE_FRAMEWORK*, std::string const&, std::string const&, std::list<std::string, std::allocator<std::string> > const&, bool, bool) + 0x824 (comp_qexe)
+    0x1ac16: qexe_standard_main(QEXE_FRAMEWORK*, QEXE_OPTION_DEFINITION const**, int, char const**) + 0x297 (comp_qexe)
+     0x2975: qsh_main(int, char const**) + 0x69 (quartus_sh)
+    0x3ee30: msg_main_thread(void*) + 0x10 (ccl_msg)
+     0x5acc: thr_final_wrapper + 0xc (ccl_thr)
+    0x3eeef: msg_thread_wrapper(void* (*)(void*), void*) + 0x62 (ccl_msg)
+     0x9f9c: mem_thread_wrapper(void* (*)(void*), void*) + 0x5c (ccl_mem)
+     0x8b39: err_thread_wrapper(void* (*)(void*), void*) + 0x27 (ccl_err)
+     0x5b0f: thr_thread_wrapper + 0x15 (ccl_thr)
+    0x40ea1: msg_exe_main(int, char const**, int (*)(int, char const**)) + 0xb2 (ccl_msg)
+     0x98cb: main + 0x26 (quartus_sh)
+    0x3a7e5: __libc_start_main + 0xe5 (c.so.6)
+
+
+End-trace
+
