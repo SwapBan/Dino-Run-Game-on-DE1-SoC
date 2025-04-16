@@ -1,3 +1,7 @@
+CFLAGS = -Wall
+
+OBJECTS = lab2.o fbputchar.o usbkeyboard.o
+
 SYSTEM = soc_system
 
 TCL = $(SYSTEM).tcl
@@ -46,8 +50,21 @@ TARFILES = Makefile \
 	ip/intr_capturer/intr_capturer.v \
 	ip/intr_capturer/intr_capturer_hw.tcl \
 	vga_ball.sv
+	usbkeyboard.h
+	usbkeyboard.c
 
 TARFILE = lab3-hw.tar.gz
+
+lab2 : $(OBJECTS)
+	cc $(CFLAGS) -o lab2 $(OBJECTS) -lusb-1.0 -pthread
+
+lab2.o : lab2.c fbputchar.h usbkeyboard.h
+fbputchar.o : fbputchar.c fbputchar.h
+usbkeyboard.o : usbkeyboard.c usbkeyboard.h
+
+.PHONY : clean
+clean :
+	rm -rf *.o lab2
 
 # project
 #
