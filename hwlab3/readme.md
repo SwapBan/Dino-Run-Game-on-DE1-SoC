@@ -43,3 +43,6 @@ module dino_sprite_rom (
 endmodule
 
 
+Error (12006): Node instance "dino_rom" instantiates undefined entity "dino_sprite_rom". Ensure that required library paths are specified correctly, define the specified entity, or change the instantiation. If this entity represents Intel FPGA or third-party IP, generate the synthesis files for the IP. File: /homes/user/stud/spring25/as7525/Music/lab3-hw/soc_system/synthesis/submodules/vga_ball.sv Line: 52
+
+
