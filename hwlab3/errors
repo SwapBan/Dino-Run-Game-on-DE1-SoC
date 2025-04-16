@@ -31,3 +31,10 @@ endmodule
 
 Error (10170): Verilog HDL syntax error at dino_sprite.hex(1) near text: :. Check for and fix any syntax errors that appear immediately before or at the specified keyword. The Intel FPGA Knowledge Database contains many articles with specific details on how to resolve this error. Visit the Knowledge Database at https://www.altera.com/support/support-resources/knowledge-base/search.html and search for this specific error message number. File: /homes/user/stud/spring25/as7525/Music/lab3-hw/dino_sprite.hex Line: 1
 Error (12152): Can't elaborate user hierarchy "soc_system:soc_system0|vga_ball:vga_ball_0|dino_sprite_rom:dino_rom" File: /homes/user/stud/spring25/as7525/Music/lab3-hw/soc_system/synthesis/submodules/vga_ball.sv Line: 52
+
+
+
+Error (174068): Output buffer atom "soc_system:soc_system0|soc_system_hps_0:hps_0|soc_system_hps_0_hps_io:hps_io|soc_system_hps_0_hps_io_border:border|hps_sdram:hps_sdram_inst|hps_sdram_p0:p0|hps_sdram_p0_acv_hard_memphy:umemphy|hps_sdram_p0_acv_hard_io_pads:uio_pads|hps_sdram_p0_altdqdqs:dq_ddio[3].ubidir_dq_dqs|altdq_dqs2_acv_connect_to_hard_phy_cyclonev:altdq_dqs2_inst|obuf_os_0" has port "PARALLELTERMINATIONCONTROL[15]" connected, but does not use calibrated on-chip termination File: /homes/user/stud/spring25/as7525/Music/lab3-hw/soc_system/synthesis/submodules/altdq_dqs2_acv_connect_to_hard_phy_cyclonev.sv Line: 1671
+
+
+Error (11802): Can't fit design in device. Modify your design to reduce resources, or choose a larger device. The Intel FPGA Knowledge Database contains many articles with specific details on how to resolve this error. Visit the Knowledge Database at https://www.altera.com/support/support-resources/knowledge-base/search.html and search for this specific error message number.
