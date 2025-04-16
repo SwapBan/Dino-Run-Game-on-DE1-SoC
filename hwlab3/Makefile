@@ -58,8 +58,8 @@ TARFILE = lab3-hw.tar.gz
 lab2 : $(OBJECTS)
 	cc $(CFLAGS) -o lab2 $(OBJECTS) -lusb-1.0 -pthread
 
-lab2.o : lab2.c fbputchar.h usbkeyboard.h
-fbputchar.o : fbputchar.c fbputchar.h
+lab2.o : lab2.c  usbkeyboard.h
+
 usbkeyboard.o : usbkeyboard.c usbkeyboard.h
 
 .PHONY : clean
