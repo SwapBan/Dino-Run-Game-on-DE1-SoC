@@ -1,0 +1,8 @@
+Increased Difficulty (Speed and Obstacles)
+Hardware Timers: Use the on-chip timers on the DE1-SoC to control the speed of the game. You can dynamically increase the speed of the obstacles by adjusting the timer intervals based on the player’s score.
+
+Increase the difficulty by adjusting obstacle speeds using hardware counters to simulate progressive difficulty.
+
+
+Power-Ups and Special Abilities
+For power-ups, you could implement them with hardware logic to modify the dino's properties (e.g., make it invincible for a short period) when the player collects a power-up. Implement collision detection for power-ups using FPGA-based comparators.
