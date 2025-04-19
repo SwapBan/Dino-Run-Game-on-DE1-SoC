@@ -4,7 +4,7 @@ module dino_sprite_rom (
     output logic [15:0] data
 );
 
-    logic [15:0] memory [0:255];
+    logic [15:0] memory [0:1023];
 
     initial begin
         $readmemh("dino_sprite.hex", memory);
