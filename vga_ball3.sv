@@ -125,11 +125,11 @@ module vga_ball(
     //   .address(dino_sprite_addr),
      //  .data(dino_sprite_output)
    //);
-   dino_powerup_rom powerup_rom(
-       .clk(clk),
-       .address(dino_sprite_addr),
-       .data(dino_sprite_output)
-   );
+ //  dino_powerup_rom powerup_rom(
+  //     .clk(clk),
+//       .address(dino_sprite_addr),
+//       .data(dino_sprite_output)
+//   );
    //dino_pterodactyl_rom pterodactyl_rom(
     //   .clk(clk),
     //   .address(dino_sprite_addr),
