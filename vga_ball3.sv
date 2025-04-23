@@ -67,6 +67,10 @@ module vga_ball(
    logic [7:0] s_cac_x;
    logic [7:0] s_cac_y;
 
+    //dead position controlled through Avalon-MM
+//    logic [7:0] dead_x;
+ //   logic [7:0] dead_y;
+
 // Godzilla position controlled through Avalon-MM
    logic [7:0] godzilla_x;
    logic [7:0] godzilla_y;
@@ -143,8 +147,8 @@ module vga_ball(
         jump_y <= 8'd150;      // Start Jump sprite at y = 150
         duck_x <= 8'd300;      // Start Duck sprite at x = 300
         duck_y <= 8'd200;      // Start Duck sprite at y = 200
-         dead_x <= 8'd400;      // Start Dead sprite at x = 400
-        dead_y <= 8'd500;      // Start Dead sprite at y = 500
+        // dead_x <= 8'd400;      // Start Dead sprite at x = 400
+     //   dead_y <= 8'd500;      // Start Dead sprite at y = 500
         s_cac_x <= 8'd500;     // Start Small Cactus sprite at x = 500
         s_cac_y <= 8'd100;     // Start Small Cactus sprite at y = 100
          godzilla_x <= 8'd100;     // Start Godzilla sprite at x = 100
