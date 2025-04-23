@@ -43,7 +43,10 @@ module vga_ball(
 // Small Cactus sprite ROM
    logic [15:0] scac_sprite_output;
    logic [9:0]  scac_sprite_addr;
-
+    
+// Godzilla sprite ROM
+    logic [15:0] godzilla_sprite_output;
+    logic [9:0]  godzilla_sprite_addr;
 
    // VGA color output
    logic [7:0] a, b, c;
