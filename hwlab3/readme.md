@@ -55,4 +55,6 @@ scp as7525@micro31.ee.columbia.edu:lab3-hw/output_files/soc_system.rbf /mnt
 scp as7525@micro31.ee.columbia.edu:lab4-hw/soc_system.dtb /mnt
 scp as7525@micro31.ee.columbia.edu:lab4-hw/output_files/soc_system.rbf /mnt
 
+scp as7525@micro15.ee.columbia.edu:lab5-hw/output_files/soc_system.rbf /mnt
 
+scp as7525@micro15.ee.columbia.edu:lab5-hw/soc_system.dtb /mnt
