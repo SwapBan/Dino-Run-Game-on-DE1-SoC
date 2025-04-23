@@ -50,7 +50,7 @@ module vga_ball(
 
    // VGA color output
    logic [7:0] a, b, c;
-
+   logic [7:0] d, e, f;
    // Dino position controlled through Avalon-MM
    logic [7:0] dino_x;
    logic [7:0] dino_y;
@@ -156,6 +156,9 @@ module vga_ball(
          a <= 8'hFF;
          b <= 8'hFF;
          c <= 8'hFF;
+         d <= 8'hFF;
+         e <= 8'hFF;
+         f <= 8'hFF;
       end else if (chipselect && write) begin
          case (address)
             9'd0: dino_x <= writedata[7:0];
@@ -171,23 +174,30 @@ module vga_ball(
          endcase
       end else if (VGA_BLANK_n) begin
          if (hcount >= dino_x && hcount < dino_x + 32 && vcount >= dino_y && vcount < dino_y + 32) begin
-            dino_sprite_addr <= ((hcount - dino_x) * 32) + ((vcount - dino_y) * 32);
+           // dino_sprite_addr <= (hcount - dino_x)  + ((vcount - dino_y) * 32);
+            dino_sprite_addr <= ((vcount - dino_y) * 32) + (hcount - dino_x);
+
             a <= {dino_sprite_output[15:11], 3'b000};
             b <= {dino_sprite_output[10:5],  2'b00};
             c <= {dino_sprite_output[4:0],   3'b000};
          end
           // Small Cactus sprite
            if (hcount >= s_cac_x && hcount < s_cac_x + 32 && vcount >= s_cac_y && vcount < s_cac_y + 32) begin
-             scac_sprite_addr <= ((hcount - s_cac_x) * 32) + ((vcount - s_cac_y) * 32);
-             a <= {scac_sprite_output[15:11], 3'b000};
-             b <= {scac_sprite_output[10:5],  2'b00};
-             c <= {scac_sprite_output[4:0],   3'b000};
+            // scac_sprite_addr <= (hcount - s_cac_x)  + ((vcount - s_cac_y) * 32);
+            scac_sprite_addr <= ((vcount - s_cac_y) * 32) + (hcount - s_cac_x);
+
+             d <= {scac_sprite_output[15:11], 3'b000};
+             e <= {scac_sprite_output[10:5],  2'b00};
+             f <= {scac_sprite_output[4:0],   3'b000};
           
          
          end else begin
             a <= 8'hFF;
             b <= 8'hFF;
             c <= 8'hFF;
+            d <= 8'hFF;
+            e <= 8'hFF;
+            f <= 8'hFF;
          end
       end
    end
