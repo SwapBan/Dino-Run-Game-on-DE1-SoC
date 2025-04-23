@@ -182,7 +182,7 @@ module vga_ball(
          a <= {scac_sprite_output[15:11], 3'b000};
          b <= {scac_sprite_output[10:5],  2'b00};
          c <= {scac_sprite_output[4:0],   3'b000};
-      end
+      
          
          end else begin
             a <= 8'hFF;
