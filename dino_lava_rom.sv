@@ -7,7 +7,7 @@ module dino_sprite_rom (
     logic [15:0] memory [0:1023];
 
     initial begin
-        $readmemh("dino_sprite.hex", memory);
+        $readmemh("lava_sprite.hex", memory);
     end
 
     always_ff @(posedge clk) begin
