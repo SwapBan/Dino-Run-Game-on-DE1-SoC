@@ -176,11 +176,13 @@ module vga_ball(
             b <= {dino_sprite_output[10:5],  2'b00};
             c <= {dino_sprite_output[4:0],   3'b000};
          end
-         if (hcount >= dino_x && hcount < dino_x + 32 && vcount >= dino_y && vcount < dino_y + 32) begin
-            dino_sprite_addr <= (hcount - dino_x) + ((vcount - dino_y) * 32);
-            a <= {dino_sprite_output[15:11], 3'b000};
-            b <= {dino_sprite_output[10:5],  2'b00};
-            c <= {dino_sprite_output[4:0],   3'b000};
+          // Small Cactus sprite
+      else if (hcount >= s_cac_x && hcount < s_cac_x + 32 && vcount >= s_cac_y && vcount < s_cac_y + 32) begin
+         scac_sprite_addr <= (hcount - s_cac_x) + ((vcount - s_cac_y) * 32);
+         a <= {scac_sprite_output[15:11], 3'b000};
+         b <= {scac_sprite_output[10:5],  2'b00};
+         c <= {scac_sprite_output[4:0],   3'b000};
+      end
          
          end else begin
             a <= 8'hFF;
