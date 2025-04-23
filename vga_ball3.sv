@@ -50,7 +50,7 @@ module vga_ball(
 
    // VGA color output
    logic [7:0] a, b, c;
-   logic [7:0] d, e, f;
+
    // Dino position controlled through Avalon-MM
    logic [7:0] dino_x;
    logic [7:0] dino_y;
@@ -186,18 +186,16 @@ module vga_ball(
             scac_sprite_addr <= (hcount - s_cac_x)  + ((vcount - s_cac_y) * 32);
             //scac_sprite_addr <= ((vcount - s_cac_y) * 32) + (hcount - s_cac_x);
 
-             d <= {scac_sprite_output[15:11], 3'b000};
-             e <= {scac_sprite_output[10:5],  2'b00};
-             f <= {scac_sprite_output[4:0],   3'b000};
+             a <= {scac_sprite_output[15:11], 3'b000};
+             b <= {scac_sprite_output[10:5],  2'b00};
+             c <= {scac_sprite_output[4:0],   3'b000};
           
          
          end else begin
             a <= 8'hFF;
             b <= 8'hFF;
             c <= 8'hFF;
-            d <= 8'hFF;
-            e <= 8'hFF;
-            f <= 8'hFF;
+            
          end
       end
    end
