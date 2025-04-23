@@ -100,11 +100,11 @@ module vga_ball(
        .address(duck_sprite_addr),
        .data(duck_sprite_output)
    );
-   dino_dead_rom dead_rom(
-       .clk(clk),
-       .address(dead_sprite_addr),
-       .data(dead_sprite_output)
-   );
+ //  dino_dead_rom dead_rom(
+ //      .clk(clk),
+ //      .address(dead_sprite_addr),
+ //      .data(dead_sprite_output)
+  // );
    dino_godzilla_rom godzilla_rom(
        .clk(clk),
        .address(godzilla_sprite_addr),
