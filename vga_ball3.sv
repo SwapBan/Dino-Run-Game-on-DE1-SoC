@@ -26,12 +26,47 @@ module vga_ball(
    logic [15:0] dino_sprite_output;
    logic [9:0]  dino_sprite_addr;
 
+ // Jump sprite ROM
+   logic [15:0] jump_sprite_output;
+   logic [9:0]  jump_sprite_addr;
+
+// Duck sprite ROM
+   logic [15:0] duck_sprite_output;
+   logic [9:0]  duck_sprite_addr;
+
+
+// Dead sprite ROM
+   logic [15:0] dead_sprite_output;
+   logic [9:0]  dead_sprite_addr;
+
+
+// Small Cactus sprite ROM
+   logic [15:0] scac_sprite_output;
+   logic [9:0]  scac_sprite_addr;
+
+
    // VGA color output
    logic [7:0] a, b, c;
 
    // Dino position controlled through Avalon-MM
    logic [7:0] dino_x;
    logic [7:0] dino_y;
+
+    // Jump position controlled through Avalon-MM
+   logic [7:0] jump_x;
+   logic [7:0] jump_y;
+
+    // Duck position controlled through Avalon-MM
+   logic [7:0] duck_x;
+   logic [7:0] duck_y;
+
+//cactus position controlled through Avalon-MM
+   logic [7:0] s_cac_x;
+   logic [7:0] s_cac_y;
+
+// Godzilla position controlled through Avalon-MM
+   logic [7:0] godzilla_x;
+   logic [7:0] godzilla_y;
 
    // Instantiate counters
    vga_counters counters(
@@ -54,53 +89,63 @@ module vga_ball(
    );
    dino_jump_rom jump_rom(
        .clk(clk),
-       .address(dino_sprite_addr),
-       .data(dino_sprite_output)
+       .address(jump_sprite_addr),
+       .data(jump_sprite_output)
    );
     dino_duck_rom duck_rom(
        .clk(clk),
-       .address(dino_sprite_addr),
-       .data(dino_sprite_output)
+       .address(duck_sprite_addr),
+       .data(duck_sprite_output)
    );
    dino_dead_rom dead_rom(
        .clk(clk),
-       .address(dino_sprite_addr),
-       .data(dino_sprite_output)
+       .address(dead_sprite_addr),
+       .data(dead_sprite_output)
    );
    dino_godzilla_rom godzilla_rom(
        .clk(clk),
-       .address(dino_sprite_addr),
-       .data(dino_sprite_output)
+       .address(godzilla_sprite_addr),
+       .data(godzilla_sprite_output)
    );
-   dino_small_cactus_rom s_cac_rom(
+   dino_s_cac_rom s_cac_rom(
        .clk(clk),
-       .address(dino_sprite_addr),
-       .data(dino_sprite_output)
+       .address(scac_sprite_addr),
+       .data(scac_sprite_output)
    );
-   dino_cac_tog_rom cac_tog_rom(
-       .clk(clk),
-       .address(dino_sprite_addr),
-       .data(dino_sprite_output)
-   );
-   dino_lava_rom lava_rom(
-       .clk(clk),
-       .address(dino_sprite_addr),
-       .data(dino_sprite_output)
-   );
+  // dino_cac_tog_rom cac_tog_rom(
+   //    .clk(clk),
+   //    .address(dino_sprite_addr),
+   //    .data(dino_sprite_output)
+   //);
+  // dino_lava_rom lava_rom(
+   //    .clk(clk),
+    //   .address(dino_sprite_addr),
+     //  .data(dino_sprite_output)
+   //);
    dino_powerup_rom powerup_rom(
        .clk(clk),
        .address(dino_sprite_addr),
        .data(dino_sprite_output)
    );
-   dino_pterodactyl_rom pterodactyl_rom(
-       .clk(clk),
-       .address(dino_sprite_addr),
-       .data(dino_sprite_output)
-   );
+   //dino_pterodactyl_rom pterodactyl_rom(
+    //   .clk(clk),
+    //   .address(dino_sprite_addr),
+     //  .data(dino_sprite_output)
+   //);
    always_ff @(posedge clk) begin
       if (reset) begin
          dino_x <= 8'd100;
          dino_y <= 8'd100;
+         jump_x <= 8'd200;      // Start Jump sprite at x = 200
+        jump_y <= 8'd150;      // Start Jump sprite at y = 150
+        duck_x <= 8'd300;      // Start Duck sprite at x = 300
+        duck_y <= 8'd200;      // Start Duck sprite at y = 200
+         dead_x <= 8'd400;      // Start Dead sprite at x = 400
+        dead_y <= 8'd500;      // Start Dead sprite at y = 500
+        s_cac_x <= 8'd500;     // Start Small Cactus sprite at x = 500
+        s_cac_y <= 8'd100;     // Start Small Cactus sprite at y = 100
+         godzilla_x <= 8'd100;     // Start Godzilla sprite at x = 100
+        godzilla_y <= 8'd260;     // Start Godzilla sprite at y = 260
          a <= 8'hFF;
          b <= 8'hFF;
          c <= 8'hFF;
@@ -108,6 +153,14 @@ module vga_ball(
          case (address)
             9'd0: dino_x <= writedata[7:0];
             9'd1: dino_y <= writedata[7:0];
+            9'd2: jump_x <= writedata[7:0];   // Update Jump sprite's x position
+            9'd3: jump_y <= writedata[7:0];   // Update Jump sprite's y position
+            9'd4: duck_x <= writedata[7:0];   // Update Duck sprite's x position
+            9'd5: duck_y <= writedata[7:0];   // Update Duck sprite's y position
+            9'd6: s_cac_x <= writedata[7:0];  // Update Small Cactus sprite's x position
+            9'd7: s_cac_y <= writedata[7:0];  // Update Small Cactus
+            9'd8: godzilla_x <= writedata[7:0];  // Update godzilla sprite's x position
+            9'd9: godzilla_y <= writedata[7:0];  // Update godzilla Cactus
          endcase
       end else if (VGA_BLANK_n) begin
          if (hcount >= dino_x && hcount < dino_x + 32 && vcount >= dino_y && vcount < dino_y + 32) begin
