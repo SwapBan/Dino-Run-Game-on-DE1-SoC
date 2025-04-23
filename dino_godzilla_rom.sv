@@ -1,4 +1,4 @@
-module dino_sprite_rom (
+module dino_godzilla_rom (
     input  logic        clk,
     input  logic [9:0]  address,
     output logic [15:0] data
