@@ -177,7 +177,7 @@ module vga_ball(
            if (hcount >= score_x && hcount < score_x + 8 &&  // First digit
     vcount >= score_y && vcount < score_y + 10) begin
     // Address for 0th digit (first digit)
-    score_sprite_addr_0 <= ((vcount - score_y) * 8) + (hcount - score_x);
+    score_sprite_addr_0 <= (hcount - score_x) + ((vcount - score_y) * 8);
     a <= {score_font_0[31:24], 3'b000};  // Update the color to black
     b <= {score_font_0[23:16], 2'b00};
     c <= {score_font_0[15:8], 3'b000};
@@ -186,7 +186,7 @@ end
 if (hcount >= score_x + 9 && hcount < score_x + 17 &&  // Second digit
     vcount >= score_y && vcount < score_y + 10) begin
     // Address for 1st digit (second digit)
-    score_sprite_addr_1 <= ((vcount - score_y) * 8) + (hcount - (score_x + 9));
+    score_sprite_addr_1 <= (hcount - (score_x + 9)) + ((vcount - score_y) * 8) ;
     a <= {score_font_1[31:24], 3'b000};
     b <= {score_font_1[23:16], 2'b00};
     c <= {score_font_1[15:8], 3'b000};
@@ -195,7 +195,7 @@ end
 if (hcount >= score_x + 18 && hcount < score_x + 26 &&  // Third digit
     vcount >= score_y && vcount < score_y + 10) begin
     // Address for 2nd digit (third digit)
-    score_sprite_addr_2 <= ((vcount - score_y) * 8) + (hcount - (score_x + 18));
+    score_sprite_addr_2 <= (hcount - (score_x + 18)) + ((vcount - score_y) * 8);
     a <= {score_font_2[31:24], 3'b000};
     b <= {score_font_2[23:16], 2'b00};
     c <= {score_font_2[15:8], 3'b000};
