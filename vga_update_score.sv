@@ -104,8 +104,9 @@ module vga_ball(
             s_cac_x <= 8'd500;  s_cac_y <= 8'd100;
             godzilla_x <= 8'd100; godzilla_y <= 8'd260;
 
-            score_x <= 8'd1184;   // Position the score at the top-left corner
-            score_y <= 8'd448;   // Position the score at the top-left corner
+            score_x <= 8'd100;  // Place it in the middle or top-left corner
+            score_y <= 8'd20;   // Adjust as needed
+   // Position the score at the top-left corner
             score_digits[0] <= 4'd0;  // Initialize score to 0
             score_digits[1] <= 4'd0;
             score_digits[2] <= 4'd0;
