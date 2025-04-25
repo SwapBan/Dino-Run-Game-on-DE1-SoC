@@ -122,6 +122,8 @@ module vga_ball(
                 9'd7: s_cac_y <= writedata[7:0];
                 9'd8: godzilla_x <= writedata[7:0];
                 9'd9: godzilla_y <= writedata[7:0];
+                9'd10: score_x <= writedata[7:0];
+                9'd11: score_y <= writedata[7:0];
             endcase
         end else if (VGA_BLANK_n) begin
             a <= 8'hFF; b <= 8'hFF; c <= 8'hFF;
