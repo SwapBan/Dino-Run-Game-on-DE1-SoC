@@ -35,7 +35,8 @@ module vga_ball(
     logic [7:0] score_x, score_y;    // Position of the score on the screen
 
     // === Font and Address for Score ===
-    logic [15:0] score_font_0, score_font_1, score_font_2; // Font for each digit
+    //logic [15:0] score_font_0, score_font_1, score_font_2; // Font for each digit
+    logic [31:0] score_font_0, score_font_1, score_font_2; // Font for each digit
     logic [9:0] score_sprite_addr_0, score_sprite_addr_1, score_sprite_addr_2; // Address for each digit
 
     // === Frame counter and sprite state ===
