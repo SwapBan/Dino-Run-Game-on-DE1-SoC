@@ -174,7 +174,7 @@ module vga_ball(
             end
 
             // Display Score (3 digits)
-          // First digit
+// First digit
 if (hcount >= score_x && hcount < score_x + 16 &&
     vcount >= score_y && vcount < score_y + 20) begin
     // Address for 0th digit (first digit)
