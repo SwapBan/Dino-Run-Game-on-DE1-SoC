@@ -34,6 +34,10 @@ module vga_ball(
     logic [3:0] score_digits [2:0];  // Array to hold 3 digits
     logic [7:0] score_x, score_y;    // Position of the score on the screen
 
+    // === Font and Address for Score ===
+    logic [15:0] score_font_0, score_font_1, score_font_2; // Font for each digit
+    logic [9:0] score_sprite_addr_0, score_sprite_addr_1, score_sprite_addr_2; // Address for each digit
+
     // === Frame counter and sprite state ===
     logic [23:0] frame_counter;
     logic [1:0] sprite_state;
@@ -75,10 +79,10 @@ module vga_ball(
     dino_godzilla_rom godzilla_rom(.clk(clk), .address(godzilla_sprite_addr), .data(godzilla_sprite_output));
     dino_s_cac_rom s_cac_rom(.clk(clk), .address(scac_sprite_addr), .data(scac_sprite_output));
 
-    // === Score Font ROM (Each digit 5x7 font) ===
-    font_rom font_rom_0(.clk(clk), .address(score_digits[0]), .data(score_font_0)); // 0th digit
-    font_rom font_rom_1(.clk(clk), .address(score_digits[1]), .data(score_font_1)); // 1st digit
-    font_rom font_rom_2(.clk(clk), .address(score_digits[2]), .data(score_font_2)); // 2nd digit
+    // === Font ROMs for score digits ===
+    font_rom font_rom_0(.clk(clk), .address(score_sprite_addr_0), .data(score_font_0));
+    font_rom font_rom_1(.clk(clk), .address(score_sprite_addr_1), .data(score_font_1));
+    font_rom font_rom_2(.clk(clk), .address(score_sprite_addr_2), .data(score_font_2));
 
     // === CHOOSE CURRENT DINO SPRITE BASED ON STATE ===
     always_comb begin
@@ -158,14 +162,41 @@ module vga_ball(
                 c <= {scac_sprite_output[4:0],   3'b000};
             end
 
+            // Display Godzilla
+            if (hcount >= godzilla_x && hcount < godzilla_x + 32 &&
+                vcount >= godzilla_y && vcount < godzilla_y + 32) begin
+                godzilla_sprite_addr <= (hcount - godzilla_x) + ((vcount - godzilla_y) * 32);
+                a <= {godzilla_sprite_output[15:11], 3'b000};
+                b <= {godzilla_sprite_output[10:5],  2'b00};
+                c <= {godzilla_sprite_output[4:0],   3'b000};
+            end
+
             // Display Score (3 digits)
             if (hcount >= score_x && hcount < score_x + 5 &&
                 vcount >= score_y && vcount < score_y + 7) begin
                 // 0th digit (first digit)
-                score_digit_addr <= (hcount - score_x) + ((vcount - score_y) * 5);
+                score_sprite_addr_0 <= (hcount - score_x) + ((vcount - score_y) * 5);
                 a <= {score_font_0[15:11], 3'b000};
                 b <= {score_font_0[10:5],  2'b00};
                 c <= {score_font_0[4:0],   3'b000};
+            end
+
+            if (hcount >= score_x + 6 && hcount < score_x + 11 &&
+                vcount >= score_y && vcount < score_y + 7) begin
+                // 1st digit (second digit)
+                score_sprite_addr_1 <= (hcount - (score_x + 6)) + ((vcount - score_y) * 5);
+                a <= {score_font_1[15:11], 3'b000};
+                b <= {score_font_1[10:5],  2'b00};
+                c <= {score_font_1[4:0],   3'b000};
+            end
+
+            if (hcount >= score_x + 12 && hcount < score_x + 17 &&
+                vcount >= score_y && vcount < score_y + 7) begin
+                // 2nd digit (third digit)
+                score_sprite_addr_2 <= (hcount - (score_x + 12)) + ((vcount - score_y) * 5);
+                a <= {score_font_2[15:11], 3'b000};
+                b <= {score_font_2[10:5],  2'b00};
+                c <= {score_font_2[4:0],   3'b000};
             end
         end
     end
@@ -173,4 +204,3 @@ module vga_ball(
     assign {VGA_R, VGA_G, VGA_B} = {a, b, c};
 
 endmodule
-
