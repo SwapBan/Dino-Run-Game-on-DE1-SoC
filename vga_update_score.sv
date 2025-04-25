@@ -177,7 +177,9 @@ module vga_ball(
             if (hcount >= score_x && hcount < score_x + 5 &&
                 vcount >= score_y && vcount < score_y + 7) begin
                 // 0th digit (first digit)
-                score_sprite_addr_0 <= (hcount - score_x) + ((vcount - score_y) * 5);
+                //score_sprite_addr_0 <= (hcount - score_x) + ((vcount - score_y) * 5);
+                score_sprite_addr_0 <= ((vcount - score_y) * 5) + (hcount - score_x);
+
                 a <= {score_font_0[15:11], 3'b000};
                 b <= {score_font_0[10:5],  2'b00};
                 c <= {score_font_0[4:0],   3'b000};
