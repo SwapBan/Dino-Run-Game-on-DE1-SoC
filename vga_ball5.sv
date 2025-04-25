@@ -62,7 +62,7 @@ module vga_ball(
     );
 
     // === SPRITE ROMS ===
-    dino_new_rom dino_rom0(.clk(clk), .address(dino_sprite_addr), .data(dino_new_output));
+    dino_sprite_rom dino_rom(.clk(clk), .address(dino_sprite_addr), .data(dino_new_output));
     dino_left_leg_up_rom dino_rom1(.clk(clk), .address(dino_sprite_addr), .data(dino_left_output));
     dino_right_leg_up_rom dino_rom2(.clk(clk), .address(dino_sprite_addr), .data(dino_right_output));
 
