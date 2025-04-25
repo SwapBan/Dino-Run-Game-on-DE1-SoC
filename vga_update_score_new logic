@@ -29,6 +29,8 @@ module vga_ball(
     logic [7:0] godzilla_x, godzilla_y;
 
     logic [7:0] a, b, c;
+    // === Digit Bitmaps (8x16) ===
+    logic [31:0] digit_0, digit_1, digit_2, digit_3, digit_4, digit_5, digit_6, digit_7, digit_8, digit_9;
 
     // === Score ===
     logic [3:0] score_digits [2:0];  // Array to hold 3 digits
