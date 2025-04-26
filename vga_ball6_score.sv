@@ -18,7 +18,9 @@ module vga_ball(
     logic [15:0] dino_new_output, dino_left_output, dino_right_output;
     logic [15:0] dino_sprite_output, jump_sprite_output, duck_sprite_output;
     logic [15:0] godzilla_sprite_output, scac_sprite_output;
-
+    // at the top, alongside dino_sprite_addr, etc.
+    logic [5:0]  score_sprite_addr;
+    logic  score_sprite_output;
     logic [9:0] dino_sprite_addr, jump_sprite_addr, duck_sprite_addr;
     logic [9:0] godzilla_sprite_addr, scac_sprite_addr;
 
@@ -173,14 +175,22 @@ module vga_ball(
             end
             // score overlay
                         // score overlay (inline lookup, no extra regs)
+           // --- SCORE as an 8×8 “sprite” ---
             if (hcount >= score_x && hcount < score_x + 8 &&
                 vcount >= score_y && vcount < score_y + 8) begin
-                // row = vcount−score_y, col = hcount−score_x
-               // if (font_rom[score][vcount - score_y][7 - (hcount - score_x)]) begin
+                // compute the 0–63 linear index just like a sprite:
+                score_sprite_addr <= (hcount - score_x)
+                                   + ((vcount - score_y) * 8);
+                // fetch the font bit for this digit & pixel:
+                score_sprite_output <= font_rom[score]
+                                               [ score_sprite_addr[5:3] ]  // row
+                                               [ 7 - score_sprite_addr[2:0] ]; // col
+                // if that bit is 1, draw black:
+                if (score_sprite_output) begin
                     a <= 8'h00;
                     b <= 8'h00;
                     c <= 8'h00;
-                //end
+                end
             end
 
         end
