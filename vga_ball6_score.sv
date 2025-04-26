@@ -177,16 +177,24 @@ module vga_ball(
                         // score overlay (inline lookup, no extra regs)
            // --- SCORE as an 8×8 “sprite” ---
            // 5) overlay “3” at (score_x+20,score_y)
-            if (hcount >= score_x+20  && hcount < score_x+28  &&
-                vcount >= score_y     && vcount < score_y+8   &&
-                font_rom[3][vcount-score_y][7-(hcount-(score_x+20))]) begin
-              a <= 8'h00; b <= 8'h00; c <= 8'h00;
-            end
-            if (hcount >= score_x+20  && hcount < score_x+28  &&
-                vcount >= score_y     && vcount < score_y+8   &&
-                font_rom[5][vcount-score_y][7-(hcount-(score_x+30))]) begin
-              a <= 8'h00; b <= 8'h00; c <= 8'h00;
-            end
+          // draw “3” at (score_x+20, score_y)
+if (hcount >= score_x+20 && hcount <  score_x+28 &&
+    vcount >= score_y   && vcount <  score_y+8  &&
+    font_rom[3][vcount-score_y]
+               [7 - (hcount - (score_x+20))])
+begin
+    a <= 8'h00; b <= 8'h00; c <= 8'h00;
+end
+
+// draw “5” at (score_x+30, score_y)
+if (hcount >= score_x+30 && hcount <  score_x+38 &&
+    vcount >= score_y   && vcount <  score_y+8  &&
+    font_rom[5][vcount-score_y]
+               [7 - (hcount - (score_x+30))])
+begin
+    a <= 8'h00; b <= 8'h00; c <= 8'h00;
+end
+
         end
     end
 
