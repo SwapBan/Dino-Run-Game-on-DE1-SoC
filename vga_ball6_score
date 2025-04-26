@@ -51,26 +51,7 @@ module vga_ball(
     // === NEW: frame counter and sprite state ===
     logic [23:0] frame_counter;
     logic [1:0] sprite_state;
-// SCORE overlay signals
-    logic [3:0]  score;
-    logic [7:0]  score_x, score_y;
-    logic [5:0]  score_addr;
-    logic        score_pixel;
 
-    // Inline 8×8 font ROM
-    logic [7:0] font_rom [0:9][0:7];
-    initial begin
-        font_rom[0] = '{8'h3C,8'h66,8'h6E,8'h7E,8'h76,8'h66,8'h3C,8'h00};
-        font_rom[1] = '{8'h18,8'h38,8'h18,8'h18,8'h18,8'h18,8'h7E,8'h00};
-        font_rom[2] = '{8'h3C,8'h66,8'h06,8'h1C,8'h30,8'h66,8'h7E,8'h00};
-        font_rom[3] = '{8'h3C,8'h66,8'h06,8'h1C,8'h06,8'h66,8'h3C,8'h00};
-        font_rom[4] = '{8'h0C,8'h1C,8'h2C,8'h4C,8'h7E,8'h0C,8'h0C,8'h00};
-        font_rom[5] = '{8'h7E,8'h60,8'h7C,8'h06,8'h06,8'h66,8'h3C,8'h00};
-        font_rom[6] = '{8'h3C,8'h66,8'h60,8'h7C,8'h66,8'h66,8'h3C,8'h00};
-        font_rom[7] = '{8'h7E,8'h06,8'h0C,8'h18,8'h30,8'h30,8'h30,8'h00};
-        font_rom[8] = '{8'h3C,8'h66,8'h66,8'h3C,8'h66,8'h66,8'h3C,8'h00};
-        font_rom[9] = '{8'h3C,8'h66,8'h66,8'h3E,8'h06,8'h66,8'h3C,8'h00};
-    end
     always_ff @(posedge clk or posedge reset) begin
         if (reset) begin
             frame_counter <= 0;
