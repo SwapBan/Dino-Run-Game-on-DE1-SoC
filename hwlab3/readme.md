@@ -58,3 +58,12 @@ scp as7525@micro31.ee.columbia.edu:lab4-hw/output_files/soc_system.rbf /mnt
 scp as7525@micro29.ee.columbia.edu:lab5-hw/output_files/soc_system.rbf /mnt
 
 scp as7525@micro29.ee.columbia.edu:lab5-hw/soc_system.dtb /mnt
+
+
+Error (10028): Can't resolve multiple constant drivers for net "a[7]" at vga_ball.sv(139) File: /homes/user/stud/spring25/as7525/Music/lab5-hw/soc_system/synthesis/submodules/vga_ball.sv Line: 139
+Error (10029): Constant driver at vga_ball.sv(63) File: /homes/user/stud/spring25/as7525/Music/lab5-hw/soc_system/synthesis/submodules/vga_ball.sv Line: 63
+Error (10028): Can't resolve multiple constant drivers for net "a[6]" at vga_ball.sv(139) File: /homes/user/stud/spring25/as7525/Music/lab5-hw/soc_system/synthesis/submodules/vga_ball.sv Line: 139
+Error (10028): Can't resolve multiple constant drivers for net "a[5]" at vga_ball.sv(139) File: /homes/user/stud/spring25/as7525/Music/lab5-hw/soc_system/synthesis/submodules/vga_ball.sv Line: 139
+Error (10028): Can't resolve multiple constant drivers for net "a[4]" at vga_ball.sv(139) File: /homes/user/stud/spring25/as7525/Music/lab5-hw/soc_system/synthesis/submodules/vga_ball.sv Line: 139
+Error (10028): Can't resolve multiple constant drivers for net "a[3]" at vga_ball.sv(139) File: /homes/user/stud/spring25/as7525/Music/lab5-hw/soc_system/synthesis/submodules/vga_ball.sv Line: 139
+Error (10028): Can't resolve multiple constant drivers for net "a[2]" at vga_ball.sv(139) File: /homes/user/stud/spring25/as7525/Music/lab5-hw/soc_system/synthesis/submodules/vga_ball.sv Line: 139
