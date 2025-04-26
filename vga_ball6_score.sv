@@ -18,17 +18,19 @@ module vga_ball(
     logic [15:0] dino_new_output, dino_left_output, dino_right_output;
     logic [15:0] dino_sprite_output, jump_sprite_output, duck_sprite_output;
     logic [15:0] godzilla_sprite_output, scac_sprite_output;
+    logic [15:0] powerup_sprite_output;
     // at the top, alongside dino_sprite_addr, etc.
     logic [5:0]  score_sprite_addr;
     logic  score_sprite_output;
     logic [9:0] dino_sprite_addr, jump_sprite_addr, duck_sprite_addr;
     logic [9:0] godzilla_sprite_addr, scac_sprite_addr;
-
+    logic [9:0] power_sprite_addr;
     logic [7:0] dino_x, dino_y;
     logic [7:0] jump_x, jump_y;
     logic [7:0] duck_x, duck_y;
     logic [7:0] s_cac_x, s_cac_y;
     logic [7:0] godzilla_x, godzilla_y;
+    logic [7:0] powerup_x, powerup_y;
 
     logic [7:0] a, b, c;
  // === SCORE overlay signals ===
@@ -91,6 +93,7 @@ module vga_ball(
     dino_duck_rom duck_rom(.clk(clk), .address(duck_sprite_addr), .data(duck_sprite_output));
     dino_godzilla_rom godzilla_rom(.clk(clk), .address(godzilla_sprite_addr), .data(godzilla_sprite_output));
     dino_s_cac_rom s_cac_rom(.clk(clk), .address(scac_sprite_addr), .data(scac_sprite_output));
+    dino_powerup powerup_rom(.clk(clk), .address(power_sprite_addr), .data(powerup_sprite_output));
 
     // === CHOOSE CURRENT DINO SPRITE BASED ON STATE ===
     always_comb begin
@@ -110,6 +113,7 @@ module vga_ball(
             duck_x <= 8'd300;   duck_y <= 8'd200;
             s_cac_x <= 8'd500;  s_cac_y <= 8'd100;
             godzilla_x <= 8'd100; godzilla_y <= 8'd260;
+            powerup_x <= 8'd130; powerup_y <= 8'd210;
             // default score
             score   <= 4'd0;
             score_x <= 8'd225;
@@ -172,6 +176,13 @@ module vga_ball(
                 a <= {godzilla_sprite_output[15:11], 3'b000};
                 b <= {godzilla_sprite_output[10:5],  2'b00};
                 c <= {godzilla_sprite_output[4:0],   3'b000};
+            end
+            if (hcount >= powerup_x && hcount < powerup_x + 32 &&
+                vcount >= powerup_y && vcount < powerup_y + 32) begin
+                powerup_sprite_addr <= (hcount - powerup_x) + ((vcount - powerup_y) * 32);
+                a <= {powerup_sprite_output[15:11], 3'b000};
+                b <= {powerup_sprite_output[10:5],  2'b00};
+                c <= {powerup_sprite_output[4:0],   3'b000};
             end
             // score overlay
                         // score overlay (inline lookup, no extra regs)
