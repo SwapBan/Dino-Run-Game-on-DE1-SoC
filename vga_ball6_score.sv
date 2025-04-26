@@ -34,7 +34,7 @@ module vga_ball(
  // === SCORE overlay signals ===
     logic [3:0]  score;
   //  logic [7:0]  score_x, score_y;
-    logic [7:0] score_x = 8'd35, score_y = 8'd44;
+    logic [7:0] score_x = 8'd35, score_y = 8'd441;
     logic [5:0]  score_addr;
     logic        score_pixel;
     // Inline 8×8 font ROM
