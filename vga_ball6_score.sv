@@ -24,7 +24,7 @@ module vga_ball(
     logic  score_sprite_output;
     logic [9:0] dino_sprite_addr, jump_sprite_addr, duck_sprite_addr;
     logic [9:0] godzilla_sprite_addr, scac_sprite_addr;
-    logic [9:0] power_sprite_addr;
+    logic [9:0] powerup_sprite_addr;
     logic [7:0] dino_x, dino_y;
     logic [7:0] jump_x, jump_y;
     logic [7:0] duck_x, duck_y;
