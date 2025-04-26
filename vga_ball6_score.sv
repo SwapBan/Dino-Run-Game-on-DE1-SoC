@@ -109,8 +109,8 @@ module vga_ball(
             godzilla_x <= 8'd100; godzilla_y <= 8'd260;
             // default score
             score   <= 4'd0;
-            score_x <= 8'd0;
-            score_y <= 8'd0;
+            score_x <= 8'd35;
+            score_y <= 8'd441;
             a <= 8'hFF; b <= 8'hFF; c <= 8'hFF;
         end else if (chipselect && write) begin
             case (address)
