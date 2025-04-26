@@ -110,14 +110,14 @@ module vga_ball(
         if (reset) begin
             dino_x <= 8'd100;   dino_y <= 8'd100;
             jump_x <= 8'd200;   jump_y <= 8'd150;
-            duck_x <= 8'd300;   duck_y <= 8'd200;
+            duck_x <= 8'd300;   duck_y <= 8'd350;
             s_cac_x <= 8'd500;  s_cac_y <= 8'd100;
-            godzilla_x <= 8'd100; godzilla_y <= 8'd260;
-            powerup_x <= 8'd130; powerup_y <= 8'd210;
+            godzilla_x <= 8'd100; godzilla_y <= 8'd360;
+            powerup_x <= 8'd130; powerup_y <= 8'd260;
             // default score
             score   <= 4'd0;
-            score_x <= 8'd225;
-            score_y <= 8'd441;
+            score_x <= 8'd25;
+            score_y <= 8'd41;
             a <= 8'hFF; b <= 8'hFF; c <= 8'hFF;
           if (vcount < 200) begin
             // sky blue
