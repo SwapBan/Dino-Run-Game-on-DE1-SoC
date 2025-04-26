@@ -177,6 +177,7 @@ module vga_ball(
                 if (score_pixel) begin
                     a <= 8'h00; b <= 8'h00; c <= 8'h00;
                 end
+            end
         end
     end
 
