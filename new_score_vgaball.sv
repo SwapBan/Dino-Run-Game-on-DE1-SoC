@@ -20,7 +20,7 @@ module vga_ball(
 
     // Sprite ROM outputs & addresses
     logic [15:0] dino_new_output, dino_left_output, dino_right_output;
-    logic [15:0] jump_sprite_output, duck_sprite_output;
+    logic [15:0] dino_sprite_output,jump_sprite_output, duck_sprite_output;
     logic [15:0] godzilla_sprite_output, scac_sprite_output;
     logic [9:0]  dino_sprite_addr, jump_sprite_addr, duck_sprite_addr;
     logic [9:0]  godzilla_sprite_addr, scac_sprite_addr;
