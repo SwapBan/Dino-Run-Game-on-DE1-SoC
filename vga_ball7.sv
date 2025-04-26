@@ -220,6 +220,15 @@ if (hcount >= score_x+30 && hcount <  score_x+38 &&
 begin
     a <= 8'h00; b <= 8'h00; c <= 8'h00;
 end
+// draw “5” at (score_x+30, score_y)
+if (hcount >= score_x+40 && hcount <  score_x+48 &&
+    vcount >= score_y   && vcount <  score_y+8  &&
+                font_rom[7][vcount-score_y]
+    [7 - (hcount - (score_x+40))])
+begin
+    a <= 8'h00; b <= 8'h00; c <= 8'h00;
+end
+
 
         end
     end
