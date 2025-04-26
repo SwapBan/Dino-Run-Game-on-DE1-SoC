@@ -182,7 +182,8 @@ module vga_ball(
             // score overlay
             if (hcount>=score_x && hcount<score_x+8 && vcount>=score_y && vcount<score_y+8) begin
                 score_sprite_addr<=(hcount-score_x)+((vcount-score_y)*8);
-                if (score_pixel) a<=8'hFF, b<=8'hFF, c<=8'hFF;
+                if (score_pixel) begin
+                    a<=8'hFF; b<=8'hFF; c<=8'hFF;
             end
         end
     end
