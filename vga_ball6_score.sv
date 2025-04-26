@@ -171,13 +171,17 @@ module vga_ball(
                 c <= {godzilla_sprite_output[4:0],   3'b000};
             end
             // score overlay
-            if (hcount>=score_x && hcount<score_x+8 && vcount>=score_y && vcount<score_y+8) begin
-                score_addr <= (hcount-score_x)+((vcount-score_y)*8);
-                score_pixel <= font_rom[score][score_addr[5:3]][7-score_addr[2:0]];
-                if (score_pixel) begin
-                    a <= 8'h00; b <= 8'h00; c <= 8'h00;
+                        // score overlay (inline lookup, no extra regs)
+            if (hcount >= score_x && hcount < score_x + 8 &&
+                vcount >= score_y && vcount < score_y + 8) begin
+                // row = vcount−score_y, col = hcount−score_x
+                if (font_rom[score][vcount - score_y][7 - (hcount - score_x)]) begin
+                    a <= 8'h00;
+                    b <= 8'h00;
+                    c <= 8'h00;
                 end
             end
+
         end
     end
 
