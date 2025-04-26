@@ -175,11 +175,11 @@ module vga_ball(
             if (hcount >= score_x && hcount < score_x + 8 &&
                 vcount >= score_y && vcount < score_y + 8) begin
                 // row = vcount−score_y, col = hcount−score_x
-                if (font_rom[score][vcount - score_y][7 - (hcount - score_x)]) begin
+               // if (font_rom[score][vcount - score_y][7 - (hcount - score_x)]) begin
                     a <= 8'h00;
                     b <= 8'h00;
                     c <= 8'h00;
-                end
+                //end
             end
 
         end
