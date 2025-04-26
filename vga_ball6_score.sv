@@ -93,7 +93,7 @@ module vga_ball(
     dino_duck_rom duck_rom(.clk(clk), .address(duck_sprite_addr), .data(duck_sprite_output));
     dino_godzilla_rom godzilla_rom(.clk(clk), .address(godzilla_sprite_addr), .data(godzilla_sprite_output));
     dino_s_cac_rom s_cac_rom(.clk(clk), .address(scac_sprite_addr), .data(scac_sprite_output));
-    dino_powerup powerup_rom(.clk(clk), .address(power_sprite_addr), .data(powerup_sprite_output));
+    dino_powerup_rom powerup_rom(.clk(clk), .address(power_sprite_addr), .data(powerup_sprite_output));
 
     // === CHOOSE CURRENT DINO SPRITE BASED ON STATE ===
     always_comb begin
