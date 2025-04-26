@@ -176,23 +176,12 @@ module vga_ball(
             // score overlay
                         // score overlay (inline lookup, no extra regs)
            // --- SCORE as an 8×8 “sprite” ---
-            if (hcount >= score_x && hcount < score_x + 8 &&
-                vcount >= score_y && vcount < score_y + 8) begin
-                // compute the 0–63 linear index just like a sprite:
-                score_sprite_addr <= (hcount - score_x)
-                                   + ((vcount - score_y) * 8);
-                // fetch the font bit for this digit & pixel:
-                score_sprite_output <= font_rom[score]
-                                               [ score_sprite_addr[5:3] ]  // row
-                                               [ 7 - score_sprite_addr[2:0] ]; // col
-                // if that bit is 1, draw black:
-                if (score_sprite_output) begin
-                    a <= 8'h00;
-                    b <= 8'h00;
-                    c <= 8'h00;
-                end
+           // 5) overlay “3” at (score_x+20,score_y)
+            if (hcount >= score_x+20  && hcount < score_x+28  &&
+                vcount >= score_y     && vcount < score_y+8   &&
+                font_rom[3][vcount-score_y][7-(hcount-(score_x+20))]) begin
+              a <= 8'h00; b <= 8'h00; c <= 8'h00;
             end
-
         end
     end
 
