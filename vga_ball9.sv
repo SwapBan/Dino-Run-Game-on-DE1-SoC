@@ -63,8 +63,22 @@ module vga_ball(
     logic [1:0] sprite_state2;
 
     function automatic logic is_visible(input logic [15:0] pixel);
-        return (pixel != 16'hF81F && pixel != 16'hFFFF && pixel != 16'hFFDF && pixel != 16'hFFDE);
+    logic [4:0] r;
+    logic [5:0] g;
+    logic [4:0] b;
+    begin
+        r = pixel[15:11];
+        g = pixel[10:5];
+        b = pixel[4:0];
+
+        // If close to white OR pure pink, treat as transparent
+        if ((r > 5'd28 && g > 6'd60 && b > 5'd28) || pixel == 16'hF81F)
+            return 0; // transparent (don't draw)
+        else
+            return 1; // visible (draw)
+    end
     endfunction
+
 
 
     always_ff @(posedge clk or posedge reset) begin
