@@ -117,22 +117,25 @@ module vga_ball(
                 cloud_counter <= cloud_counter + 1;
             end
 
-            // Sky color cycle
             if (sky_counter == 24'd10_000_000) begin
-                sky_counter <= 0;
-                sky_phase <= sky_phase + 1;
-                case (sky_phase)
-                    0: begin sky_r <= sky_r + 1; sky_g <= sky_g;     sky_b <= sky_b - 1; end
-                    1: begin sky_r <= sky_r + 1; sky_g <= sky_g - 1; sky_b <= sky_b - 1; end
-                    2: begin sky_r <= sky_r;     sky_g <= sky_g - 1; sky_b <= sky_b;     end
-                    3: begin sky_r <= sky_r - 1; sky_g <= sky_g + 1; sky_b <= sky_b + 1; end
-                    4: begin sky_r <= 8'd135;    sky_g <= 8'd206;    sky_b <= 8'd235;   sky_phase <= 0; end
-                    default: sky_phase <= 0;
-                endcase
-            end else begin
-                sky_counter <= sky_counter + 1;
-            end
+    sky_counter <= 0;
+    if (sky_phase == 4) begin
+        sky_phase <= 0;
+    end else begin
+        sky_phase <= sky_phase + 1;
+    end
 
+    case (sky_phase)
+        0: begin sky_r <= sky_r + 1; sky_g <= sky_g;     sky_b <= sky_b - 1; end
+        1: begin sky_r <= sky_r + 1; sky_g <= sky_g - 1; sky_b <= sky_b - 1; end
+        2: begin sky_r <= sky_r;     sky_g <= sky_g - 1; sky_b <= sky_b;     end
+        3: begin sky_r <= sky_r - 1; sky_g <= sky_g + 1; sky_b <= sky_b + 1; end
+        4: begin sky_r <= 8'd135;    sky_g <= 8'd206;    sky_b <= 8'd235; end
+        default: begin sky_r <= 8'd135; sky_g <= 8'd206; sky_b <= 8'd235; end
+    endcase
+end else begin
+    sky_counter <= sky_counter + 1;
+end
             // Sun motion
             if (sun_counter == 24'd8_000_000) begin
                 sun_counter <= 0;
