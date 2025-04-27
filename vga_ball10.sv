@@ -40,10 +40,11 @@ module vga_ball(
     logic [9:0] godzilla_x, godzilla_y;
     logic [7:0] powerup_x, powerup_y;
     logic [7:0] ptr_x, ptr_y;
+    logic [3:0] ones, tens, hundreds;
 
     logic [7:0] a, b, c;
  // === SCORE overlay signals ===
-    logic [3:0]  score;
+   // logic [3:0]  score;
   //  logic [7:0]  score_x, score_y;
     logic [7:0] score_x = 8'd225, score_y = 8'd441;
     logic [5:0]  score_addr;
@@ -170,7 +171,7 @@ always_comb begin
             powerup_x <= 8'd130; powerup_y <= 8'd260;
             ptr_x <= 8'd700;     ptr_y <= 8'd100;
             // default score
-            score   <= 4'd0;
+            //score   <= 4'd0;
             score_x <= 8'd25;
             score_y <= 8'd41;
             a <= 8'hFF; b <= 8'hFF; c <= 8'hFF;
@@ -202,7 +203,7 @@ always_comb begin
                 9'd7: s_cac_y <= writedata[9:0];
                 9'd8: godzilla_x <= writedata[9:0];
                 9'd9: godzilla_y <= writedata[9:0];
-                9'd10: score   <= writedata[3:0];
+               // 9'd10: score   <= writedata[3:0];
                 9'd11: score_x <= writedata[7:0];
                 9'd12: score_y <= writedata[7:0];
             endcase
