@@ -146,19 +146,22 @@ module vga_ball(
             score_x <= 8'd25;
             score_y <= 8'd41;
             a <= 8'hFF; b <= 8'hFF; c <= 8'hFF;
-             if (vcount == 200) begin
-        a <= 8'd0;
-        b <= 8'd0;
-        c <= 8'd0;
-    end
+             
          if (vcount < 200) begin
     // light sky blue
     a <= 8'd135;  // R = 135
     b <= 8'd206;  // G = 206
     c <= 8'd235;  // B = 235
           end else begin
-            a <= 8'hFF; b <= 8'hFF; c <= 8'hFF;
+            a <= 8'd139;  // brown R
+        b <= 8'd69;   // brown G
+        c <= 8'd19;   // brown B
           end
+       if (vcount == 200) begin
+        a <= 8'd0;
+        b <= 8'd0;
+        c <= 8'd0;
+    end     
         end else if (chipselect && write) begin
             case (address)
                 9'd0: dino_x <= writedata[7:0];
@@ -176,20 +179,22 @@ module vga_ball(
                 9'd12: score_y <= writedata[7:0];
             endcase
         end else if (VGA_BLANK_n) begin
-             if (vcount == 200) begin
-        a <= 8'd0;
-        b <= 8'd0;
-        c <= 8'd0;
-    end
+            
           if (vcount < 200) begin
     // light sky blue
     a <= 8'd135;  // R = 135
     b <= 8'd206;  // G = 206
     c <= 8'd235;  // B = 235
           end else begin
-            a <= 8'hFF; b <= 8'hFF; c <= 8'hFF;
+             a <= 8'd139;  // brown R
+        b <= 8'd69;   // brown G
+        c <= 8'd19;   // brown B
           end
-
+ if (vcount == 200) begin
+        a <= 8'd0;
+        b <= 8'd0;
+        c <= 8'd0;
+    end
             if (hcount >= dino_x && hcount < dino_x + 32 &&
                 vcount >= dino_y && vcount < dino_y + 32) begin
                 dino_sprite_addr <= (hcount - dino_x) + ((vcount - dino_y) * 32);
