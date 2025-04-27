@@ -17,20 +17,24 @@ module vga_ball(
 
     logic [15:0] dino_new_output, dino_left_output, dino_right_output;
     logic [15:0] dino_sprite_output, jump_sprite_output, duck_sprite_output;
-    logic [15:0] godzilla_sprite_output, scac_sprite_output;
+    logic [15:0] godzilla_sprite_output, scac_sprite_output, ptr_sprite_output;
     logic [15:0] powerup_sprite_output;
+    logic [15:0] ptr_up_output, ptr_down_output;
+
     // at the top, alongside dino_sprite_addr, etc.
     logic [5:0]  score_sprite_addr;
     logic  score_sprite_output;
     logic [9:0] dino_sprite_addr, jump_sprite_addr, duck_sprite_addr;
     logic [9:0] godzilla_sprite_addr, scac_sprite_addr;
-    logic [9:0] powerup_sprite_addr;
+    logic [9:0] powerup_sprite_addr, ptr_sprite_addr;
+
     logic [7:0] dino_x, dino_y;
     logic [7:0] jump_x, jump_y;
     logic [7:0] duck_x, duck_y;
     logic [7:0] s_cac_x, s_cac_y;
     logic [7:0] godzilla_x, godzilla_y;
     logic [7:0] powerup_x, powerup_y;
+    logic [7:0] ptr_x, ptr_y;
 
     logic [7:0] a, b, c;
  // === SCORE overlay signals ===
@@ -56,14 +60,17 @@ module vga_ball(
     // === NEW: frame counter and sprite state ===
     logic [23:0] frame_counter;
     logic [1:0] sprite_state;
+    logic [1:0] sprite_state2;
 
     always_ff @(posedge clk or posedge reset) begin
         if (reset) begin
             frame_counter <= 0;
             sprite_state <= 0;
+            sprite_state2 <= 0;
         end else begin
             if (frame_counter == 24'd5_000_000) begin
                 sprite_state <= sprite_state + 1;
+                sprite_state2 <= sprite_state2 + 1;
                 frame_counter <= 0;
             end else begin
                 frame_counter <= frame_counter + 1;
@@ -89,6 +96,11 @@ module vga_ball(
     dino_left_leg_up_rom dino_rom1(.clk(clk), .address(dino_sprite_addr), .data(dino_left_output));
     dino_right_leg_up_rom dino_rom2(.clk(clk), .address(dino_sprite_addr), .data(dino_right_output));
 
+    dino_pterodactyl_down_rom ptero_up(.clk(clk), .address(ptr_sprite_addr), .data(ptr_up_output));
+    dino_pterodactyl_up_rom ptero_down(.clk(clk), .address(ptr_sprite_addr), .data(ptr_down_output));
+
+    
+
     dino_jump_rom jump_rom(.clk(clk), .address(jump_sprite_addr), .data(jump_sprite_output));
     dino_duck_rom duck_rom(.clk(clk), .address(duck_sprite_addr), .data(duck_sprite_output));
     dino_godzilla_rom godzilla_rom(.clk(clk), .address(godzilla_sprite_addr), .data(godzilla_sprite_output));
@@ -105,6 +117,15 @@ module vga_ball(
         endcase
     end
 
+    always_comb begin
+        case (sprite_state2)
+            2'd0: ptr_sprite_output = ptr_up_output;
+            2'd1: ptr_sprite_output = ptr_down_output;
+            default: ptr_sprite_output = dino_new_output;
+        endcase
+    end
+
+
     // === SPRITE DRAWING + CONTROL LOGIC ===
     always_ff @(posedge clk) begin
         if (reset) begin
@@ -112,8 +133,9 @@ module vga_ball(
             jump_x <= 8'd200;   jump_y <= 8'd150;
             duck_x <= 8'd300;   duck_y <= 8'd350;
             s_cac_x <= 8'd500;  s_cac_y <= 8'd100;
-            godzilla_x <= 8'd105; godzilla_y <= 8'd460;
+            godzilla_x <= 8'd100; godzilla_y <= 8'd360;
             powerup_x <= 8'd130; powerup_y <= 8'd260;
+            ptr_x <= 8'd700;     ptr_y <= 8'd700;
             // default score
             score   <= 4'd0;
             score_x <= 8'd25;
@@ -198,6 +220,13 @@ module vga_ball(
                 a <= {powerup_sprite_output[15:11], 3'b000};
                 b <= {powerup_sprite_output[10:5],  2'b00};
                 c <= {powerup_sprite_output[4:0],   3'b000};
+            end
+            if (hcount >= ptr_x && hcount < ptr_x + 32 &&
+                vcount >= ptr_y && vcount < ptr_y + 32) begin
+                ptr_sprite_addr <= (hcount - ptr_x) + ((vcount - ptr_y) * 32);
+                a <= {ptr_sprite_output[15:11], 3'b000};
+                b <= {ptr_sprite_output[10:5],  2'b00};
+                c <= {ptr_sprite_output[4:0],   3'b000};
             end
             // score overlay
                         // score overlay (inline lookup, no extra regs)
