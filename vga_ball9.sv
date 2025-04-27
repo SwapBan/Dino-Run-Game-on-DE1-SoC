@@ -66,7 +66,7 @@ module vga_ball(
 
  
 
-        return (pixel != 16'hF81F && pixel != 16'hFFFF && pixel != 16'hFFDF && pixel != 16'hFFDE);
+        return (pixel != 16'hF81F && pixel != 16'hFFFF && pixel != 16'hFFDF && pixel != 16'hFFDE && pixel != 16'h8410);
  
 
     endfunction
