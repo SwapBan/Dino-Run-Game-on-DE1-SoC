@@ -151,8 +151,8 @@ module vga_ball(
             dino_x <= 8'd100;   dino_y <= 8'd100;
             jump_x <= 8'd200;   jump_y <= 8'd150;
             duck_x <= 8'd300;   duck_y <= 8'd550;
-            s_cac_x <= 9'd500;  s_cac_y <= 9'd100;
-            godzilla_x <= 9'd100; godzilla_y <= 9'd460;
+            s_cac_x <= 8'd500;  s_cac_y <= 8'd100;
+            godzilla_x <= 8'd100; godzilla_y <= 8'd360;
             powerup_x <= 8'd130; powerup_y <= 8'd260;
             ptr_x <= 8'd700;     ptr_y <= 8'd100;
             // default score
@@ -192,22 +192,65 @@ module vga_ball(
                 9'd11: score_x <= writedata[7:0];
                 9'd12: score_y <= writedata[7:0];
             endcase
-        end else if (VGA_BLANK_n) begin
+    end else if (VGA_BLANK_n) begin
             
-          if (vcount < 200) begin
+    if (vcount < 200) begin
     // light sky blue
-    a <= 8'd135;  // R = 135
-    b <= 8'd206;  // G = 206
-    c <= 8'd235;  // B = 235
-          end else begin
-             a <= 8'd139;  // brown R
+        a <= 8'd135;  // R = 135
+        b <= 8'd206;  // G = 206
+        c <= 8'd235;  // B = 235
+    end else begin
+        a <= 8'd139;  // brown R
         b <= 8'd69;   // brown G
         c <= 8'd19;   // brown B
-          end
- if (vcount == 200) begin
+    end
+    if (vcount == 200) begin
         a <= 8'd0;
         b <= 8'd0;
         c <= 8'd0;
+    end
+     // === Sun (big yellow circle at top right) ===
+    if ((hcount-1150)*(hcount-1150) + (vcount-80)*(vcount-80) < 900) begin
+        a <= 8'd255; // Yellow R
+        b <= 8'd255; // Yellow G
+        c <= 8'd0;   // Yellow B
+    end
+
+    // === Cloud 1 (around (250, 70)) ===
+    if (((hcount-240)*(hcount-240) + (vcount-70)*(vcount-70) < 100) ||
+        ((hcount-250)*(hcount-250) + (vcount-60)*(vcount-60) < 100) ||
+        ((hcount-260)*(hcount-260) + (vcount-70)*(vcount-70) < 100)) begin
+        a <= 8'd255;
+        b <= 8'd255;
+        c <= 8'd255;
+    end
+
+    // === Cloud 2 (around (450, 100)) ===
+    if (((hcount-440)*(hcount-440) + (vcount-100)*(vcount-100) < 100) ||
+        ((hcount-450)*(hcount-450) + (vcount-90)*(vcount-90) < 100) ||
+        ((hcount-460)*(hcount-460) + (vcount-100)*(vcount-100) < 100)) begin
+        a <= 8'd250;
+        b <= 8'd250;
+        c <= 8'd250;
+    end
+
+    // === Cloud 3 (around (700, 60)) ===
+    if (((hcount-690)*(hcount-690) + (vcount-60)*(vcount-60) < 100) ||
+        ((hcount-700)*(hcount-700) + (vcount-50)*(vcount-50) < 100) ||
+        ((hcount-710)*(hcount-710) + (vcount-60)*(vcount-60) < 100)) begin
+        a <= 8'd245;
+        b <= 8'd245;
+        c <= 8'd245;
+    end
+
+    // === Ground rocks / bumps (small dark brown spots) ===
+    if (vcount > 200 && vcount < 480) begin
+        if ((hcount % 120 == 0 && vcount % 50 < 10) ||
+            (hcount % 200 == 15 && vcount % 60 < 8)) begin
+            a <= 8'd110; // darker brown
+            b <= 8'd50;
+            c <= 8'd10;
+        end
     end
             if (hcount >= dino_x && hcount < dino_x + 32 &&
                 vcount >= dino_y && vcount < dino_y + 32) begin
