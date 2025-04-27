@@ -212,21 +212,7 @@ module vga_ball(
             score_y <= 8'd41;
             a <= 8'hFF; b <= 8'hFF; c <= 8'hFF;
              
-         if (vcount < 200) begin
-    // light sky blue
-    a <= 8'd135;  // R = 135
-    b <= 8'd206;  // G = 206
-    c <= 8'd235;  // B = 235
-          end else begin
-            a <= 8'd139;  // brown R
-        b <= 8'd69;   // brown G
-        c <= 8'd19;   // brown B
-          end
-       if (vcount == 200) begin
-        a <= 8'd0;
-        b <= 8'd0;
-        c <= 8'd0;
-    end     
+      
         end else if (chipselect && write) begin
             case (address)
                 9'd0: dino_x <= writedata[7:0];
