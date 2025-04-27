@@ -256,6 +256,7 @@ module vga_ball(
                     b <= {ptr_sprite_output[10:5],  2'b00};
                     c <= {ptr_sprite_output[4:0],   3'b000};
                 end
+            end
             // score overlay
                         // score overlay (inline lookup, no extra regs)
            // --- SCORE as an 8×8 “sprite” ---
