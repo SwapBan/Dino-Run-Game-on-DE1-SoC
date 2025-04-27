@@ -31,8 +31,8 @@ module vga_ball(
     logic [7:0] dino_x, dino_y;
     logic [7:0] jump_x, jump_y;
     logic [7:0] duck_x, duck_y;
-    logic [7:0] s_cac_x, s_cac_y;
-    logic [7:0] godzilla_x, godzilla_y;
+    logic [9:0] s_cac_x, s_cac_y;
+    logic [9:0] godzilla_x, godzilla_y;
     logic [7:0] powerup_x, powerup_y;
     logic [7:0] ptr_x, ptr_y;
 
@@ -63,7 +63,7 @@ module vga_ball(
     logic [1:0] sprite_state2;
 
     function automatic logic is_visible(input logic [15:0] pixel);
-        return (pixel != 16'hF81F && pixel != 16'hFFFF);
+        return (pixel != 16'hF81F && pixel != 16'hFFFF && pixel != 16'hFFDF && pixel != 16'hFFDE);
     endfunction
 
 
@@ -170,10 +170,10 @@ module vga_ball(
                 9'd3: jump_y <= writedata[7:0];
                 9'd4: duck_x <= writedata[7:0];
                 9'd5: duck_y <= writedata[7:0];
-                9'd6: s_cac_x <= writedata[7:0];
-                9'd7: s_cac_y <= writedata[7:0];
-                9'd8: godzilla_x <= writedata[7:0];
-                9'd9: godzilla_y <= writedata[7:0];
+                9'd6: s_cac_x <= writedata[9:0];
+                9'd7: s_cac_y <= writedata[9:0];
+                9'd8: godzilla_x <= writedata[9:0];
+                9'd9: godzilla_y <= writedata[9:0];
                 9'd10: score   <= writedata[3:0];
                 9'd11: score_x <= writedata[7:0];
                 9'd12: score_y <= writedata[7:0];
