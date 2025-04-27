@@ -131,7 +131,7 @@ module vga_ball(
         if (reset) begin
             dino_x <= 8'd100;   dino_y <= 8'd100;
             jump_x <= 8'd200;   jump_y <= 8'd150;
-            duck_x <= 8'd300;   duck_y <= 8'd350;
+            duck_x <= 8'd300;   duck_y <= 8'd450;
             s_cac_x <= 8'd500;  s_cac_y <= 8'd100;
             godzilla_x <= 8'd100; godzilla_y <= 8'd360;
             powerup_x <= 8'd130; powerup_y <= 8'd260;
@@ -141,13 +141,20 @@ module vga_ball(
             score_x <= 8'd25;
             score_y <= 8'd41;
             a <= 8'hFF; b <= 8'hFF; c <= 8'hFF;
+            if (vcount == 200) begin
+        a <= 8'd0;
+        b <= 8'd0;
+        c <= 8'd0;
+    end
          if (vcount < 200) begin
     // light sky blue
     a <= 8'd135;  // R = 135
     b <= 8'd206;  // G = 206
     c <= 8'd235;  // B = 235
           end else begin
-            a <= 8'hFF; b <= 8'hFF; c <= 8'hFF;
+             a <= 8'd139;  // brown R
+        b <= 8'd69;   // brown G
+        c <= 8'd19;   // brown B
           end
         end else if (chipselect && write) begin
             case (address)
@@ -166,13 +173,20 @@ module vga_ball(
                 9'd12: score_y <= writedata[7:0];
             endcase
         end else if (VGA_BLANK_n) begin
+            if (vcount == 200) begin
+        a <= 8'd0;
+        b <= 8'd0;
+        c <= 8'd0;
+    end
           if (vcount < 200) begin
     // light sky blue
     a <= 8'd135;  // R = 135
     b <= 8'd206;  // G = 206
     c <= 8'd235;  // B = 235
           end else begin
-            a <= 8'hFF; b <= 8'hFF; c <= 8'hFF;
+             a <= 8'd139;  // brown R
+        b <= 8'd69;   // brown G
+        c <= 8'd19;   // brown B
           end
 
             if (hcount >= dino_x && hcount < dino_x + 32 &&
