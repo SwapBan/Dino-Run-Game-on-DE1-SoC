@@ -11,6 +11,11 @@ module vga_ball(
                         VGA_BLANK_n,
     output logic        VGA_SYNC_n
 );
+    // -------------------------------------------------------------------
+  // 1) Replace the old 4-bit score with a 10-bit counter + 50MHz timer
+  // -------------------------------------------------------------------
+  logic [9:0]  score;           // allows 0…999
+  logic [25:0] sec_counter;     // counts 50 MHz cycles → 1 s
 
     logic [10:0] hcount;
     logic [9:0]  vcount;
@@ -78,17 +83,31 @@ module vga_ball(
             frame_counter <= 0;
             sprite_state <= 0;
             sprite_state2 <= 0;
+            sec_counter <= 0;
+            score <= 0;
+        end else if (sec_counter == 26'd50_000_000-1) begin
+            sec_counter <= 0;
+            score <= score + 1;
         end else begin
+             sec_counter <= sec_counter + 1;
             if (frame_counter == 24'd5_000_000) begin
                 sprite_state <= sprite_state + 1;
                 sprite_state2 <= sprite_state2 + 1;
                 frame_counter <= 0;
             end else begin
                 frame_counter <= frame_counter + 1;
+               
             end
+            
         end
     end
 
+always_comb begin
+    ones     = score % 10;
+    tens     = (score / 10) % 10;
+    hundreds = (score / 100) % 10;
+  end
+    
     // === VGA TIMING COUNTERS ===
     vga_counters counters(
         .clk50(clk),
@@ -117,6 +136,9 @@ module vga_ball(
     dino_godzilla_rom godzilla_rom(.clk(clk), .address(godzilla_sprite_addr), .data(godzilla_sprite_output));
     dino_s_cac_rom s_cac_rom(.clk(clk), .address(scac_sprite_addr), .data(scac_sprite_output));
     dino_powerup_rom powerup_rom(.clk(clk), .address(powerup_sprite_addr), .data(powerup_sprite_output));
+
+    
+   
 
     // === CHOOSE CURRENT DINO SPRITE BASED ON STATE ===
     always_comb begin
@@ -316,7 +338,7 @@ module vga_ball(
            // --- SCORE as an 8×8 “sprite” ---
            // 5) overlay “3” at (score_x+20,score_y)
           // draw “3” at (score_x+20, score_y)
-if (hcount >= score_x+20 && hcount <  score_x+28 &&
+/*if (hcount >= score_x+20 && hcount <  score_x+28 &&
     vcount >= score_y   && vcount <  score_y+8  &&
     font_rom[3][vcount-score_y]
                [7 - (hcount - (score_x+20))])
@@ -340,7 +362,37 @@ if (hcount >= score_x+40 && hcount <  score_x+48 &&
 begin
     a <= 8'h00; b <= 8'h00; c <= 8'h00;
 end
+*/
+        // --- SCORE overlay as three 8×8 glyphs ---
+            // hundreds at (score_x,   score_y)
+            if (hcount >= score_x
+                && hcount <  score_x + 8
+                && vcount >= score_y
+                && vcount <  score_y + 8
+                && font_rom[ hundreds ][ vcount - score_y ][ 7 - (hcount - score_x) ])
+            begin
+                a <= 8'h00; b <= 8'h00; c <= 8'h00;
+            end
 
+            // tens at (score_x+8, score_y)
+            if (hcount >= score_x + 8
+                && hcount <  score_x + 16
+                && vcount >= score_y
+                && vcount <  score_y + 8
+                && font_rom[ tens ][ vcount - score_y ][ 7 - (hcount - (score_x+8)) ])
+            begin
+                a <= 8'h00; b <= 8'h00; c <= 8'h00;
+            end
+
+            // ones at (score_x+16, score_y)
+            if (hcount >= score_x + 16
+                && hcount <  score_x + 24
+                && vcount >= score_y
+                && vcount <  score_y + 8
+                && font_rom[ ones ][ vcount - score_y ][ 7 - (hcount - (score_x+16)) ])
+            begin
+                a <= 8'h00; b <= 8'h00; c <= 8'h00;
+            end
 
         end
     end
