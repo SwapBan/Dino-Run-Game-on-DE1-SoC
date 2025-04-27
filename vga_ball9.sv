@@ -118,7 +118,7 @@ module vga_ball(
             2'd0: dino_sprite_output = dino_new_output;
             2'd1: dino_sprite_output = dino_left_output;
             2'd2: dino_sprite_output = dino_right_output;
-            default: dino_sprite_output = dino_new_output;
+            default: dino_sprite_output = ptr_up_output;
         endcase
     end
 
