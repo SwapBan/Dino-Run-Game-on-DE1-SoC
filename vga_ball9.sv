@@ -138,7 +138,7 @@ module vga_ball(
             jump_x <= 8'd200;   jump_y <= 8'd150;
             duck_x <= 8'd300;   duck_y <= 8'd550;
             s_cac_x <= 8'd500;  s_cac_y <= 8'd100;
-            godzilla_x <= 8'd100; godzilla_y <= 8'd860;
+            godzilla_x <= 8'd100; godzilla_y <= 8'd360;
             powerup_x <= 8'd130; powerup_y <= 8'd260;
             ptr_x <= 8'd700;     ptr_y <= 8'd100;
             // default score
