@@ -130,9 +130,9 @@ module vga_ball(
             
             // Change to night after 5 seconds (1250 million cycles)
           
-            if (night_timer < 24'd1250_000_000) begin
+            if (night_timer < 24'd250_000_000) begin
                 night_timer <= night_timer + 1;  // Increment the timer
-            end else if (night_timer == 24'd1250_000_000) begin
+            end else if (night_timer == 24'd250_000_000) begin
                 night_time <= 1;  // Set to night after 10 seconds
             end
         //end
@@ -146,6 +146,11 @@ module vga_ball(
                 sky_g <= 8'd10;
                 sky_b <= 8'd40;
             end
+            else begin
+                sky_r <= 8'd135;
+                sky_g <= 8'd206;
+                sky_b <= 8'd235; // Day sky color
+                
             // Sun motion
           
         end
@@ -239,7 +244,7 @@ end else if (VGA_BLANK_n) begin
         a <= sky_r;
         b <= sky_g;
         c <= sky_b;
-    end else if (vcount < 300) begin
+    end else if (vcount > 300) begin
         a <= 8'd139; // Light brown ground
         b <= 8'd69;
         c <= 8'd19;
