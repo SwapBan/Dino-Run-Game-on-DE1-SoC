@@ -145,8 +145,7 @@ module vga_ball(
                 sky_r <= 8'd10;  // Dark blue night sky
                 sky_g <= 8'd10;
                 sky_b <= 8'd40;
-            end
-            else begin
+            end else begin
                 sky_r <= 8'd135;
                 sky_g <= 8'd206;
                 sky_b <= 8'd235; // Day sky color
