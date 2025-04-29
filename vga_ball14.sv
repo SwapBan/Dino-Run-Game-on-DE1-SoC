@@ -126,10 +126,19 @@ module vga_ball(
                 cloud_counter <= cloud_counter + 1;
             end
 
+
+            
   // Change to night after 10 seconds (10 million cycles)
-            if (night_timer == 24'd10_000_000) begin
-                night_time <= 1; // Transition to night
+          
+            if (night_timer < 24'd10_000_000) begin
+                night_timer <= night_timer + 1;  // Increment the timer
+            end else if (night_timer == 24'd10_000_000) begin
+                night_time <= 1;  // Set to night after 10 seconds
             end
+        //end
+           // if (night_timer == 24'd10_000_000) begin
+            //    night_time <= 1; // Transition to night
+          //  end
 
             // If it's night, set the sky color to dark blue
             if (night_time) begin
