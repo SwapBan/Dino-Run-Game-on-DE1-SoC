@@ -32,6 +32,9 @@ module vga_ball(
     logic [23:0] sun_counter;
 
     logic [7:0] a, b, c;
+// === Timer for Night Transition ===
+    logic [23:0] night_timer; // Timer to trigger night time
+    logic night_time; // Flag to indicate if it's nighttime
 
     // === Sprite Outputs ===
     logic [15:0] dino_new_output, dino_left_output, dino_right_output;
@@ -98,6 +101,12 @@ module vga_ball(
             sun_counter <= 0;
             sun_offset_x <= 0;
             sun_offset_y <= 0;
+            night_timer <= 0;
+            night_time <= 0; // Start with day
+            sky_r <= 8'd135;
+            sky_g <= 8'd206;
+            sky_b <= 8'd235; // Day sky color
+            
         end else begin
             // Sprite frame switching
             if (frame_counter == 24'd5_000_000) begin
@@ -117,25 +126,31 @@ module vga_ball(
                 cloud_counter <= cloud_counter + 1;
             end
 
-            if (sky_counter == 24'd10_000_000) begin
-    sky_counter <= 0;
-    if (sky_phase == 4) begin
-        sky_phase <= 0;
-    end else begin
-        sky_phase <= sky_phase + 1;
-    end
+   // Sky color cycle, track the time of day and night
+           // Increment the night timer
+            night_timer <= night_timer + 1;
 
-    case (sky_phase)
-        0: begin sky_r <= sky_r + 1; sky_g <= sky_g;     sky_b <= sky_b - 1; end
-        1: begin sky_r <= sky_r + 1; sky_g <= sky_g - 1; sky_b <= sky_b - 1; end
-        2: begin sky_r <= sky_r;     sky_g <= sky_g - 1; sky_b <= sky_b;     end
-        3: begin sky_r <= sky_r - 1; sky_g <= sky_g + 1; sky_b <= sky_b + 1; end
-        4: begin sky_r <= 8'd135;    sky_g <= 8'd206;    sky_b <= 8'd235; end
-        default: begin sky_r <= 8'd135; sky_g <= 8'd206; sky_b <= 8'd235; end
-    endcase
-end else begin
-    sky_counter <= sky_counter + 1;
-end
+            // Switch to night after 50 million clock cycles (this is just an example)
+            if (night_timer == 24'd50_000_000) begin
+                night_time <= 1; // Transition to night
+            end
+
+            // Switch back to day after 100 million cycles
+            if (night_timer == 24'd100_000_000) begin
+                night_time <= 0; // Transition to day
+                night_timer <= 0; // Reset timer
+            end
+
+            // Sky color based on day or night
+            if (night_time) begin
+                sky_r <= 8'd10;    // Night sky color
+                sky_g <= 8'd10;
+                sky_b <= 8'd40;    // Deep navy blue
+            end else begin
+                sky_r <= 8'd135;   // Day sky color
+                sky_g <= 8'd206;
+                sky_b <= 8'd235;   // Light blue
+            end
             // Sun motion
             if (sun_counter == 24'd8_000_000) begin
                 sun_counter <= 0;
@@ -151,6 +166,7 @@ end
             end
         end
     end
+
 
     // === VGA Timing Counters ===
     vga_counters counters(
