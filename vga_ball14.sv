@@ -150,7 +150,7 @@ module vga_ball(
                 sky_r <= 8'd135;
                 sky_g <= 8'd206;
                 sky_b <= 8'd235; // Day sky color
-                
+            end
             // Sun motion
           
         end
