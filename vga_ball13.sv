@@ -126,30 +126,16 @@ module vga_ball(
                 cloud_counter <= cloud_counter + 1;
             end
 
-   // Sky color cycle, track the time of day and night
-           // Increment the night timer
-            night_timer <= night_timer + 1;
-
-            // Switch to night after 50 million clock cycles (this is just an example)
-            if (night_timer == 24'd50_000_000) begin
+  // Change to night after 10 seconds (10 million cycles)
+            if (night_timer == 24'd10_000_000) begin
                 night_time <= 1; // Transition to night
             end
 
-            // Switch back to day after 100 million cycles
-            if (night_timer == 24'd100_000_000) begin
-                night_time <= 0; // Transition to day
-                night_timer <= 0; // Reset timer
-            end
-
-            // Sky color based on day or night
+            // If it's night, set the sky color to dark blue
             if (night_time) begin
-                sky_r <= 8'd10;    // Night sky color
+                sky_r <= 8'd10;  // Dark blue night sky
                 sky_g <= 8'd10;
-                sky_b <= 8'd40;    // Deep navy blue
-            end else begin
-                sky_r <= 8'd135;   // Day sky color
-                sky_g <= 8'd206;
-                sky_b <= 8'd235;   // Light blue
+                sky_b <= 8'd40;
             end
             // Sun motion
             if (sun_counter == 24'd8_000_000) begin
@@ -255,7 +241,7 @@ end else if (VGA_BLANK_n) begin
         a <= sky_r;
         b <= sky_g;
         c <= sky_b;
-    end else if (vcount < 400) begin
+    end else if (vcount < 300) begin
         a <= 8'd139; // Light brown ground
         b <= 8'd69;
         c <= 8'd19;
