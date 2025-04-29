@@ -138,18 +138,7 @@ module vga_ball(
                 sky_b <= 8'd40;
             end
             // Sun motion
-            if (sun_counter == 24'd8_000_000) begin
-                sun_counter <= 0;
-                sun_offset_x <= sun_offset_x + 1;
-                if (sun_offset_x > 1280) begin
-                    sun_offset_x <= 0;
-                    sun_offset_y <= sun_offset_y + 1;
-                    if (sun_offset_y > 50)
-                        sun_offset_y <= 0;
-                end
-            end else begin
-                sun_counter <= sun_counter + 1;
-            end
+          
         end
     end
 
