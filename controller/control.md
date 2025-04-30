@@ -1,0 +1,9 @@
+Nothing - 01 7f 7f 7f 7f 0f 00 00
+Down - 01 7f 7f 7f ff 0f 00 00
+Up  - 01 7f 7f 7f 00 0f 00 00
+Left  - 01 7f 7f 00 7f 0f 00 00
+Right - 01 7f 7f ff 7f 0f 00 00
+Select - 01 7f 7f 7f 7f 0f 10 00
+Start -  01 7f 7f 7f 7f 0f 20 00
+D - 01 7f 7f 7f 7f 4f 00 00
+A - 01 7f 7f 7f 7f 2f 00 00
