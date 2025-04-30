@@ -1,4 +1,4 @@
-# module vga_ball(
+ module vga_ball(
     input logic         clk,
     input logic         reset,
     input logic [31:0]  writedata,
