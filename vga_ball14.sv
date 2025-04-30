@@ -1,4 +1,4 @@
-module vga_ball(
+# module vga_ball(
     input logic         clk,
     input logic         reset,
     input logic [31:0]  writedata,
@@ -55,6 +55,10 @@ module vga_ball(
     logic [10:0] godzilla_x, godzilla_y;
     logic [10:0] powerup_x, powerup_y;
     logic [10:0] ptr_x, ptr_y;
+    logic ducking;
+    logic jumping;
+
+
 
     // === Score Overlay ===
     logic [3:0] score;
@@ -186,14 +190,22 @@ module vga_ball(
     dino_powerup_rom powerup_rom(.clk(clk), .address(powerup_sprite_addr), .data(powerup_sprite_output));
 
     // === CHOOSE CURRENT DINO SPRITE BASED ON STATE ===
-    always_comb begin
+    
+        always_comb begin
+        if (ducking)
+            dino_sprite_output = duck_sprite_output;
+        else if (jumping)
+            dino_sprite_output = jump_sprite_output;
+        else begin
         case (sprite_state)
-            2'd0: dino_sprite_output = dino_new_output;
-            2'd1: dino_sprite_output = dino_left_output;
-            2'd2: dino_sprite_output = dino_right_output;
-            default: dino_sprite_output = dino_new_output;
-        endcase
+                2'd0: dino_sprite_output = dino_new_output;
+                2'd1: dino_sprite_output = dino_left_output;
+                2'd2: dino_sprite_output = dino_right_output;
+                default: dino_sprite_output = dino_new_output;
+            endcase 
+        end
     end
+
 
     always_comb begin
         case (sprite_state2)
@@ -222,12 +234,12 @@ module vga_ball(
       
         end else if (chipselect && write) begin
             case (address)
-                9'd0: dino_x <= writedata[7:0];
-                9'd1: dino_y <= writedata[7:0];
-                9'd2: jump_x <= writedata[7:0];
-                9'd3: jump_y <= writedata[7:0];
-                9'd4: duck_x <= writedata[7:0];
-                9'd5: duck_y <= writedata[7:0];
+                9'd0: dino_x <= writedata[9:0];
+                9'd1: dino_y <= writedata[9:0];
+                9'd2: jump_x <= writedata[9:0];
+                9'd3: jump_y <= writedata[9:0];
+                9'd4: duck_x <= writedata[9:0];
+                9'd5: duck_y <= writedata[9:0];
                 9'd6: s_cac_x <= writedata[9:0];
                 9'd7: s_cac_y <= writedata[9:0];
                 9'd8: godzilla_x <= writedata[9:0];
@@ -235,6 +247,9 @@ module vga_ball(
                 9'd10: score   <= writedata[3:0];
                 9'd11: score_x <= writedata[7:0];
                 9'd12: score_y <= writedata[7:0];
+                9'd13: ducking <= writedata[0];
+                9'd14: jumping <= writedata[0];
+
             endcase
 
 end else if (VGA_BLANK_n) begin
@@ -512,3 +527,4 @@ endmodule
 
 
 endmodule
+
