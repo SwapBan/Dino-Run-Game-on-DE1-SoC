@@ -77,6 +77,7 @@ scp as7525@micro07.ee.columbia.edu:new/fpga_pio.c /root/test_game
 scp as7525@micro07.ee.columbia.edu:new/fpga_pio.h /root/test_gamepad
 scp as7525@micro07.ee.columbia.edu:new/test_pio.c /root/test_gamepad
 
+scp as7525@micro07.ee.columbia.edu:new/control.c /root/test_gamepad
 
 
 Error (10028): Can't resolve multiple constant drivers for net "a[7]" at vga_ball.sv(139) File: /homes/user/stud/spring25/as7525/Music/lab5-hw/soc_system/synthesis/submodules/vga_ball.sv Line: 139
