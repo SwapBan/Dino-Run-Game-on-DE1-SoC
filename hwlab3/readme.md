@@ -73,6 +73,11 @@ scp as7525@micro22.ee.columbia.edu:new/ps4_input.c /home
 scp as7525@micro07.ee.columbia.edu:new/test_hid.c /root/test_gamepad
 scp as7525@micro07.ee.columbia.edu:new/usbkeyboard.c /root/test_game
 scp as7525@micro07.ee.columbia.edu:new/usbkeyboard.h /root/test_game
+scp as7525@micro07.ee.columbia.edu:new/fpga_pio.c /root/test_game
+scp as7525@micro07.ee.columbia.edu:new/fpga_pio.h /root/test_gamepad
+scp as7525@micro07.ee.columbia.edu:new/test_pio.c /root/test_gamepad
+
+
 
 Error (10028): Can't resolve multiple constant drivers for net "a[7]" at vga_ball.sv(139) File: /homes/user/stud/spring25/as7525/Music/lab5-hw/soc_system/synthesis/submodules/vga_ball.sv Line: 139
 Error (10029): Constant driver at vga_ball.sv(63) File: /homes/user/stud/spring25/as7525/Music/lab5-hw/soc_system/synthesis/submodules/vga_ball.sv Line: 63
