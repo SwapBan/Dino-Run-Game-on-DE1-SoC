@@ -134,9 +134,9 @@
             
             // Change to night after 5 seconds (1250 million cycles)
           
-            if (night_timer < 24'd250_000_000) begin
+            if (night_timer < 24'd550_000_000) begin
                 night_timer <= night_timer + 1;  // Increment the timer
-            end else if (night_timer == 24'd250_000_000) begin
+            end else if (night_timer == 24'd550_000_000) begin
                 night_time <= 1;  // Set to night after 10 seconds
             end
         //end
@@ -259,13 +259,14 @@ end else if (VGA_BLANK_n) begin
         b <= sky_g;
         c <= sky_b;
     end else if (vcount > 300) begin
-        a <= 8'd139; // Light brown ground
-        b <= 8'd69;
-        c <= 8'd19;
-    end else begin
         a <= 8'd100; // Darker brown ground stripe
         b <= 8'd40;
         c <= 8'd10;
+    end else begin
+        a <= 8'd139; // Light brown ground
+        b <= 8'd69;
+        c <= 8'd19;
+        
     end
 
     // === Ground Line ===
