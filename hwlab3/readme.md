@@ -82,6 +82,7 @@ scp as7525@micro07.ee.columbia.edu:new/dino_control.c /root/test_gamepad
 scp as7525@micro07.ee.columbia.edu:new/dino_game.c /root/test_gamepad
 scp as7525@micro07.ee.columbia.edu:new/dino_jump_final.c /root/test_gamepad
 
+gcc -o dino_jump dino_jump_final.c usbkeyboard.c -lusb-1.0
 
 
 Error (10028): Can't resolve multiple constant drivers for net "a[7]" at vga_ball.sv(139) File: /homes/user/stud/spring25/as7525/Music/lab5-hw/soc_system/synthesis/submodules/vga_ball.sv Line: 139
