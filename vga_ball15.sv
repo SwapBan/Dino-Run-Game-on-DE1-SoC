@@ -136,7 +136,7 @@
           
          if (frame_counter % 100_000==0 && night_timer < 24'd550_000_000) begin
                 night_timer <= night_timer + 1;  // Increment the timer
-                night_time <= 0
+                //night_time <= 0
             end else if (night_timer == 24'd550_000_000) begin
                 night_time <= 1;  // Set to night after 10 seconds
             end
