@@ -33,7 +33,7 @@
 
     logic [7:0] a, b, c;
 // === Timer for Night Transition ===
-  logic [32:0] night_timer; // Timer to trigger night time
+  logic [31:0] night_timer; // Timer to trigger night time
     logic night_time; // Flag to indicate if it's nighttime
 
     // === Sprite Outputs ===
