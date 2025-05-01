@@ -26,7 +26,9 @@
     logic [7:0] sky_r, sky_g, sky_b;
     logic [23:0] sky_counter;
     logic [3:0]  sky_phase;
-
+ // === Sun Color ===
+    logic [7:0] sun_r, sun_g, sun_b; // Declared sun color variables
+  
     logic [10:0] sun_offset_x;
     logic [10:0] sun_offset_y;
     logic [23:0] sun_counter;
@@ -144,12 +146,13 @@
             
             // Change to night after 5 seconds (1250 million cycles)
           
-         if (night_timer < 32'd100_550_000_000) begin
-                night_timer <= night_timer + 1;  // Increment the timer
-                //night_time <= 0
-         end else if (night_timer >= 32'd100_550_000_000) begin
-                night_time <= 1;  // Set to night after 10 seconds
-            end
+         // Night Timer Logic (Alternating between day and night)
+         if (night_timer < 32'd100_000_000_000) begin
+            night_timer <= night_timer + 1;  // Increment the timer
+         end else if (night_timer == 32'd100_000_000_000) begin
+            night_time <= ~night_time;  // Toggle between night and day
+            night_timer <= 32'd0; // Reset the timer after 200 billion cycles
+        end
         //end
            // if (night_timer == 24'd10_000_000) begin
             //    night_time <= 1; // Transition to night
@@ -160,6 +163,10 @@
                 sky_r <= 8'd10;  // Dark blue night sky
                 sky_g <= 8'd10;
                 sky_b <= 8'd40;
+             // Change Sun to white at night
+            sun_r <= 8'd255; // White sun
+            sun_g <= 8'd255;
+            sun_b <= 8'd255;
             end else begin
                 sky_r <= 8'd135;
                 sky_g <= 8'd206;
@@ -292,16 +299,16 @@ end else if (VGA_BLANK_n) begin
         (vcount-(80+sun_offset_y))*(vcount-(80+sun_offset_y)) < 1200 &&
         (hcount-(1150-sun_offset_x))*(hcount-(1150-sun_offset_x)) +
         (vcount-(80+sun_offset_y))*(vcount-(80+sun_offset_y)) > 900) begin
-        a <= 8'd255;
-        b <= 8'd255;
-        c <= 8'd100;
+        a <= sun_r;
+        b <= sun_g;
+        c <= sun_b;
     end
 
     if ((hcount-(1150-sun_offset_x))*(hcount-(1150-sun_offset_x)) +
         (vcount-(80+sun_offset_y))*(vcount-(80+sun_offset_y)) < 900) begin
-        a <= 8'd255;
-        b <= 8'd255;
-        c <= 8'd0;
+        a <= sun_r;
+        b <= sun_g;
+        c <= sun_b;
     end
 
     // === Clouds (with wraparound drift) ===
