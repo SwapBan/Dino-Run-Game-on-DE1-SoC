@@ -144,7 +144,7 @@
             
             // Change to night after 5 seconds (1250 million cycles)
           
-         if (night_timer < 24'd550_000_000) begin
+        /* if (night_timer < 24'd550_000_000) begin
                 night_timer <= night_timer + 1;  // Increment the timer
                 //night_time <= 0
             end else if (night_timer == 24'd550_000_000) begin
@@ -154,7 +154,7 @@
            // if (night_timer == 24'd10_000_000) begin
             //    night_time <= 1; // Transition to night
           //  end
-
+*/
             // If it's night, set the sky color to dark blue
             if (night_time) begin
                 sky_r <= 8'd10;  // Dark blue night sky
