@@ -134,7 +134,7 @@
             
             // Change to night after 5 seconds (1250 million cycles)
           
-            if (night_timer < 24'd550_000_000) begin
+         if (frame_counter % 100_000==0 && night_timer < 24'd550_000_000) begin
                 night_timer <= night_timer + 1;  // Increment the timer
             end else if (night_timer == 24'd550_000_000) begin
                 night_time <= 1;  // Set to night after 10 seconds
