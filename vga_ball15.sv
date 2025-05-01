@@ -147,7 +147,7 @@
          if (night_timer < 32'd100_550_000_000) begin
                 night_timer <= night_timer + 1;  // Increment the timer
                 //night_time <= 0
-         end else if (night_timer == 32'd100_550_000_000) begin
+         end else if (night_timer >= 32'd100_550_000_000) begin
                 night_time <= 1;  // Set to night after 10 seconds
             end
         //end
