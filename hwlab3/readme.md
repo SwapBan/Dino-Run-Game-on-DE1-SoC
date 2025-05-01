@@ -58,13 +58,13 @@ scp as7525@micro31.ee.columbia.edu:lab4-hw/output_files/soc_system.rbf /mnt
 scp as7525@micro29.ee.columbia.edu:lab5-hw/output_files/soc_system.rbf /mnt
 
 scp as7525@micro22.ee.columbia.edu:lab5-hw/output_files/soc_system.rbf /mnt
+scp as7525@micro07.ee.columbia.edu:lab6/output_files/soc_system.rbf /mnt
 
 
 scp as7525@micro29.ee.columbia.edu:lab5-hw/soc_system.dtb /mnt
 
 scp as7525@micro29.ee.columbia.edu:lab5-hw/soc_system.dtb /mnt
 scp as7525@micro22.ee.columbia.edu:lab5-hw/soc_system.dtb /mnt
-
 
 
 scp as7525@micro29.ee.columbia.edu:lab5-hw/soc_system.dtb /home
