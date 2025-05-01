@@ -68,6 +68,8 @@ scp as7525@micro22.ee.columbia.edu:lab5-hw/soc_system.dtb /mnt
 
 
 scp as7525@micro29.ee.columbia.edu:lab5-hw/soc_system.dtb /home
+scp as7525@micro07.ee.columbia.edu:lab6/soc_system.dtb /home
+
 
 scp as7525@micro22.ee.columbia.edu:new/ps4_input.c /home
 scp as7525@micro07.ee.columbia.edu:new/test_hid.c /root/test_gamepad
