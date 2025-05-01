@@ -33,7 +33,7 @@
 
     logic [7:0] a, b, c;
 // === Timer for Night Transition ===
-    logic [23:0] night_timer; // Timer to trigger night time
+  logic [32:0] night_timer; // Timer to trigger night time
     logic night_time; // Flag to indicate if it's nighttime
 
     // === Sprite Outputs ===
@@ -105,7 +105,7 @@
             sun_counter <= 0;
             sun_offset_x <= 0;
             sun_offset_y <= 0;
-            night_timer <= 0;
+            night_timer <= 32'd0;
             night_time <= 0; // Start with day
             sky_r <= 8'd135;
             sky_g <= 8'd206;
@@ -144,10 +144,10 @@
             
             // Change to night after 5 seconds (1250 million cycles)
           
-         if (night_timer < 24'd550_000_000) begin
+         if (night_timer < 32'd100_550_000_000) begin
                 night_timer <= night_timer + 1;  // Increment the timer
                 //night_time <= 0
-            end else if (night_timer == 24'd550_000_000) begin
+         end else if (night_timer == 32'd100_550_000_000) begin
                 night_time <= 1;  // Set to night after 10 seconds
             end
         //end
