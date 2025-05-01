@@ -171,6 +171,9 @@
                 sky_r <= 8'd135;
                 sky_g <= 8'd206;
                 sky_b <= 8'd235; // Day sky color
+                sun_r <= 8'd255; // Yellow sun
+                sun_g <= 8'd255;
+                sun_b <= 8'd0;
             end
             // Sun motion
           
