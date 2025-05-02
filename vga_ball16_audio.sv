@@ -154,6 +154,7 @@
             end else begin
                 cloud_counter <= cloud_counter + 1;
             end
+        end
 
 
         /* // Cloud drifting
