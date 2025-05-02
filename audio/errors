@@ -6,3 +6,6 @@ Error (10161): Verilog HDL error at soc_system_top.sv(302): object "soc_system_a
 
 Error (12152): Can't elaborate user hierarchy "soc_system:soc_system0|vga_ball:vga_ball_0" File: /homes/user/stud/spring25/as7525/Music/lab9/soc_system/synthesis/soc_system.v Line: 329
 
+Error (10200): Verilog HDL Conditional Statement error at vga_ball.sv(175): cannot match operand(s) in the condition to the corresponding edges in the enclosing event control of the always construct File: /homes/user/stud/spring25/as7525/Music/lab10/soc_system/synthesis/submodules/vga_ball.sv Line: 175
+Error (10200): Verilog HDL Conditional Statement error at vga_ball.sv(181): cannot match operand(s) in the condition to the corresponding edges in the enclosing event control of the always construct File: /homes/user/stud/spring25/as7525/Music/lab10/soc_system/synthesis/submodules/vga_ball.sv Line: 181
+
