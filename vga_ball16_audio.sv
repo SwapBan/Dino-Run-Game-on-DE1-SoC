@@ -71,6 +71,7 @@
     logic [10:0] ptr_x, ptr_y;
     logic ducking;
     logic jumping;
+  logic [3:0] counter;
     // Maximum address for jump sound data (just a placeholder)
     parameter MAX_JUMP = 15'd5000;
 
