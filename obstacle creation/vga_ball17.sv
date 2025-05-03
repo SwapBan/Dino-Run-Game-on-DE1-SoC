@@ -64,6 +64,9 @@
     logic [10:0] ptr_x, ptr_y;
     logic ducking;
     logic jumping;
+   logic [10:0] cacti_x   = 11'd500;        // NEW: group cactus X
+    logic [10:0] cacti_y   = 11'd200; 
+   
 
 
 
@@ -215,10 +218,11 @@
     dino_s_cac_rom s_cac_rom(.clk(clk), .address(scac_sprite_addr), .data(scac_sprite_output));
     dino_powerup_rom powerup_rom(.clk(clk), .address(powerup_sprite_addr), .data(powerup_sprite_output));
       // alongside your other roms
-    dino_cacti_together_rom cactus_group_rom (
-      .clk  (clk),
-      .address(cacti_group_addr),
-      .data (cacti_group_output)
+   // NEW: group cactus ROM follows same format
+    dino_cacti_together_rom  cacti_group_rom(
+        .clk(clk),
+        .address(cacti_group_addr),
+        .data(cacti_group_output)
     );
 
 
@@ -484,18 +488,16 @@ end else if (VGA_BLANK_n) begin
            // 5) overlay “3” at (score_x+20,score_y)
           // draw “3” at (score_x+20, score_y)
  // --- group cactus (150×40) ---
-if (hcount >= cg_x && hcount < cg_x + 150 &&
-    vcount >= cg_y && vcount < cg_y + 40) begin
-
-  // flatten 2D → 1D:
-  cacti_group_addr <= (hcount - cg_x) + ((vcount - cg_y) * 150);
-
-  if (is_visible(cacti_group_output)) begin
-    a <= {cacti_group_output[15:11], 3'b000};
-    b <= {cacti_group_output[10:5],  2'b00};
-    c <= {cacti_group_output[4:0],   3'b000};
-  end
-end
+// NEW: group cactus draw at 150×40
+      if (hcount >= cacti_x && hcount < cacti_x+150 &&
+          vcount >= cacti_y && vcount < cacti_y+40) begin
+        cacti_group_addr <= (hcount - cacti_x) + ((vcount-cacti_y)*150);
+        if (is_visible(cacti_group_output)) begin
+          a <= cacti_group_output[15:11];
+          b <= cacti_group_output[10:5];
+          c <= cacti_group_output[4:0];
+        end
+      end
  
 if (hcount >= score_x+20 && hcount <  score_x+28 &&
     vcount >= score_y   && vcount <  score_y+8  &&
