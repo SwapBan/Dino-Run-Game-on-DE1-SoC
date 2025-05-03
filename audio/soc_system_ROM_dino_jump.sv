@@ -1,23 +1,25 @@
+
+
 module soc_system_ROM_dino_jump #(
-    parameter DEPTH       = 5000,                         // number of samples in your hex
-    parameter ADDR_WIDTH  = $clog2(DEPTH)
+  parameter ADDR_WIDTH = 13,      // 2^13 = 8192 words, > MAX_JUMP=5000
+  parameter DATA_WIDTH = 16
 )(
-    input  logic                 clk,
-    input  logic [ADDR_WIDTH-1:0] address,
-    output logic [15:0]          data
+  input  logic                      clk,
+  input  logic [ADDR_WIDTH-1:0]    address,
+  output logic [DATA_WIDTH-1:0]    readdata
 );
 
-    // storage
-    logic [15:0] memory [0:DEPTH-1];
+  // Memory array
+  logic [DATA_WIDTH-1:0] mem [(1<<ADDR_WIDTH)-1:0];
 
-    // preload from hex file
-    initial begin
-        $readmemh("dino_jump.hex", memory);
-    end
+  // Initialize from hex file (one 16-bit word per line)
+  initial begin
+    $readmemh("dino_jump.hex", mem);
+  end
 
-    // synchronous read
-    always_ff @(posedge clk) begin
-        data <= memory[address];
-    end
+  // Synchronous read
+  always_ff @(posedge clk) begin
+    readdata <= mem[address];
+  end
 
 endmodule
