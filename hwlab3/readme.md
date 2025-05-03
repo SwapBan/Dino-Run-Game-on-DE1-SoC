@@ -90,6 +90,8 @@ scp as7525@micro07.ee.columbia.edu:new/dino_control.c /root/test_gamepad
 scp as7525@micro07.ee.columbia.edu:new/dino_game.c /root/test_gamepad
 scp as7525@micro07.ee.columbia.edu:new/dino_jump_final.c /root/test_gamepad
 scp as7525@micro07.ee.columbia.edu:new/dino_souped_up_jump_flag.c /root/test_gamepad
+scp as7525@micro21.ee.columbia.edu:new/dino_jump3.c /root/test_gamepad
+
 
 
 gcc -o dino_jump dino_jump_final.c usbkeyboard.c -lusb-1.0
