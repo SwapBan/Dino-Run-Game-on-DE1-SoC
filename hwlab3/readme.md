@@ -89,6 +89,7 @@ scp as7525@micro07.ee.columbia.edu:new/dino_souped_up_jump_flag.c /root/test_gam
 gcc -o dino_jump dino_jump_final.c usbkeyboard.c -lusb-1.0
 gcc -o dino_jump dino_souped_up_jump_flag.c usbkeyboard.c -lusb-1.0
 gcc -o dino_souped_up_jump_flag dino_souped_up_jump_flag.c usbkeyboard.c -lusb-1.0
+gcc -o dino_jump dino_souped_up_jump_flag.c usbkeyboard.c -lusb-1.0
 
 
 
