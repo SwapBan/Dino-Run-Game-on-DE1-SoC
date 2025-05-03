@@ -10,12 +10,12 @@
     output logic        VGA_CLK, VGA_HS, VGA_VS,
                         VGA_BLANK_n,
     output logic        VGA_SYNC_n,
-	 input L_READY,
-		input R_READY,
-		output logic [15:0] L_DATA,
-		output logic [15:0] R_DATA,
-		output logic L_VALID,
-		output logic R_VALID
+    input L_READY,
+    input R_READY,
+    output logic [15:0] L_DATA,
+    output logic [15:0] R_DATA,
+    output logic L_VALID,
+    output logic R_VALID
 );
 
     // === Counters and Coordinates ===
