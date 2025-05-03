@@ -110,7 +110,7 @@
     endfunction
 
     // === Animation and Color Update Logic ===
-    always_ff @(posedge clk or posedge reset) begin
+   /* always_ff @(posedge clk or posedge reset) begin
         if (reset) begin
             frame_counter <= 0;
             sprite_state <= 0;
@@ -165,7 +165,7 @@
                 
             end else begin
                 night_timer <= night_timer + 1;
-            end*/
+            end
 
 
             
@@ -213,7 +213,140 @@
             // Sun motion
           
         end
+    end*/
+      // === Animation, night-timer & audio stepping ===
+   /* always_ff @(posedge clk or posedge reset) begin
+        if (reset) begin
+            // — reset all your frame, cloud, sky, sun, audio state here —
+            frame_counter       <= 0;
+            sprite_state        <= 0;
+            sprite_state2       <= 0;
+            cloud_counter       <= 0;
+            cloud_offset        <= 0;
+            sky_r               <= 8'd135; sky_g <= 8'd206; sky_b <= 8'd235;
+            sun_r               <= 8'd255; sun_g <= 8'd255; sun_b <= 8'd0;
+            sun_offset_x        <= 0;      sun_offset_y <= 0;
+            night_timer         <= 0;
+            night_time          <= 0;
+            counter             <= 0;
+            addr_jump           <= 0;
+            left_channel_valid  <= 0;
+            right_channel_valid <= 0;
+        end else begin
+            // — frame switching —
+            if (frame_counter == 24'd5_000_000) begin
+                frame_counter <= 0;
+                sprite_state  <= sprite_state + 1;
+                sprite_state2 <= sprite_state2 + 1;
+            end else
+                frame_counter <= frame_counter + 1;
+
+            // — cloud drifting —
+            if (cloud_counter == 24'd8_000_000) begin
+                cloud_counter <= 0;
+                cloud_offset  <= (cloud_offset == 11'd1280 ? 0 : cloud_offset + 1);
+            end else
+                cloud_counter <= cloud_counter + 1;
+        end  // ←<< THIS END closes your reset/else
+
+        // — night-timer toggles every 100e9 cycles —
+        if (night_timer < 32'd100_000_000_000)
+            night_timer <= night_timer + 1;
+        else begin
+            night_timer <= 0;
+            night_time  <= ~night_time;
+        end
+
+        // — audio stepping when both channels ready & triggered —
+        if (left_channel_ready && right_channel_ready && play_jump) begin
+            left_channel_valid  <= 1;
+            right_channel_valid <= 1;
+            if (counter == delay) begin
+                counter   <= 0;
+                addr_jump <= (addr_jump >= MAX_JUMP ? MAX_JUMP : addr_jump + 1);
+            end else
+                counter <= counter + 1;
+        end else begin
+            left_channel_valid  <= 0;
+            right_channel_valid <= 0;
+        end
+
+        // — sky & sun color for day/night —
+        if (night_time) begin
+            sky_r <= 8'd10;  sky_g <= 8'd10;  sky_b <= 8'd40;
+            sun_r <= 8'd255; sun_g <= 8'd255; sun_b <= 8'd255;
+        end else begin
+            sky_r <= 8'd135; sky_g <= 8'd206; sky_b <= 8'd235;
+            sun_r <= 8'd255; sun_g <= 8'd255; sun_b <=   0;
+        end
+    end*/
+  always_ff @(posedge clk or posedge reset) begin
+  if (reset) begin
+    // — reset all the state —
+    frame_counter       <= 0;
+    sprite_state        <= 0;
+    sprite_state2       <= 0;
+    cloud_counter       <= 0;
+    cloud_offset        <= 0;
+    sky_r               <= 8'd135; sky_g <= 8'd206; sky_b <= 8'd235;
+    sun_r               <= 8'd255; sun_g <= 8'd255; sun_b <=   0;
+    sun_offset_x        <= 0;      sun_offset_y <= 0;
+    night_timer         <= 0;
+    night_time          <= 0;
+    counter             <= 0;
+    addr_jump           <= 0;
+    left_channel_valid  <= 0;
+    right_channel_valid <= 0;
+  end else begin
+    // — frame switching —
+    if (frame_counter == 24'd5_000_000) begin
+      frame_counter <= 0;
+      sprite_state  <= sprite_state + 1;
+      sprite_state2 <= sprite_state2 + 1;
+    end else
+      frame_counter <= frame_counter + 1;
+
+    // — cloud drifting —
+    if (cloud_counter == 24'd8_000_000) begin
+      cloud_counter <= 0;
+      cloud_offset  <= (cloud_offset == 11'd1280 ? 0 : cloud_offset + 1);
+    end else
+      cloud_counter <= cloud_counter + 1;
+
+    // — night‐timer toggles every 100 billion cycles —
+    if (night_timer < 32'd100_000_000_000)
+      night_timer <= night_timer + 1;
+    else begin
+      night_timer <= 0;
+      night_time  <= ~night_time;
     end
+
+    // — audio stepping —
+    if (left_channel_ready && right_channel_ready && play_jump) begin
+      left_channel_valid  <= 1;
+      right_channel_valid <= 1;
+      if (counter == delay) begin
+        counter   <= 0;
+        addr_jump <= (addr_jump >= MAX_JUMP ? MAX_JUMP : addr_jump + 1);
+      end else
+        counter <= counter + 1;
+    end else begin
+      left_channel_valid  <= 0;
+      right_channel_valid <= 0;
+    end
+
+    // — sky & sun color for day/night —
+    if (night_time) begin
+      sky_r <= 8'd10;  sky_g <= 8'd10;  sky_b <= 8'd40;
+      sun_r <= 8'd255; sun_g <= 8'd255; sun_b <= 8'd255;
+    end else begin
+      sky_r <= 8'd135; sky_g <= 8'd206; sky_b <= 8'd235;
+      sun_r <= 8'd255; sun_g <= 8'd255; sun_b <=   0;
+    end
+  end
+end
+
+
 
 
     // === VGA Timing Counters ===
