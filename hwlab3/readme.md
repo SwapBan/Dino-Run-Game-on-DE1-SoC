@@ -98,7 +98,7 @@ gcc -o dino_souped_up_jump_flag dino_souped_up_jump_flag.c usbkeyboard.c -lusb-1
 gcc -o dino_jump dino_souped_up_jump_flag.c usbkeyboard.c -lusb-1.0
 
 
-
+wget https://www.cs.columbia.edu/~sedwards/classes/2025/4840-spring/linux-headers-4.19.0.tar.gz
 
 Error (10028): Can't resolve multiple constant drivers for net "a[7]" at vga_ball.sv(139) File: /homes/user/stud/spring25/as7525/Music/lab5-hw/soc_system/synthesis/submodules/vga_ball.sv Line: 139
 Error (10029): Constant driver at vga_ball.sv(63) File: /homes/user/stud/spring25/as7525/Music/lab5-hw/soc_system/synthesis/submodules/vga_ball.sv Line: 63
