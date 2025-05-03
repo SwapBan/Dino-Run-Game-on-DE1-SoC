@@ -48,6 +48,11 @@
     // === Sprite Addresses ===
     logic [9:0] dino_sprite_addr, jump_sprite_addr, duck_sprite_addr;
     logic [9:0] godzilla_sprite_addr, scac_sprite_addr, powerup_sprite_addr, ptr_sprite_addr;
+     //cacti
+    logic [15:0] cacti_group_output;
+    logic [12:0] cacti_group_addr;   // 150×40 = 6000 pixels → needs 13 bits
+    logic [10:0] cg_x, cg_y;         // group‐cactus position
+
 
     // === Sprite Positions ===
     logic [10:0] dino_x, dino_y;
@@ -209,6 +214,13 @@
     dino_godzilla_rom godzilla_rom(.clk(clk), .address(godzilla_sprite_addr), .data(godzilla_sprite_output));
     dino_s_cac_rom s_cac_rom(.clk(clk), .address(scac_sprite_addr), .data(scac_sprite_output));
     dino_powerup_rom powerup_rom(.clk(clk), .address(powerup_sprite_addr), .data(powerup_sprite_output));
+      // alongside your other roms
+    dino_cacti_together_rom cactus_group_rom (
+      .clk  (clk),
+      .address(cacti_group_addr),
+      .data (cacti_group_output)
+    );
+
 
     // === CHOOSE CURRENT DINO SPRITE BASED ON STATE ===
     
@@ -250,6 +262,9 @@
             score   <= 4'd0;
             score_x <= 8'd25;
             score_y <= 8'd41;
+
+          cg_x <= 11'd400;    // wherever you want it to start
+          cg_y <= 11'd300;
             a <= 8'hFF; b <= 8'hFF; c <= 8'hFF;
              
       
@@ -270,6 +285,8 @@
                 9'd12: score_y <= writedata[7:0];
                 9'd13: ducking <= writedata[0];
                 9'd14: jumping <= writedata[0];
+                9'd15: cg_x <= writedata[10:0];   // new bus slots
+                9'd16: cg_y <= writedata[10:0];
 
             endcase
 
@@ -466,6 +483,20 @@ end else if (VGA_BLANK_n) begin
            // --- SCORE as an 8×8 “sprite” ---
            // 5) overlay “3” at (score_x+20,score_y)
           // draw “3” at (score_x+20, score_y)
+ // --- group cactus (150×40) ---
+if (hcount >= cg_x && hcount < cg_x + 150 &&
+    vcount >= cg_y && vcount < cg_y + 40) begin
+
+  // flatten 2D → 1D:
+  cacti_group_addr <= (hcount - cg_x) + ((vcount - cg_y) * 150);
+
+  if (is_visible(cacti_group_output)) begin
+    a <= {cacti_group_output[15:11], 3'b000};
+    b <= {cacti_group_output[10:5],  2'b00};
+    c <= {cacti_group_output[4:0],   3'b000};
+  end
+end
+ 
 if (hcount >= score_x+20 && hcount <  score_x+28 &&
     vcount >= score_y   && vcount <  score_y+8  &&
     font_rom[3][vcount-score_y]
