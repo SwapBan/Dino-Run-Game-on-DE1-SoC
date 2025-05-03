@@ -67,3 +67,12 @@ Info (12021): Found 1 design units, including 1 entities, in source file soc_sys
 Error (10200): Verilog HDL Conditional Statement error at vga_ball.sv(175): cannot match operand(s) in the condition to the corresponding edges in the enclosing event control of the always construct File: /homes/user/stud/spring25/as7525/Music/lab11/soc_system/synthesis/submodules/vga_ball.sv Line: 175
 Error (10200): Verilog HDL Conditional Statement error at vga_ball.sv(181): cannot match operand(s) in the condition to the corresponding edges in the enclosing event control of the always construct File: /homes/user/stud/spring25/as7525/Music/lab11/soc_system/synthesis/submodules/vga_ball.sv Line: 181
 
+
+module soc_system_ROM_dino_jump (
+  input  logic        clk,
+  input  logic        clken,
+  input  logic        reset,
+  input  logic        reset_req,
+  input  logic [15:0] address,
+  output logic [15:0] readdata
+);
