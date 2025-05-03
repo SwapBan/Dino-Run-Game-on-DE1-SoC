@@ -10,6 +10,12 @@
     output logic        VGA_CLK, VGA_HS, VGA_VS,
                         VGA_BLANK_n,
     output logic        VGA_SYNC_n
+	 input L_READY,
+		input R_READY,
+		output logic [15:0] L_DATA,
+		output logic [15:0] R_DATA,
+		output logic L_VALID,
+		output logic R_VALID
 );
 
     // === Counters and Coordinates ===
@@ -72,6 +78,13 @@
     logic [3:0] score;
     logic [7:0] score_x = 8'd225, score_y = 8'd441;
     logic [7:0] font_rom [0:9][0:7];
+
+	 logic [15:0] audio_play_0;
+	 logic audio_start;
+	 assign R_DATA = audio_out;
+	assign L_DATA = audio_out;
+	assign L_VALID = audio_valid_sr[1];
+	assign R_VALID = audio_valid_sr[1];
 
     initial begin
         // Tiny 8x8 font ROM
@@ -257,6 +270,7 @@
             score_x <= 8'd25;
             score_y <= 8'd41;
             a <= 8'hFF; b <= 8'hFF; c <= 8'hFF;
+		audio_valid_sr[1] <= audio_valid_sr[0];
              
       
         end else if (chipselect && write) begin
@@ -276,6 +290,7 @@
                 9'd12: score_y <= writedata[7:0];
                 9'd13: ducking <= writedata[0];
                 9'd14: jumping <= writedata[0];
+		5'd16 : audio_play_0 [15:0] <= writedata[15:0];
 
             endcase
 
