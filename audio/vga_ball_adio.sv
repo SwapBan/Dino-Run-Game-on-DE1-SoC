@@ -537,12 +537,15 @@ if (L_READY && R_READY) begin
 			else
 				audio_valid_sr[0] <= 0;
 
-			if (audio_divider == 14'd3125)
+	if (audio_divider == 14'd3125)begin
 				audio_divider <= 14'd0;
-			else
+		end else begin
 				audio_divider <= audio_divider + 14'd1;
 		end
 	end
+	 
+	 end
+	 
 	
 
 endmodule
