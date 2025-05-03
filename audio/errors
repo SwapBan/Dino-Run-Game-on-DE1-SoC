@@ -76,3 +76,42 @@ module soc_system_ROM_dino_jump (
   input  logic [15:0] address,
   output logic [15:0] readdata
 );
+
+
+
+// soc_system_ROM_dino_jump.sv
+module soc_system_ROM_dino_jump #(
+  parameter ADDR_WIDTH = 13,           // enough to index up to MAX_JUMP (5000)
+  parameter DATA_WIDTH = 16
+)(
+  input  logic                      clk,
+  input  logic [ADDR_WIDTH-1:0]    address,
+  output logic [DATA_WIDTH-1:0]    readdata
+);
+
+  // declare ROM depth = 2^ADDR_WIDTH (you'll only use up to MAX_JUMP)
+  logic [DATA_WIDTH-1:0] mem [0:(1<<ADDR_WIDTH)-1];
+
+  // initialize from external hex file (one sample per line)
+  initial begin
+    $readmemh("dino_jump.hex", mem);
+  end
+
+  // synchronous read
+  always_ff @(posedge clk) begin
+    readdata <= mem[address];
+  end
+
+endmodule
+
+
+
+
+soc_system_ROM_dino_jump #(
+  .ADDR_WIDTH(13),
+  .DATA_WIDTH(16)
+) jump_sound (
+  .clk      (clk50),
+  .address  (addr_jump),
+  .readdata (jump_data)
+);
