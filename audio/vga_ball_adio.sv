@@ -9,7 +9,7 @@
     output logic [7:0]  VGA_R, VGA_G, VGA_B,
     output logic        VGA_CLK, VGA_HS, VGA_VS,
                         VGA_BLANK_n,
-    output logic        VGA_SYNC_n
+    output logic        VGA_SYNC_n,
 	 input L_READY,
 		input R_READY,
 		output logic [15:0] L_DATA,
@@ -70,7 +70,7 @@
 	logic [13:0] audio_divider;
 	logic [15:0] audio_out;
 	logic [1:0] audio_valid_sr;
-	logic audio_start;
+	//logic audio_start;
 
 
 
