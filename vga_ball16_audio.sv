@@ -365,14 +365,14 @@ end
     // === SPRITE ROMS ===
   
     // ROM for jump sound data
-    soc_system_ROM_dino_jump jump_sound(
-        .address(addr_jump), 
-        .clk(clk50), 
-        .clken(1), 
-        .reset(reset), 
-        .reset_req(0), 
-        .readdata(jump_data)
-    );
+   
+ soc_system_ROM_dino_jump #(.ADDR_WIDTH(13)) jump_sound (
+    .clk     (clk50),
+     .address (addr_jump),
+     .readdata(jump_data)
+   );
+
+
     dino_sprite_rom dino_rom(.clk(clk), .address(dino_sprite_addr), .data(dino_new_output));
     dino_left_leg_up_rom dino_rom1(.clk(clk), .address(dino_sprite_addr), .data(dino_left_output));
     dino_right_leg_up_rom dino_rom2(.clk(clk), .address(dino_sprite_addr), .data(dino_right_output));
