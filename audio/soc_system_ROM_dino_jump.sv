@@ -1,5 +1,3 @@
-
-
 module soc_system_ROM_dino_jump #(
   parameter ADDR_WIDTH = 13,      // 2^13 = 8192 words, > MAX_JUMP=5000
   parameter DATA_WIDTH = 16
