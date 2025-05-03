@@ -274,14 +274,7 @@ module soc_system_top(
 .vga_hs (VGA_HS),
 .vga_vs (VGA_VS),
 .vga_blank_n (VGA_BLANK_N),
-.vga_sync_n (VGA_SYNC_N),
-.audio_0_external_interface_BCLK                  (AUD_BCLK),
-     .audio_0_external_interface_DACDAT                (AUD_DACDAT),
-     .audio_0_external_interface_DACLRCK               (AUD_DACLRCK),
-     .audio_pll_0_audio_clk_clk                        (AUD_XCK),
-     .audio_and_video_config_0_external_interface_SDAT (FPGA_I2C_SDAT),
-     .audio_and_video_config_0_external_interface_SCLK (FPGA_I2C_SCLK)  
-
+.vga_sync_n (VGA_SYNC_N)
   );
 
    // The following quiet the "no driver" warnings for output
@@ -333,3 +326,24 @@ module soc_system_top(
 
 							          
 endmodule
+
+
+// === Audio Signal Connections ===
+logic signed [15:0] audio_sample;
+logic audio_reset = ~KEY[0];  // Use KEY[0] as reset
+
+tone_gen tone_inst (
+    .clk(CLOCK_50),
+    .reset(audio_reset),
+    .audio_out(audio_sample)
+);
+
+audio_codec codec_inst (
+    .clk(CLOCK_50),
+    .reset(audio_reset),
+    .audio_data(audio_sample),
+    .AUD_BCLK(AUD_BCLK),
+    .AUD_DACDAT(AUD_DACDAT),
+    .AUD_DACLRCK(AUD_DACLRCK),
+    .AUD_XCK(AUD_XCK)
+);
