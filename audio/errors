@@ -62,3 +62,8 @@ Error (10170): Verilog HDL syntax error at vga_ball.sv(554) near text: "paramete
 Error (10170): Verilog HDL syntax error at vga_ball.sv(554) near text: ",";  expecting ";". Check for and fix any syntax errors that appear immediately before or at the specified keyword. The Intel FPGA Knowledge Database contains many articles with specific details on how to resolve this error. Visit the Knowledge Database at https://www.altera.com/support/support-resources/knowledge-base/search.html and search for this specific error message number. File: /homes/user/stud/spring25/as7525/Music/lab11/soc_system/synthesis/submodules/vga_ball.sv Line: 554
 Info (12021): Found 0 design units, including 0 entities, in source file soc_system/synthesis/submodules/vga_ball.sv
 Info (12021): Found 1 design units, including 1 entities, in source file soc_system/synthesis/submodules/soc_system_hps_0.v
+
+
+Error (10200): Verilog HDL Conditional Statement error at vga_ball.sv(175): cannot match operand(s) in the condition to the corresponding edges in the enclosing event control of the always construct File: /homes/user/stud/spring25/as7525/Music/lab11/soc_system/synthesis/submodules/vga_ball.sv Line: 175
+Error (10200): Verilog HDL Conditional Statement error at vga_ball.sv(181): cannot match operand(s) in the condition to the corresponding edges in the enclosing event control of the always construct File: /homes/user/stud/spring25/as7525/Music/lab11/soc_system/synthesis/submodules/vga_ball.sv Line: 181
+
