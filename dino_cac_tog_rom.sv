@@ -1,4 +1,4 @@
-module dino_sprite_rom (
+module dino_cacti_together_rom (
     input  logic        clk,
     input  logic [9:0]  address,
     output logic [15:0] data
@@ -7,7 +7,7 @@ module dino_sprite_rom (
     logic [15:0] memory [0:1023];
 
     initial begin
-        $readmemh("dino_sprite.hex", memory);
+        $readmemh("cactus_group_custom.hex", memory);
     end
 
     always_ff @(posedge clk) begin
