@@ -26,3 +26,15 @@ dino_duck.c:75:9: error: unknown type name 'bool'
          ^
 dino_duck.c:76:9: error: unknown type name 'bool'
          bool want_duck = (y_axis == 0xFF && y == GROUND_Y);
+
+
+root@de1-soc:~/test_gamepad# lsusb
+Bus 001 Device 003: ID 0079:0011 DragonRise Inc. Gamepad
+Bus 001 Device 002: ID 0424:2512 Standard Microsystems Corp. USB 2.0 Hub
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+root@de1-soc:~/test_gamepad# lsusb
+Bus 001 Device 002: ID 0424:2512 Standard Microsystems Corp. USB 2.0 Hub
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+root@de1-soc:~/test_gamepad# lsusb
+Bus 001 Device 004: ID 0079:0011 DragonRise Inc. Gamepad
+Bus 001 Device 002: ID 0424:2512 Standard Microsystems Corp. USB 2.0 Hub
