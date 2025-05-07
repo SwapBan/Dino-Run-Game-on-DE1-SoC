@@ -106,7 +106,7 @@ gcc -o dino_jump3 dino_duck.c usbkeyboard.c -lusb-1.0 -lm
 gcc -o dino_jump4 dino_new.c usbkeyboard.c -lusb-1.0 -lm
 gcc -o dino_jump5 dino_move.c usbkeyboard.c -lusb-1.0 -lm
 gcc -o -dino_jump5 dino_move.c usbkeyboard.c -std=gnu99 -lusb-1.0 -lm
-
+gcc -02 -o dino_move dino_move.c
 
 
 wget https://www.cs.columbia.edu/~sedwards/classes/2025/4840-spring/linux-headers-4.19.0.tar.gz
