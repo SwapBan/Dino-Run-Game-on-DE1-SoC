@@ -45,3 +45,7 @@ Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
 root@de1-soc:~/test_gamepad# lsusb
 Bus 001 Device 004: ID 0079:0011 DragonRise Inc. Gamepad
 Bus 001 Device 002: ID 0424:2512 Standard Microsystems Corp. USB 2.0 Hub
+
+
+USB read error: -1
+
