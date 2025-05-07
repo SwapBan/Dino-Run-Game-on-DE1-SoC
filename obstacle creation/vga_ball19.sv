@@ -382,7 +382,7 @@ end else if (VGA_BLANK_n) begin
         b <= 8'd0;
         c <= 8'd0;
     end
-
+ if (!game_over) begin
     // === Sun with Soft Glow and Movement ===
     if ((hcount-(1150-sun_offset_x))*(hcount-(1150-sun_offset_x)) +
         (vcount-(80+sun_offset_y))*(vcount-(80+sun_offset_y)) < 1200 &&
@@ -602,6 +602,7 @@ end
 
 
         end
+    end
     end
 
     assign {VGA_R, VGA_G, VGA_B} = {a, b, c};
