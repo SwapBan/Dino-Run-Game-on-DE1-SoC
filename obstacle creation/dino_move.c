@@ -1,55 +1,52 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <unistd.h>
-#include <stdint.h>
 #include <fcntl.h>
 #include <sys/mman.h>
+#include <stdint.h>
 
-#define LW_BASE        0xFF200000
-#define MAP_SIZE       0x1000
+#define LW_BASE       0xFF200000
+#define MAP_SIZE      0x1000
 
-// match your vga_ball.sv case(address) × 4
-#define OFF_GROUP_CAC_X  (15*4)
-#define OFF_LAVA_X       (17*4)
+// these indices must match your vga_ball's case(address)
+#define S_CAC_X_IDX   6
+#define CG_X_IDX     15
+#define LAVA_X_IDX   17
 
-#define SCREEN_WIDTH   640    // visible area width
-#define WRAP_OFFSET    100    // how far off‐screen to respawn
-#define SPEED            1    // pixels per frame
+// byte offsets = index * 4
+#define S_CAC_X_OFF  (S_CAC_X_IDX * 4)
+#define CG_X_OFF     (CG_X_IDX    * 4)
+#define LAVA_X_OFF   (LAVA_X_IDX  * 4)
 
-int main(void) {
-    // 1) open /dev/mem and mmap
-    int fd = open("/dev/mem", O_RDWR | O_SYNC);
-    if (fd < 0) { perror("open"); return 1; }
-    void *base = mmap(NULL, MAP_SIZE,
-                      PROT_READ|PROT_WRITE, MAP_SHARED,
+#define SCREEN_WIDTH 640
+#define SPEED         1
+
+int main() {
+    int fd = open("/dev/mem", O_RDWR|O_SYNC);
+    void *base = mmap(NULL, MAP_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED,
                       fd, LW_BASE);
-    if (base == MAP_FAILED) { perror("mmap"); close(fd); return 1; }
 
-    // 2) pointers to your two PIO registers
-    volatile uint32_t *gx = (uint32_t *)( (char*)base + OFF_GROUP_CAC_X );
-    volatile uint32_t *lx = (uint32_t *)( (char*)base + OFF_LAVA_X      );
+    volatile uint32_t *s_cac_x = (uint32_t *)((char*)base + S_CAC_X_OFF);
+    volatile uint32_t *cg_x    = (uint32_t *)((char*)base + CG_X_OFF);
+    volatile uint32_t *lava_x  = (uint32_t *)((char*)base + LAVA_X_OFF);
 
-    // 3) initial positions (just off the right edge)
-    *gx = SCREEN_WIDTH + WRAP_OFFSET;
-    *lx = SCREEN_WIDTH + WRAP_OFFSET*2;
+    // initialize them off the right edge
+    *s_cac_x = SCREEN_WIDTH +  50;
+    *cg_x    = SCREEN_WIDTH + 150;
+    *lava_x  = SCREEN_WIDTH + 250;
 
-    // 4) main loop: move left, wrap when <=0
     while (1) {
-        uint32_t g = *gx;
-        uint32_t l = *lx;
+        // move each left by SPEED; wrap around to SCREEN_WIDTH
+        uint32_t x;
 
-        // move left or wrap
-        g = (g > SPEED) ? g - SPEED : SCREEN_WIDTH + WRAP_OFFSET;
-        l = (l > SPEED) ? l - SPEED : SCREEN_WIDTH + WRAP_OFFSET*2;
+        x = *s_cac_x;
+        *s_cac_x = (x > SPEED) ? x - SPEED : SCREEN_WIDTH;
 
-        *gx = g;
-        *lx = l;
+        x = *cg_x;
+        *cg_x    = (x > SPEED) ? x - SPEED : SCREEN_WIDTH;
 
-        usleep(20000);  // ~50 Hz update
+        x = *lava_x;
+        *lava_x  = (x > SPEED) ? x - SPEED : SCREEN_WIDTH;
+
+        usleep(10000);
     }
-
-    // never reached
-    munmap(base, MAP_SIZE);
-    close(fd);
-    return 0;
 }
