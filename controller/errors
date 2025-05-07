@@ -49,3 +49,9 @@ Bus 001 Device 002: ID 0424:2512 Standard Microsystems Corp. USB 2.0 Hub
 
 USB read error: -1
 
+/tmp/ccXga9qt.o: In function `main':
+motion1.c:(.text.startup+0x5c): undefined reference to `wait_for_vsync'
+motion1.c:(.text.startup+0x60): undefined reference to `read_controller'
+motion1.c:(.text.startup+0xc4): undefined reference to `show_game_over_screen'
+motion1.c:(.text.startup+0xca): undefined reference to `start_pressed'
+collect2: error: ld returned 1 exit status
