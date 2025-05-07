@@ -1,64 +1,60 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <stdint.h>
 #include <fcntl.h>
 #include <sys/mman.h>
+#include <unistd.h>
 
-#define LW_BRIDGE_BASE   0xFF200000
-#define MAP_SIZE         0x1000
+#define LW_BRIDGE_BASE 0xFF200000
+#define MAP_SIZE       0x1000
 
-// Avalon-MM “address” × 4 bytes:
-#define DINO_Y_OFFSET    0x04    // reg 1
-#define CACTUS_X_OFFSET  0x3C    // reg 15
-#define PTERO_X_OFFSET   0x40    // reg 16
-#define LAVA_X_OFFSET    0x44    // reg 17
+// these indices must match your case(address) in vga_ball.sv:
+//   0→dino_x, …, 15→cg_x, 16→cg_y, 17→lava_x, 18→lava_y
+#define CG_X_OFFSET   (15*4)   // word 15
+#define CG_Y_OFFSET   (16*4)
+#define LAVA_X_OFFSET (17*4)
+#define LAVA_Y_OFFSET (18*4)
 
-#define SCREEN_WIDTH     640
-#define OBSTACLE_SPEED     1
+#define SCREEN_WIDTH  1280     // HACTIVE in your vga_counters
+#define OBSTACLE_SPEED   1
 
 int main() {
-    int fd = open("/dev/mem", O_RDWR|O_SYNC);
+    int fd = open("/dev/mem", O_RDWR | O_SYNC);
     if (fd < 0) { perror("open"); return 1; }
+
     void *lw = mmap(NULL, MAP_SIZE,
                     PROT_READ|PROT_WRITE, MAP_SHARED,
                     fd, LW_BRIDGE_BASE);
     if (lw == MAP_FAILED) { perror("mmap"); return 1; }
 
-    volatile uint32_t *cactus_x = (uint32_t *)(lw + CACTUS_X_OFFSET);
-    volatile uint32_t *ptero_x  = (uint32_t *)(lw + PTERO_X_OFFSET);
-    volatile uint32_t *lava_x   = (uint32_t *)(lw + LAVA_X_OFFSET);
+    volatile uint32_t *cg_x   = (uint32_t*)(lw + CG_X_OFFSET);
+    volatile uint32_t *cg_y   = (uint32_t*)(lw + CG_Y_OFFSET);
+    volatile uint32_t *lava_x = (uint32_t*)(lw + LAVA_X_OFFSET);
+    volatile uint32_t *lava_y = (uint32_t*)(lw + LAVA_Y_OFFSET);
 
-    // place them off-screen to the right
-    *cactus_x = SCREEN_WIDTH +  50;
-    *ptero_x  = SCREEN_WIDTH + 150;
-    *lava_x   = SCREEN_WIDTH + 250;
+    // place them just off the right edge
+    *cg_x   = SCREEN_WIDTH + 100;  // starts at x=1380
+    *cg_y   = 248;                 // same ground‐y as your dino
+    *lava_x = SCREEN_WIDTH + 300;  // starts a bit farther out
+    *lava_y = 248;
 
     while (1) {
-        uint32_t x;
+        // read back
+        uint32_t cx = *cg_x;
+        uint32_t lx = *lava_x;
 
-        x = *cactus_x;
-        *cactus_x = (x > OBSTACLE_SPEED) ? x - OBSTACLE_SPEED : 0;
+        // slide left; wrap to right edge when off the left
+        cx = (cx > OBSTACLE_SPEED) ? cx - OBSTACLE_SPEED : SCREEN_WIDTH;
+        lx = (lx > OBSTACLE_SPEED) ? lx - OBSTACLE_SPEED : SCREEN_WIDTH;
 
-        x = *ptero_x;
-        *ptero_x  = (x > OBSTACLE_SPEED) ? x - OBSTACLE_SPEED : 0;
+        *cg_x   = cx;
+        *lava_x = lx;
 
-        x = *lava_x;
-        *lava_x   = (x > OBSTACLE_SPEED) ? x - OBSTACLE_SPEED : 0;
+        printf("group_cactus@%4u   lava@%4u\r", cx, lx);
+        fflush(stdout);
 
-        // DEBUG: print once every 100 frames
-        static int frame=0;
-        if (++frame == 100) {
-            printf("   cactus=%3u   ptero=%3u   lava=%3u\n",
-                   *cactus_x, *ptero_x, *lava_x);
-            fflush(stdout);
-            frame = 0;
-        }
-
-        usleep(10_000);  // ~100 Hz
+        usleep(10000);  // ~100 Hz update
     }
 
-    munmap(lw, MAP_SIZE);
-    close(fd);
     return 0;
 }
