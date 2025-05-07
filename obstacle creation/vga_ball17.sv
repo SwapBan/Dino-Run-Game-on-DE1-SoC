@@ -44,6 +44,7 @@
     logic [15:0] godzilla_sprite_output, scac_sprite_output, ptr_sprite_output;
     logic [15:0] powerup_sprite_output;
     logic [15:0] ptr_up_output, ptr_down_output;
+     logic [15:0] lava_sprite_output;
 
     // === Sprite Addresses ===
     logic [9:0] dino_sprite_addr, jump_sprite_addr, duck_sprite_addr;
@@ -52,7 +53,7 @@
     logic [15:0] cacti_group_output;
     logic [12:0] cacti_group_addr;   // 150×40 = 6000 pixels → needs 13 bits
     logic [10:0] cg_x, cg_y;         // group‐cactus position
-
+    logic [9:0] lava_sprite_addr;
 
     // === Sprite Positions ===
     logic [10:0] dino_x, dino_y;
@@ -64,8 +65,8 @@
     logic [10:0] ptr_x, ptr_y;
     logic ducking;
     logic jumping;
-   logic [10:0] cacti_x   = 11'd500;        // NEW: group cactus X
-    logic [10:0] cacti_y   = 11'd200; 
+  
+   logic [10:0] lava_x, lava_y; 
    
 
 
@@ -224,6 +225,11 @@
         .address(cacti_group_addr),
         .data(cacti_group_output)
     );
+    dino_lava_rom          lava_rom   (
+      .clk    (clk),
+      .address(lava_sprite_addr),
+      .data   (lava_sprite_output)
+  );
 
 
     // === CHOOSE CURRENT DINO SPRITE BASED ON STATE ===
@@ -266,9 +272,12 @@
             score   <= 4'd0;
             score_x <= 8'd25;
             score_y <= 8'd41;
+            lava_x <= 8'd400;     lava_y <= 8'd320; 
+     //         cacti_x   = 9'd500;        // NEW: group cactus X
+    //cacti_y   = 9'd200; 
 
-          cg_x <= 11'd400;    // wherever you want it to start
-          cg_y <= 11'd300;
+          cg_x <= 9'd400;    // wherever you want it to start
+          cg_y <= 9'd300;
             a <= 8'hFF; b <= 8'hFF; c <= 8'hFF;
              
       
@@ -482,6 +491,17 @@ end else if (VGA_BLANK_n) begin
                     c <= {ptr_sprite_output[4:0],   3'b000};
                 end
             end
+                // e.g. draw lava at fixed pos (lava_x, lava_y), size 32×32:
+    if (hcount >= lava_x && hcount < lava_x + 32 &&
+        vcount >= lava_y && vcount < lava_y + 32) begin
+        lava_sprite_addr <= (hcount - lava_x) + ((vcount - lava_y) * 32);
+        if (is_visible(lava_sprite_output)) begin
+            a <= {lava_sprite_output[15:11], 3'b000};
+            b <= {lava_sprite_output[10:5],  2'b00};
+            c <= {lava_sprite_output[4:0],   3'b000};
+        end
+    end
+
             // score overlay
                         // score overlay (inline lookup, no extra regs)
            // --- SCORE as an 8×8 “sprite” ---
