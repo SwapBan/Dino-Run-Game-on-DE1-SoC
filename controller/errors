@@ -1,3 +1,10 @@
+
+command to run: gcc -o dino_duck dino_duck.c usbkeyboard.c -lusb-1.0
+
+
+
+
+
 dino_duck.c: In function 'main':
 dino_duck.c:46:49: error: 'USB_VID' undeclared (first use in this function)
      pad = libusb_open_device_with_vid_pid(NULL, USB_VID, USB_PID);
