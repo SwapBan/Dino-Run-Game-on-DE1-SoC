@@ -1,60 +1,65 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <stdint.h>
 #include <fcntl.h>
 #include <sys/mman.h>
 #include <unistd.h>
 
-#define LW_BRIDGE_BASE 0xFF200000
-#define MAP_SIZE       0x1000
+#define LW_BRIDGE_BASE   0xFF200000
+#define MAP_SIZE         0x1000
 
-// these indices must match your case(address) in vga_ball.sv:
-//   0→dino_x, …, 15→cg_x, 16→cg_y, 17→lava_x, 18→lava_y
-#define CG_X_OFFSET   (15*4)   // word 15
-#define CG_Y_OFFSET   (16*4)
-#define LAVA_X_OFFSET (17*4)
-#define LAVA_Y_OFFSET (18*4)
+#define DINO_Y_OFFSET    0x0004
+#define CACTUS_X_OFFSET  0x0008
+#define PTERO_X_OFFSET   0x000C
+#define LAVA_X_OFFSET    0x0010
 
-#define SCREEN_WIDTH  1280     // HACTIVE in your vga_counters
-#define OBSTACLE_SPEED   1
+#define GROUND_Y         120
+#define OBSTACLE_SPEED     1
+#define SCREEN_WIDTH    1280   // Must match your VGA HACTIVE
 
-int main() {
-    int fd = open("/dev/mem", O_RDWR | O_SYNC);
+int main(void) {
+    int fd = open("/dev/mem", O_RDWR|O_SYNC);
     if (fd < 0) { perror("open"); return 1; }
 
-    void *lw = mmap(NULL, MAP_SIZE,
-                    PROT_READ|PROT_WRITE, MAP_SHARED,
-                    fd, LW_BRIDGE_BASE);
-    if (lw == MAP_FAILED) { perror("mmap"); return 1; }
+    void *mem = mmap(NULL, MAP_SIZE, PROT_READ|PROT_WRITE,
+                     MAP_SHARED, fd, LW_BRIDGE_BASE);
+    if (mem == MAP_FAILED) { perror("mmap"); return 1; }
 
-    volatile uint32_t *cg_x   = (uint32_t*)(lw + CG_X_OFFSET);
-    volatile uint32_t *cg_y   = (uint32_t*)(lw + CG_Y_OFFSET);
-    volatile uint32_t *lava_x = (uint32_t*)(lw + LAVA_X_OFFSET);
-    volatile uint32_t *lava_y = (uint32_t*)(lw + LAVA_Y_OFFSET);
+    // Byte-pointer so offsets are in raw bytes
+    uint8_t *base = (uint8_t*)mem;
 
-    // place them just off the right edge
-    *cg_x   = SCREEN_WIDTH + 100;  // starts at x=1380
-    *cg_y   = 248;                 // same ground‐y as your dino
-    *lava_x = SCREEN_WIDTH + 300;  // starts a bit farther out
-    *lava_y = 248;
+    // Map our four 32-bit registers
+    volatile uint32_t *dino_y   = (uint32_t*)(base + DINO_Y_OFFSET);
+    volatile uint32_t *cactus_x = (uint32_t*)(base + CACTUS_X_OFFSET);
+    volatile uint32_t *ptero_x  = (uint32_t*)(base + PTERO_X_OFFSET);
+    volatile uint32_t *lava_x   = (uint32_t*)(base + LAVA_X_OFFSET);
+
+    // Initial positions
+    *dino_y   = GROUND_Y;
+    *cactus_x = SCREEN_WIDTH +  50;
+    *ptero_x  = SCREEN_WIDTH + 150;
+    *lava_x   = SCREEN_WIDTH + 250;
 
     while (1) {
-        // read back
-        uint32_t cx = *cg_x;
-        uint32_t lx = *lava_x;
+        // Keep Dino on the ground
+        *dino_y = GROUND_Y;
 
-        // slide left; wrap to right edge when off the left
-        cx = (cx > OBSTACLE_SPEED) ? cx - OBSTACLE_SPEED : SCREEN_WIDTH;
-        lx = (lx > OBSTACLE_SPEED) ? lx - OBSTACLE_SPEED : SCREEN_WIDTH;
+        // Slide each obstacle left by OBSTACLE_SPEED, wrap at SCREEN_WIDTH
+        uint32_t x;
+        x = *cactus_x;
+        *cactus_x = (x > OBSTACLE_SPEED) ? x - OBSTACLE_SPEED : SCREEN_WIDTH;
 
-        *cg_x   = cx;
-        *lava_x = lx;
+        x = *ptero_x;
+        *ptero_x = (x > OBSTACLE_SPEED) ? x - OBSTACLE_SPEED : SCREEN_WIDTH;
 
-        printf("group_cactus@%4u   lava@%4u\r", cx, lx);
-        fflush(stdout);
+        x = *lava_x;
+        *lava_x = (x > OBSTACLE_SPEED) ? x - OBSTACLE_SPEED : SCREEN_WIDTH;
 
-        usleep(10000);  // ~100 Hz update
+        // ~100 Hz update
+        usleep(10000);
     }
 
+    // (never reached, but good form)
+    munmap(mem, MAP_SIZE);
+    close(fd);
     return 0;
 }
