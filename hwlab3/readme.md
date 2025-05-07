@@ -88,6 +88,7 @@ scp as7525@micro20.ee.columbia.edu:new/dino_duck.c /root/test_gamepad
 scp as7525@micro20.ee.columbia.edu:new/dino_new.c /root/test_gamepad
 scp as7525@micro20.ee.columbia.edu:new/dino_move.c /root/test_gamepad
 scp as7525@micro20.ee.columbia.edu:new/motion1.c /root/test_gamepad
+scp as7525@micro20.ee.columbia.edu:new/motion3.c /root/test_gamepad
 
 
 
