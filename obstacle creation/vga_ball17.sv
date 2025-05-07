@@ -261,7 +261,7 @@
  // === SPRITE DRAWING + CONTROL LOGIC ===
     always_ff @(posedge clk) begin
         if (reset) begin
-            dino_x <= 8'd100;   dino_y <= 8'd100;
+            dino_x <= 8'd100;   dino_y <= 10'd248;
             jump_x <= 8'd200;   jump_y <= 8'd150;
             duck_x <= 8'd300;   duck_y <= 8'd550;
             s_cac_x <= 9'd500;  s_cac_y <= 9'd100;
@@ -272,12 +272,11 @@
             score   <= 4'd0;
             score_x <= 8'd25;
             score_y <= 8'd41;
-            lava_x <= 8'd400;     lava_y <= 8'd320; 
-     //         cacti_x   = 9'd500;        // NEW: group cactus X
-    //cacti_y   = 9'd200; 
+            lava_x <= 8'd400;     lava_y <= 10'd248;
+    
 
           cg_x <= 9'd400;    // wherever you want it to start
-          cg_y <= 9'd300;
+          cg_y <= 10'd248;
             a <= 8'hFF; b <= 8'hFF; c <= 8'hFF;
              
       
@@ -298,9 +297,10 @@
                 9'd12: score_y <= writedata[7:0];
                 9'd13: ducking <= writedata[0];
                 9'd14: jumping <= writedata[0];
-                9'd15: cg_x <= writedata[10:0];   // new bus slots
-                9'd16: cg_y <= writedata[10:0];
-
+                9'd15: cg_x <= writedata[9:0];   // new bus slots
+                9'd16: cg_y <= writedata[9:0];
+                9'd17: lava_x <= writedata[9:0];   // new bus slots
+                9'd18: lava_y <= writedata[9:0];
             endcase
 
 end else if (VGA_BLANK_n) begin
@@ -509,9 +509,9 @@ end else if (VGA_BLANK_n) begin
           // draw “3” at (score_x+20, score_y)
  // --- group cactus (150×40) ---
 // NEW: group cactus draw at 150×40
-      if (hcount >= cacti_x && hcount < cacti_x+150 &&
-          vcount >= cacti_y && vcount < cacti_y+40) begin
-        cacti_group_addr <= (hcount - cacti_x) + ((vcount-cacti_y)*150);
+      if (hcount >= cg_x && hcount < cg_x,+150 &&
+          vcount >= cg_y && vcount < cg_y+40) begin
+        cacti_group_addr <= (hcount - cg_x) + ((vcount-cg_y)*150);
         if (is_visible(cacti_group_output)) begin
           a <= cacti_group_output[15:11];
           b <= cacti_group_output[10:5];
