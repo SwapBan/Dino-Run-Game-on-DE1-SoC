@@ -56,4 +56,13 @@ dino_move.c:29:24: error: 'lava_y' undeclared (first use in this function)
      volatile uint32_t *lava_y = (uint32_t *)((char*)lw + LAVA_Y_OFFSET);
                         ^
 dino_move.c:29:44: error: expected expression before ')' token
+
+
+
+Error (10170): Verilog HDL syntax error at vga_ball.sv(112) near text: "else";  expecting "endmodule". Check for and fix any syntax errors that appear immediately before or at the specified keyword. The Intel FPGA Knowledge Database contains many articles with specific details on how to resolve this error. Visit the Knowledge Database at https://www.altera.com/support/support-resources/knowledge-base/search.html and search for this specific error message number. File: /homes/user/stud/fall23/rp3187/Downloads/lab3/soc_system/synthesis/submodules/vga_ball.sv Line: 112
+Error (10170): Verilog HDL syntax error at vga_ball.sv(113) near text: ")";  expecting ".", or an identifier. Check for and fix any syntax errors that appear immediately before or at the specified keyword. The Intel FPGA Knowledge Database contains many articles with specific details on how to resolve this error. Visit the Knowledge Database at https://www.altera.com/support/support-resources/knowledge-base/search.html and search for this specific error message number. File: /homes/user/stud/fall23/rp3187/Downloads/lab3/soc_system/synthesis/submodules/vga_ball.sv Line: 113
+Error (10170): Verilog HDL syntax error at vga_ball.sv(123) near text: "end"; "end" without "begin" . Check for and fix any syntax errors that appear immediately before or at the specified keyword. The Intel FPGA Knowledge Database contains many articles with specific details on how to resolve this error. Visit the Knowledge Database at https://www.altera.com/support/support-resources/knowledge-base/search.html and search for this specific error message number. File: /homes/user/stud/fall23/rp3187/Downloads/lab3/soc_system/synthesis/submodules/vga_ball.sv Line: 123
+Error (10112): Ignored design unit "vga_ball" at vga_ball.sv(4) due to previous errors File: /homes/user/stud/fall23/rp3187/Downloads/lab3/soc_system/synthesis/submodules/vga_ball.sv Line: 4
+Error (10112): Ignored design unit "vga_counters" at vga_ball.sv(224) due to previous errors File: /homes/user/stud/fall23/rp3187/Downloads/lab3/soc_system/synthesis/submodules/vga_ball.sv Line: 224
+
      volatile uint32_t *lava_y = (uint32_t *)((char*)lw + LAVA_Y_OFFSET);
