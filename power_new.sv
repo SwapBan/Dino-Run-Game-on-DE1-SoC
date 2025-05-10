@@ -78,6 +78,10 @@ localparam SCORE_Y = 10;
     logic        game_over;
     logic [1:0]  sprite_state;
 
+    // === Power-up / Godzilla mode ===
+logic godzilla_mode;
+logic [23:0] godzilla_timer; // optional timer
+
     // === Random seed (6-bit LFSR) ===
     logic [5:0] lfsr;
     always_ff @(posedge clk or posedge reset) begin
@@ -115,6 +119,11 @@ localparam SCORE_Y = 10;
           // … existing reset of positions, flags, etc. …
         //score <= 10'd0;
             score <= 17'd0;
+            // === Power-up reset ===
+    powerup_x      <= 800;
+    powerup_y      <= 248;
+    godzilla_mode  <= 0;
+    godzilla_timer <= 0;
 
         end else if (!game_over) begin
             if (motion_timer >= 24'd2_000_000) begin
@@ -131,6 +140,10 @@ localparam SCORE_Y = 10;
                 ptr_x   <= (ptr_x   <= obstacle_speed)
                            ? (HACTIVE + {{lfsr[5:2]},6'd0})
                            : ptr_x   - obstacle_speed;
+                // === Power-up movement ===
+powerup_x <= (powerup_x <= obstacle_speed)
+             ? (HACTIVE + {{lfsr[4:0]}, 5'd0})
+             : powerup_x - obstacle_speed;
                 // tick the score (wrap from 999 back to 0)
 score <= (score == 17'd99999) ? 17'd0 : score + 1;                // count passes and speed up
                 if (s_cac_x <= obstacle_speed || group_x <= obstacle_speed ||
@@ -154,6 +167,26 @@ score <= (score == 17'd99999) ? 17'd0 : score + 1;                // count passe
                 collide(dino_x, dino_y, ptr_x,    ptr_y,    32,32,32,32)) begin
                 game_over <= 1;
             end
+        /*    if (collide(dino_x, dino_y, s_cac_x,  s_cac_y,  32,32,32,32) ||
+    collide(dino_x, dino_y, group_x,  group_y, 150,40,32,32) ||
+    collide(dino_x, dino_y, lava_x,   lava_y,   32,32,32,32) ||
+    collide(dino_x, dino_y, ptr_x,    ptr_y,    32,32,32,32)) begin
+    game_over <= 1;
+end*/
+            if (collide(dino_x, dino_y, powerup_x, powerup_y, 32, 32, 32, 32)) begin
+    godzilla_mode <= 1;
+    godzilla_timer <= 0;
+    powerup_x <= 2000; // move off screen
+end
+
+// === Optional Godzilla mode timeout ===
+if (godzilla_mode)
+    godzilla_timer <= godzilla_timer + 1;
+
+if (godzilla_timer >= 24'd600000) begin
+    godzilla_mode <= 0;
+    godzilla_timer <= 0;
+end
         end else begin
             // on replay, reset everything
             if (controller_report[4]) begin
@@ -189,7 +222,9 @@ score <= (score == 17'd99999) ? 17'd0 : score + 1;                // count passe
     dino_pterodactyl_up_rom    ptero_down(.clk(clk), .address(ptr_sprite_addr), .data(ptr_down_output));
 
     // DINO ROM (unchanged) …
-    assign dino_sprite_output = dino_new_output;
+   // assign dino_sprite_output = dino_new_output;
+    assign dino_sprite_output = godzilla_mode ? godzilla_sprite_output : dino_new_output;
+
     dino_sprite_rom dino_rom(.clk(clk), .address(dino_sprite_addr), .data(dino_new_output));
 
     // REPLAY ROM (unchanged) …
@@ -274,6 +309,16 @@ end*/
             font_rom[digit_u][vcount-10][7 - (hcount-30)]) begin
             a <= 8'd0; b <= 8'd0; c <= 8'd0;
         end*/
+        // === Power-up sprite drawing ===
+if (hcount >= powerup_x && hcount < powerup_x + 32 &&
+    vcount >= powerup_y && vcount < powerup_y + 32) begin
+    powerup_sprite_addr <= (hcount - powerup_x) + ((vcount - powerup_y) * 32);
+    if (is_visible(powerup_sprite_output)) begin
+        a <= {powerup_sprite_output[15:11], 3'b000};
+        b <= {powerup_sprite_output[10:5],  2'b00};
+        c <= {powerup_sprite_output[4:0],   3'b000};
+    end
+end
         if (hcount >= dino_x && hcount < dino_x + 32 && vcount >= dino_y && vcount < dino_y + 32) begin
             dino_sprite_addr <= (hcount - dino_x) + ((vcount - dino_y) * 32);
             if (is_visible(dino_sprite_output)) begin
