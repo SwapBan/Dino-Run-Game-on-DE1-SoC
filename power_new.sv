@@ -161,10 +161,10 @@ score <= (score == 17'd99999) ? 17'd0 : score + 1;                // count passe
                 motion_timer <= motion_timer + 1;
             end
 
-            if (collide(dino_x, dino_y, s_cac_x,  s_cac_y,  32,32,32,32) ||
+            if (!godzilla_mode &&(collide(dino_x, dino_y, s_cac_x,  s_cac_y,  32,32,32,32) ||
                 collide(dino_x, dino_y, group_x,  group_y, 150,40,32,32) ||
                 collide(dino_x, dino_y, lava_x,   lava_y,   32,32,32,32) ||
-                collide(dino_x, dino_y, ptr_x,    ptr_y,    32,32,32,32)) begin
+                                  collide(dino_x, dino_y, ptr_x,    ptr_y,    32,32,32,32))) begin
                 game_over <= 1;
             end
         /*    if (collide(dino_x, dino_y, s_cac_x,  s_cac_y,  32,32,32,32) ||
