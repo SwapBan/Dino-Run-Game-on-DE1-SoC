@@ -76,8 +76,8 @@ scp as7525@micro20.ee.columbia.edu:lab11/soc_system.dtb /mnt
 scp as7525@micro20.ee.columbia.edu:lab11/output_files/soc_system.rbf /mnt
 
 
-scp as7525@micro08.ee.columbia.edu:lab11/soc_system.dtb /mnt
-scp as7525@micro08.ee.columbia.edu:lab11/output_files/soc_system.rbf /mnt
+scp as7525@micro07.ee.columbia.edu:lab11/soc_system.dtb /mnt
+scp as7525@micro07.ee.columbia.edu:lab11/output_files/soc_system.rbf /mnt
 
 
 
