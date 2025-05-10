@@ -107,7 +107,9 @@ localparam SCORE_Y = 10;
             sprite_state   <= 0;
             motion_timer   <= 0;
           // … existing reset of positions, flags, etc. …
-        score <= 10'd0;
+        //score <= 10'd0;
+            score <= 17'd0;
+
         end else if (!game_over) begin
             if (motion_timer >= 24'd2_000_000) begin
                 // wrap each obstacle with a different pseudo‐random offset
@@ -124,7 +126,7 @@ localparam SCORE_Y = 10;
                            ? (HACTIVE + {{lfsr[5:2]},6'd0})
                            : ptr_x   - obstacle_speed;
                 // tick the score (wrap from 999 back to 0)
-            score <= (score == 10'd999) ? 10'd0 : score + 10'd1;
+                score <= (score == 17'd999) ? 17'd0 : score + 1;
                 // count passes and speed up
                 if (s_cac_x <= obstacle_speed || group_x <= obstacle_speed ||
                     lava_x  <= obstacle_speed || ptr_x   <= obstacle_speed) begin
