@@ -230,14 +230,12 @@ if (hcount >= SCORE_X + 32 && hcount < SCORE_X + 40 &&
     a <= 8'h00; b <= 8'h00; c <= 8'h00;
 end
 
-// --- tens digit at (SCORE_X+16, SCORE_Y) ---
-if (hcount >= SCORE_X + 16 && hcount < SCORE_X + 24 &&
-    vcount >= SCORE_Y      && vcount < SCORE_Y +  8 &&
-    font_rom[(score/10)%10][vcount - SCORE_Y][7 - (hcount - (SCORE_X+16))])
-begin
-  a <= 8'h00; b <= 8'h00; c <= 8'h00;
+// --- tens digit at (SCORE_X+48, SCORE_Y) ---
+if (hcount >= SCORE_X + 48 && hcount < SCORE_X + 56 &&
+    vcount >= SCORE_Y && vcount < SCORE_Y + 8 &&
+    font_rom[digit_t][vcount - SCORE_Y][7 - (hcount - (SCORE_X + 48))]) begin
+    a <= 8'h00; b <= 8'h00; c <= 8'h00;
 end
-
 /*// --- units digit at (SCORE_X+32, SCORE_Y) ---
 if (hcount >= SCORE_X + 32 && hcount < SCORE_X + 40 &&
     vcount >= SCORE_Y      && vcount < SCORE_Y +  8 &&
