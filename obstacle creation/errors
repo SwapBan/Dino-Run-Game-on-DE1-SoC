@@ -71,3 +71,16 @@ Error (10112): Ignored design unit "vga_counters" at vga_ball.sv(224) due to pre
 Error (10748): Verilog HDL error at vga_ball.sv(140): expression in variable declaration assignment to vs_rising must be constant File: /homes/user/stud/spring25/as7525/Music/lab11/soc_system/synthesis/submodules/vga_ball.sv Line: 140
 Error (12152): Can't elaborate user hierarchy "soc_system:soc_system0|vga_ball:vga_ball_0" File: /homes/user/stud/spring25/as7525/Music/lab11/soc_system/synthesis/soc_system.v Line: 357
 
+
+
+
+--cacti together--
+Error (10748): Verilog HDL error at vga_ball.sv(100): expression in variable declaration assignment to new_t must be constant File: /homes/user/stud/spring25/as7525/Music/lab11/soc_system/synthesis/submodules/vga_ball.sv Line: 100
+Warning (10240): Verilog HDL Always Construct warning at vga_ball.sv(82): inferring latch(es) for variable "obstacle_speed", which holds its previous value in one or more paths through the always construct File: /homes/user/stud/spring25/as7525/Music/lab11/soc_system/synthesis/submodules/vga_ball.sv Line: 82
+Warning (10240): Verilog HDL Always Construct warning at vga_ball.sv(82): inferring latch(es) for variable "passed_count", which holds its previous value in one or more paths through the always construct File: /homes/user/stud/spring25/as7525/Music/lab11/soc_system/synthesis/submodules/vga_ball.sv Line: 82
+Warning (10240): Verilog HDL Always Construct warning at vga_ball.sv(82): inferring latch(es) for variable "game_over", which holds its previous value in one or more paths through the always construct File: /homes/user/stud/spring25/as7525/Music/lab11/soc_system/synthesis/submodules/vga_ball.sv Line: 82
+Warning (10240): Verilog HDL Always Construct warning at vga_ball.sv(82): inferring latch(es) for variable "motion_timer", which holds its previous value in one or more paths through the always construct File: /homes/user/stud/spring25/as7525/Music/lab11/soc_system/synthesis/submodules/vga_ball.sv Line: 82
+Warning (10240): Verilog HDL Always Construct warning at vga_ball.sv(82): inferring latch(es) for variable "sprite_state", which holds its previous value in one or more paths through the always construct File: /homes/user/stud/spring25/as7525/Music/lab11/soc_system/synthesis/submodules/vga_ball.sv Line: 82
+Error (12152): Can't elaborate user hierarchy "soc_system:soc_system0|vga_ball:vga_ball_0" File: /homes/user/stud/spring25/as7525/Music/lab11/soc_system/synthesis/soc_system.v Line: 357
+
+
