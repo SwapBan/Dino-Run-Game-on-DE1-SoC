@@ -11,6 +11,8 @@ module vga_ball(
 
     // VGA timing constants
     localparam HACTIVE = 11'd1280;
+    localparam SCORE_X = 50;
+localparam SCORE_Y = 10;
 
     // VGA TIMING
     logic [10:0] hcount;
@@ -200,8 +202,31 @@ always_ff @(posedge clk) begin
         digit_h = score / 100;
         digit_t = (score / 10) % 10;
         digit_u = score % 10;
+// --- hundreds digit at (SCORE_X, SCORE_Y) ---
+if (hcount >= SCORE_X      && hcount < SCORE_X +  8 &&
+    vcount >= SCORE_Y      && vcount < SCORE_Y +  8 &&
+    font_rom[score/100]    [vcount - SCORE_Y][7 - (hcount - SCORE_X)])
+begin
+  a <= 8'h00; b <= 8'h00; c <= 8'h00;
+end
 
-        // hundreds digit at (10,10)
+// --- tens digit at (SCORE_X+16, SCORE_Y) ---
+if (hcount >= SCORE_X + 16 && hcount < SCORE_X + 24 &&
+    vcount >= SCORE_Y      && vcount < SCORE_Y +  8 &&
+    font_rom[(score/10)%10][vcount - SCORE_Y][7 - (hcount - (SCORE_X+16))])
+begin
+  a <= 8'h00; b <= 8'h00; c <= 8'h00;
+end
+
+// --- units digit at (SCORE_X+32, SCORE_Y) ---
+if (hcount >= SCORE_X + 32 && hcount < SCORE_X + 40 &&
+    vcount >= SCORE_Y      && vcount < SCORE_Y +  8 &&
+    font_rom[score%10]     [vcount - SCORE_Y][7 - (hcount - (SCORE_X+32))])
+begin
+  a <= 8'h00; b <= 8'h00; c <= 8'h00;
+end
+
+        /*// hundreds digit at (10,10)
         if (hcount >= 10 && hcount < 18 && vcount >= 10 && vcount < 18 &&
             font_rom[digit_h][vcount-10][7 - (hcount-10)]) begin
             a <= 8'd0; b <= 8'd0; c <= 8'd0;
@@ -217,7 +242,7 @@ always_ff @(posedge clk) begin
         if (hcount >= 30 && hcount < 38 && vcount >= 10 && vcount < 18 &&
             font_rom[digit_u][vcount-10][7 - (hcount-30)]) begin
             a <= 8'd0; b <= 8'd0; c <= 8'd0;
-        end
+        end*/
         if (hcount >= dino_x && hcount < dino_x + 32 && vcount >= dino_y && vcount < dino_y + 32) begin
             dino_sprite_addr <= (hcount - dino_x) + ((vcount - dino_y) * 32);
             if (is_visible(dino_sprite_output)) begin
