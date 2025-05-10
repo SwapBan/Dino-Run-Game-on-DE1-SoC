@@ -126,8 +126,7 @@ localparam SCORE_Y = 10;
                            ? (HACTIVE + {{lfsr[5:2]},6'd0})
                            : ptr_x   - obstacle_speed;
                 // tick the score (wrap from 999 back to 0)
-                score <= (score == 17'd999) ? 17'd0 : score + 1;
-                // count passes and speed up
+score <= (score == 17'd99999) ? 17'd0 : score + 1;                // count passes and speed up
                 if (s_cac_x <= obstacle_speed || group_x <= obstacle_speed ||
                     lava_x  <= obstacle_speed || ptr_x   <= obstacle_speed) begin
                     passed_count <= passed_count + 1;
