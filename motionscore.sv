@@ -3,6 +3,10 @@
 module vga_ball(
     input  logic        clk,
     input  logic        reset,
+input logic [31:0]  writedata,
+    input logic         write,
+    input               chipselect,
+    input logic [8:0]   address,
     input  logic [7:0]  controller_report,
 
     output logic [7:0]  VGA_R, VGA_G, VGA_B,
