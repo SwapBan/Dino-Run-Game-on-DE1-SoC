@@ -41,7 +41,7 @@ module vga_ball(
     logic [15:0] dino_sprite_output;
     logic [15:0] dino_new_output;
     logic [9:0]  dino_sprite_addr;
-    logic [10:0] dino_x = 100, dino_y = 48;
+    logic [10:0] dino_x = 100, dino_y = 348;
 
     // === Obstacles ===
     logic [10:0] s_cac_x = 1200, s_cac_y = 248;
