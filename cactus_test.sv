@@ -435,3 +435,5 @@ endmodule
    assign VGA_SYNC_n = 1'b0;
    assign VGA_BLANK_n = (hcount < HACTIVE) && (vcount < VACTIVE);
    assign VGA_CLK = hcount[0];
+
+ endmodule
