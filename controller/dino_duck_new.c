@@ -48,6 +48,12 @@ int main(void) {
     int transferred, r;
     while (1) {
         r = libusb_interrupt_transfer(pad, ep, report, REPORT_LEN, &transferred, 0);
+        // Check if Start button (bit 5 of report[5]) is pressed
+bool want_start = (report[5] & 0x20);  // Start = 0x20 in report[5]
+
+// Map this to controller_report[4] bit 4 (SystemVerilog reads this)
+report[4] = want_start ? 0x10 : 0x00;
+
         if (r < 0) {
             fprintf(stderr, "USB read error: %d\n", r);
             break;
@@ -57,12 +63,12 @@ int main(void) {
         uint8_t y_axis = report[4];
         bool want_jump = (y_axis == 0x00 && y == GROUND_Y);
         bool want_duck = (y_axis == 0xFF && y == GROUND_Y);
-      bool want_start = report[0] & 0x10; // Start button is usually bit 4 (0x10)
-if (want_start) {
-    report[4] = 0x10; // trigger the same bit SV is using for replay
-} else {
-    report[4] = 0x00;
-}
+//      bool want_start = report[0] & 0x10; // Start button is usually bit 4 (0x10)
+//if (want_start) {
+//    report[4] = 0x10; // trigger the same bit SV is using for replay
+//} else {
+ //   report[4] = 0x00;
+//}
 
         if (want_jump) v = -12;
         *jump_reg = want_jump;
