@@ -181,13 +181,13 @@ end
             // === Godzilla destroys obstacles on collision ===
 if (godzilla_mode) begin
     if (collide(dino_x, dino_y, s_cac_x, s_cac_y, 32, 32, 32, 32))
-        s_cac_x <= 2000//HACTIVE + 11'd300;
+        s_cac_x <= 2000;//HACTIVE + 11'd300;
     if (collide(dino_x, dino_y, group_x, group_y, 64, 32, 32, 32))
-        group_x <= 2000//HACTIVE + 11'd300;
+        group_x <= 2000;//HACTIVE + 11'd300;
     if (collide(dino_x, dino_y, lava_x, lava_y, 32, 32, 32, 32))
-        lava_x <= 2000//HACTIVE + 11'd300;
+        lava_x <= 2000;//HACTIVE + 11'd300;
     if (collide(dino_x, dino_y, ptr_x, ptr_y, 32, 32, 32, 32))
-        ptr_x <= 2000//HACTIVE + 11'd300;
+        ptr_x <= 2000;//HACTIVE + 11'd300;
 end
 
 // === Optional Godzilla mode timeout ===
