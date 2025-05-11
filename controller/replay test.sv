@@ -80,6 +80,9 @@ input logic [31:0]  writedata,
     logic [9:0]  replay_addr;
     logic [10:0] replay_x = 560, replay_y = 200;
 
+    logic replay_button;
+
+
     // === Motion ===
     logic [23:0] motion_timer;
     logic [10:0] obstacle_speed = 1;
@@ -158,7 +161,8 @@ logic [31:0] godzilla_timer;
                // 9'd16: cg_y <= writedata[9:0];
                 9'd17: lava_x <= writedata[9:0];   
                 9'd18: lava_y <= writedata[9:0];
-                9'd19: controller_report[4] <= writedata[0]; 
+                9'd19: replay_button <= writedata[0]; // trigger replay
+
 
             endcase
 
@@ -237,7 +241,7 @@ if (godzilla_timer >= 32'd100_000_000_000) begin
 end
         end else begin
             // on replay, reset everything
-            if (controller_report[4]) begin
+            if (replay_button) begin
                 s_cac_x        <= 1200;
                 group_x        <= 1600;
                 lava_x         <= 1800;
