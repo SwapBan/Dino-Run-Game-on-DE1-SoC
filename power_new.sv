@@ -47,7 +47,7 @@ localparam SCORE_Y = 10;
     logic [15:0] dino_sprite_output;
     logic [15:0] dino_new_output;
     logic [9:0]  dino_sprite_addr;
-    logic [10:0] dino_x = 100, dino_y = 348;
+    logic [10:0] dino_x = 100, dino_y = 248;
   logic [10:0] godzilla_x, godzilla_y;
 
     // === Obstacles ===
