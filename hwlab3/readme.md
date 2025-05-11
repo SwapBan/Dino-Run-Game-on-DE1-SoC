@@ -85,6 +85,9 @@ scp as7525@micro07.ee.columbia.edu:lab13/output_files/soc_system.rbf /mnt
 scp as7525@micro07.ee.columbia.edu:lab14/soc_system.dtb /mnt
 scp as7525@micro07.ee.columbia.edu:lab14/output_files/soc_system.rbf /mnt
 
+scp as7525@micro18.ee.columbia.edu:lab14/soc_system.dtb /mnt
+scp as7525@micro18.ee.columbia.edu:lab14/output_files/soc_system.rbf /mnt
+
 
 scp as7525@micro22.ee.columbia.edu:new/ps4_input.c /home
 scp as7525@micro07.ee.columbia.edu:new/test_hid.c /root/test_gamepad
