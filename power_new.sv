@@ -80,8 +80,8 @@ localparam SCORE_Y = 10;
 
     // === Power-up / Godzilla mode ===
 logic godzilla_mode;
-logic [23:0] godzilla_timer; // optional timer
-
+//logic [23:0] godzilla_timer; // optional timer
+logic [31:0] godzilla_timer;
     // === Random seed (6-bit LFSR) ===
     logic [5:0] lfsr;
     always_ff @(posedge clk or posedge reset) begin
@@ -183,7 +183,7 @@ end
 if (godzilla_mode)
     godzilla_timer <= godzilla_timer + 1;
 
-if (godzilla_timer >= 24'd600000) begin
+if (godzilla_timer >= 32'd100_000_000_000) begin
     godzilla_mode <= 0;
     godzilla_timer <= 0;
 end
@@ -319,14 +319,27 @@ if (hcount >= powerup_x && hcount < powerup_x + 32 &&
         c <= {powerup_sprite_output[4:0],   3'b000};
     end
 end
-        if (hcount >= dino_x && hcount < dino_x + 32 && vcount >= dino_y && vcount < dino_y + 32) begin
+    /*    if (hcount >= dino_x && hcount < dino_x + 32 && vcount >= dino_y && vcount < dino_y + 32) begin
             dino_sprite_addr <= (hcount - dino_x) + ((vcount - dino_y) * 32);
             if (is_visible(dino_sprite_output)) begin
                 a <= {dino_sprite_output[15:11], 3'b000};
                 b <= {dino_sprite_output[10:5],  2'b00};
                 c <= {dino_sprite_output[4:0],   3'b000};
             end
-        end
+        end*/
+        if (hcount >= dino_x && hcount < dino_x + 32 && vcount >= dino_y && vcount < dino_y + 32) begin
+    if (godzilla_mode)
+        godzilla_sprite_addr <= (hcount - dino_x) + ((vcount - dino_y) * 32);
+    else
+        dino_sprite_addr <= (hcount - dino_x) + ((vcount - dino_y) * 32);
+
+    if (is_visible(dino_sprite_output)) begin
+        a <= {dino_sprite_output[15:11], 3'b000};
+        b <= {dino_sprite_output[10:5],  2'b00};
+        c <= {dino_sprite_output[4:0],   3'b000};
+    end
+end
+
         if (hcount >= s_cac_x && hcount < s_cac_x + 32 && vcount >= s_cac_y && vcount < s_cac_y + 32) begin
             scac_sprite_addr <= (hcount - s_cac_x) + ((vcount - s_cac_y) * 32);
             if (is_visible(scac_sprite_output)) begin
