@@ -272,7 +272,7 @@ if (hcount >= SCORE_X + 16 && hcount < SCORE_X + 24 &&
 end
 
 // --- hundreds digit at (SCORE_X+32, SCORE_Y) ---
-if (hcount >= SCORE_X + 32 && hcount < SCORE_X + 32 &&
+        if (hcount >= SCORE_X + 32 && hcount < SCORE_X + 40 &&
     vcount >= SCORE_Y && vcount < SCORE_Y + 8 &&
     font_rom[digit_h][vcount - SCORE_Y][7 - (hcount - (SCORE_X + 32))]) begin
     a <= 8'h00; b <= 8'h00; c <= 8'h00;
