@@ -55,3 +55,11 @@ motion1.c:(.text.startup+0x60): undefined reference to `read_controller'
 motion1.c:(.text.startup+0xc4): undefined reference to `show_game_over_screen'
 motion1.c:(.text.startup+0xca): undefined reference to `start_pressed'
 collect2: error: ld returned 1 exit status
+
+
+
+
+
+_system/synthesis/submodules/soc_system_hps_0_fpga_interfaces.sv Line: 14
+Error (10231): Verilog HDL error at vga_ball.sv(161): value cannot be assigned to input "controller_report" File: /homes/user/stud/spring25/as7525/Music/lab15/soc_system/synthesis/submodules/vga_ball.sv Line: 161
+
