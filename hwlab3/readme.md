@@ -113,7 +113,7 @@ scp as7525@micro07.ee.columbia.edu:new/dino_game.c /root/test_gamepad
 scp as7525@micro07.ee.columbia.edu:new/dino_jump_final.c /root/test_gamepad
 scp as7525@micro07.ee.columbia.edu:new/dino_souped_up_jump_flag.c /root/test_gamepad
 scp as7525@micro21.ee.columbia.edu:new/dino_jump3.c /root/test_gamepad
-
+scp as7525@micro18.ee.columbia.edu:new/dino_duck_new.c /root/test_gamepad
 
 
 gcc -o dino_jump dino_jump_final.c usbkeyboard.c -lusb-1.0
@@ -127,6 +127,9 @@ gcc -o -dino_jump5 dino_move.c usbkeyboard.c -std=gnu99 -lusb-1.0 -lm
 gcc -02 -o dino_move dino_move.c
 gcc -o dino_jump6 motion1.c usbkeyboard.c -std=gnu99 -lusb-1.0 -lm
 gcc -O2 -std=gnu99 -o dino_jump6 motion1.c
+gcc -o dino_jump6 dino_duck_new.c usbkeyboard.c -lusb-1.0 -lm
+
+
 
 wget https://www.cs.columbia.edu/~sedwards/classes/2025/4840-spring/linux-headers-4.19.0.tar.gz
 
