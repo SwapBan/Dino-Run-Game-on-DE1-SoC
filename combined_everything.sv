@@ -473,6 +473,123 @@ end*/
             font_rom[digit_u][vcount-10][7 - (hcount-30)]) begin
             a <= 8'd0; b <= 8'd0; c <= 8'd0;
         end*/
+
+    if (vcount < 280) begin
+        a <= sky_r;
+        b <= sky_g;
+        c <= sky_b;
+    end else if (vcount > 300) begin
+        a <= 8'd100; // Darker brown ground stripe
+        b <= 8'd40;
+        c <= 8'd10;
+    end else begin
+        a <= 8'd139; // Light brown ground
+        b <= 8'd69;
+        c <= 8'd19;
+        
+    end
+
+    // === Ground Line ===
+    if (vcount == 280) begin
+        a <= 8'd0;
+        b <= 8'd0;
+        c <= 8'd0;
+    end
+
+    // === Sun with Soft Glow and Movement ===
+    if ((hcount-(1150-sun_offset_x))*(hcount-(1150-sun_offset_x)) +
+        (vcount-(80+sun_offset_y))*(vcount-(80+sun_offset_y)) < 1200 &&
+        (hcount-(1150-sun_offset_x))*(hcount-(1150-sun_offset_x)) +
+        (vcount-(80+sun_offset_y))*(vcount-(80+sun_offset_y)) > 900) begin
+        a <= sun_r;
+        b <= sun_g;
+        c <= sun_b;
+    end
+     if ((hcount-(1150-sun_offset_x))*(hcount-(1150-sun_offset_x)) +
+        (vcount-(80+sun_offset_y))*(vcount-(80+sun_offset_y)) < 900) begin
+        a <= sun_r;
+        b <= sun_g;
+        c <= sun_b;
+    end
+
+    // === Clouds (with wraparound drift) ===
+    // --- Cloud 1 ---
+    if (((hcount-(235+cloud_offset))*(hcount-(235+cloud_offset)) + (vcount-70)*(vcount-70) < 100) ||
+        ((hcount-(245+cloud_offset))*(hcount-(245+cloud_offset)) + (vcount-65)*(vcount-65) < 100) ||
+        ((hcount-(255+cloud_offset))*(hcount-(255+cloud_offset)) + (vcount-65)*(vcount-65) < 100) ||
+        ((hcount-(245+cloud_offset))*(hcount-(245+cloud_offset)) + (vcount-75)*(vcount-75) < 100) ||
+        ((hcount-(255+cloud_offset))*(hcount-(255+cloud_offset)) + (vcount-75)*(vcount-75) < 100) ||
+        ((hcount-(265+cloud_offset))*(hcount-(265+cloud_offset)) + (vcount-70)*(vcount-70) < 100) ||
+
+        ((hcount-(235+cloud_offset-1280))*(hcount-(235+cloud_offset-1280)) + (vcount-70)*(vcount-70) < 100) ||
+        ((hcount-(245+cloud_offset-1280))*(hcount-(245+cloud_offset-1280)) + (vcount-65)*(vcount-65) < 100) ||
+        ((hcount-(255+cloud_offset-1280))*(hcount-(255+cloud_offset-1280)) + (vcount-65)*(vcount-65) < 100) ||
+        ((hcount-(245+cloud_offset-1280))*(hcount-(245+cloud_offset-1280)) + (vcount-75)*(vcount-75) < 100) ||
+        ((hcount-(255+cloud_offset-1280))*(hcount-(255+cloud_offset-1280)) + (vcount-75)*(vcount-75) < 100) ||
+        ((hcount-(265+cloud_offset-1280))*(hcount-(265+cloud_offset-1280)) + (vcount-70)*(vcount-70) < 100)) begin
+        a <= 8'd255;
+        b <= 8'd255;
+        c <= 8'd255;
+    end
+        // --- Cloud 2 ---
+    if (((hcount-(440+cloud_offset))*(hcount-(440+cloud_offset)) + (vcount-100)*(vcount-100) < 100) ||
+        ((hcount-(450+cloud_offset))*(hcount-(450+cloud_offset)) + (vcount-95)*(vcount-95) < 100) ||
+        ((hcount-(460+cloud_offset))*(hcount-(460+cloud_offset)) + (vcount-95)*(vcount-95) < 100) ||
+        ((hcount-(440+cloud_offset))*(hcount-(440+cloud_offset)) + (vcount-105)*(vcount-105) < 100) ||
+        ((hcount-(450+cloud_offset))*(hcount-(450+cloud_offset)) + (vcount-110)*(vcount-110) < 100) ||
+        ((hcount-(460+cloud_offset))*(hcount-(460+cloud_offset)) + (vcount-105)*(vcount-105) < 100) ||
+
+        ((hcount-(440+cloud_offset-1280))*(hcount-(440+cloud_offset-1280)) + (vcount-100)*(vcount-100) < 100) ||
+        ((hcount-(450+cloud_offset-1280))*(hcount-(450+cloud_offset-1280)) + (vcount-95)*(vcount-95) < 100) ||
+        ((hcount-(460+cloud_offset-1280))*(hcount-(460+cloud_offset-1280)) + (vcount-95)*(vcount-95) < 100) ||
+        ((hcount-(440+cloud_offset-1280))*(hcount-(440+cloud_offset-1280)) + (vcount-105)*(vcount-105) < 100) ||
+        ((hcount-(450+cloud_offset-1280))*(hcount-(450+cloud_offset-1280)) + (vcount-110)*(vcount-110) < 100) ||
+        ((hcount-(460+cloud_offset-1280))*(hcount-(460+cloud_offset-1280)) + (vcount-105)*(vcount-105) < 100)) begin
+        a <= 8'd250;
+        b <= 8'd250;
+        c <= 8'd250;
+    end
+        // --- Cloud 3 ---
+    if (((hcount-(690+cloud_offset))*(hcount-(690+cloud_offset)) + (vcount-60)*(vcount-60) < 100) ||
+        ((hcount-(700+cloud_offset))*(hcount-(700+cloud_offset)) + (vcount-55)*(vcount-55) < 100) ||
+        ((hcount-(710+cloud_offset))*(hcount-(710+cloud_offset)) + (vcount-55)*(vcount-55) < 100) ||
+        ((hcount-(690+cloud_offset))*(hcount-(690+cloud_offset)) + (vcount-65)*(vcount-65) < 100) ||
+        ((hcount-(700+cloud_offset))*(hcount-(700+cloud_offset)) + (vcount-70)*(vcount-70) < 100) ||
+        ((hcount-(710+cloud_offset))*(hcount-(710+cloud_offset)) + (vcount-65)*(vcount-65) < 100) ||
+
+        ((hcount-(690+cloud_offset-1280))*(hcount-(690+cloud_offset-1280)) + (vcount-60)*(vcount-60) < 100) ||
+        ((hcount-(700+cloud_offset-1280))*(hcount-(700+cloud_offset-1280)) + (vcount-55)*(vcount-55) < 100) ||
+        ((hcount-(710+cloud_offset-1280))*(hcount-(710+cloud_offset-1280)) + (vcount-55)*(vcount-55) < 100) ||
+        ((hcount-(690+cloud_offset-1280))*(hcount-(690+cloud_offset-1280)) + (vcount-65)*(vcount-65) < 100) ||
+        ((hcount-(700+cloud_offset-1280))*(hcount-(700+cloud_offset-1280)) + (vcount-70)*(vcount-70) < 100) ||
+        ((hcount-(710+cloud_offset-1280))*(hcount-(710+cloud_offset-1280)) + (vcount-65)*(vcount-65) < 100)) begin
+        a <= 8'd245;
+        b <= 8'd245;
+        c <= 8'd245;
+    end
+
+    // === Tiny Birds ===
+    if (((hcount > 300 && hcount < 305) && (vcount == 50)) ||
+        ((hcount > 305 && hcount < 310) && (vcount == 51)) ||
+        ((hcount > 310 && hcount < 315) && (vcount == 50)) ||
+        ((hcount > 600 && hcount < 605) && (vcount == 80)) ||
+        ((hcount > 605 && hcount < 610) && (vcount == 81)) ||
+        ((hcount > 610 && hcount < 615) && (vcount == 80))) begin
+        a <= 8'd0;
+        b <= 8'd0;
+        c <= 8'd0;
+    end
+         // === Ground Rocks ===
+    if (vcount > 280 && vcount < 480) begin
+        if ((hcount % 120 == 0 && vcount % 50 < 10) ||
+            (hcount % 200 == 15 && vcount % 60 < 8)) begin
+            a <= 8'd110;
+            b <= 8'd50;
+            c <= 8'd10;
+        end
+    end
+
+        
         // === Power-up sprite drawing ===
 if (hcount >= powerup_x && hcount < powerup_x + 32 &&
     vcount >= powerup_y && vcount < powerup_y + 32) begin
