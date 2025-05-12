@@ -135,14 +135,6 @@ logic [31:0] godzilla_timer;
             sprite_state   <= 0;
             motion_timer   <= 0;
             for (int i = 0; i < N_DIGITS; i++)
-             bcd[i] <= 4’d0;
-
-            
-
-          // … existing reset of positions, flags, etc. …
-        
-                        // reset BCD digits
-            for (int i = 0; i < N_DIGITS; i++)
               bcd[i] <= 4'd0;
 
             // === Power-up reset ===
@@ -256,7 +248,7 @@ end
 if (godzilla_mode)
     godzilla_timer <= godzilla_timer + 1;
 
-if (godzilla_timer >= 32'd100_000_000_000) begin
+if (godzilla_timer >= 32'd100_000_000) begin
     godzilla_mode <= 0;
     godzilla_timer <= 0;
 end
@@ -435,7 +427,6 @@ end
                 b <= {ptr_sprite_output[10:5],  2'b00};
                 c <= {ptr_sprite_output[4:0],   3'b000};
             end
-        end
     end else begin
         if (hcount >= replay_x && hcount < replay_x + 160 && vcount >= replay_y && vcount < replay_y + 32) begin
             replay_addr <= (hcount - replay_x) + ((vcount - replay_y) * 160);
