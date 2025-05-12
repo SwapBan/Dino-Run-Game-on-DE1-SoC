@@ -22,6 +22,10 @@ input logic [31:0]  writedata,
     logic [10:0] hcount;
     logic [9:0]  vcount;
       // === Score (0–999) ===
+      // === Score as 5-digit BCD ===
+   localparam int N_DIGITS = 5;
+   logic [3:0] bcd [N_DIGITS-1:0];  // [0]=units … [4]=ten-thousands
+
   logic [16:0]  score;
   logic [3:0]  digit_ten_thou, digit_thou, digit_h, digit_t, digit_u;
     logic [7:0]  font_rom [0:9][0:7];
@@ -216,6 +220,17 @@ logic [31:0] godzilla_timer;
 powerup_x <= (powerup_x <= obstacle_speed)
              ? (HACTIVE + {{lfsr[4:0]}, 5'd0})
              : powerup_x - obstacle_speed;
+
+                  bcd[0] <= bcd[0] + 1;
+               for (int i = 0; i < N_DIGITS-1; i++) begin
+                 if (bcd[i] == 4'd10) begin
+                   bcd[i]   <= 4'd0;
+                   bcd[i+1] <= bcd[i+1] + 1;
+                 end
+               end
+               // wrap highest digit
+               if (bcd[N_DIGITS-1] == 4'd10)
+                 bcd[N_DIGITS-1] <= 4'd0;
                 // tick the score (wrap from 999 back to 0)
 score <= (score == 17'd99999) ? 17'd0 : score + 1;                // count passes and speed up
                 if (s_cac_x <= obstacle_speed || group_x <= obstacle_speed ||
