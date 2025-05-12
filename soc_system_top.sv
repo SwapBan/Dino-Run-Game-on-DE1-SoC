@@ -274,7 +274,13 @@ module soc_system_top(
 .vga_hs (VGA_HS),
 .vga_vs (VGA_VS),
 .vga_blank_n (VGA_BLANK_N),
-.vga_sync_n (VGA_SYNC_N)
+	   .vga_sync_n (VGA_SYNC_N),
+	   .audio_0_external_interface_ADCDAT  (AUD_ADCDAT),
+     .audio_0_external_interface_ADCLRCK (AUD_ADCLRCK),
+     .audio_0_external_interface_BCLK    (AUD_BCLK),
+     .audio_0_external_interface_DACDAT  (AUD_DACDAT),
+     .audio_0_external_interface_DACLRCK (AUD_DACLRCK),
+     .audio_0_external_interface_XCK     (AUD_XCK)
   );
 
    // The following quiet the "no driver" warnings for output
