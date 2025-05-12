@@ -113,6 +113,7 @@ scp as7525@micro20.ee.columbia.edu:new/dino_move.c /root/test_gamepad
 scp as7525@micro20.ee.columbia.edu:new/motion1.c /root/test_gamepad
 scp as7525@micro20.ee.columbia.edu:new/motion3.c /root/test_gamepad
 
+scp -r as7525@micro07.ee.columbia.edu:new/alsa-utils-1.2.3 /root/alsa
 
 
 scp as7525@micro07.ee.columbia.edu:new/control.c /root/test_gamepad
