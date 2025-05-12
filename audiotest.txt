@@ -1,3 +1,10 @@
+https://github.com/Nativu5/DE1-SoC-MyPlayer/blob/master/README.md - new
+
+
+
+
+
+
 https://github.com/altera-fpga/linux-socfpga/tree/v4.19
 
 
