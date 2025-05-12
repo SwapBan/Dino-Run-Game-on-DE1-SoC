@@ -49,6 +49,12 @@ input logic [31:0]  writedata,
     localparam [7:0] FG_R = 8'h00, FG_G = 8'h00, FG_B = 8'h00;  // black digits
 
 
+    logic [9:0] rx;
+    logic [2:0] idx, ry;
+    logic [3:0] cx;
+
+
+
     // === Dino ===
     logic [15:0] dino_sprite_output;
     logic [15:0] dino_new_output;
@@ -348,19 +354,17 @@ a <= BG_R; b <= BG_G; c <= BG_B;
 
 // 2) draw BCD score if within our 8‐pixel font band
 if (!game_over && vcount >= SCORE_Y && vcount < SCORE_Y+8) begin
-  logic [9:0] rx  = hcount - SCORE_X;   // horizontal offset
-  logic [2:0] idx = rx[9:4];            // rx/16 → which digit slot?
-  if (idx < N_DIGITS) begin
-    logic [3:0] cx = rx[3:0];            // rx%16 → column in slot
-    if (cx < 8) begin                   // only first 8px per digit
-      logic [2:0] ry = vcount - SCORE_Y; // row in 8px font
-      if (font_rom[bcd[idx]][ry][7 - cx]) begin
-        a <= FG_R; b <= FG_G; c <= FG_B; // draw pixel
-      end
-    end
-  end
-end
+    rx  = hcount - SCORE_X;   // horizontal offset
+    idx = rx[9:4];            // rx/16 → which digit slot?
+    cx  = rx[3:0];            // rx%16 → column in slot
+    ry  = vcount - SCORE_Y;   // row in 8px font
 
+    if (idx < N_DIGITS && cx < 8) begin
+        if (font_rom[bcd[idx]][ry][7 - cx]) begin
+            a <= FG_R; b <= FG_G; c <= FG_B; // draw pixel
+        end
+    end
+end
 
 
 
