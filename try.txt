@@ -1,0 +1,2 @@
+wget https://github.com/shinhwagk/alsa-utils-arm/releases/download/v1.2.5/aplay
+chmod +x aplay
