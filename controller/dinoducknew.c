@@ -16,7 +16,7 @@
 #define DINO_Y_OFFSET    0x0004     // reg 1: vertical position
 #define DUCKING_OFFSET  (13 * 4)    // reg13: duck flag
 #define JUMPING_OFFSET  (14 * 4)    // reg14: jump flag
-#define REPLAY_OFFSET   (4 * 4)     // reg4: Start button (replay signal)
+#define REPLAY_OFFSET   (19 * 4)     // reg4: Start button (replay signal)
 
 // Physics
 #define GROUND_Y        248         // Match Verilog default
