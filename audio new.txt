@@ -1,0 +1,92 @@
+To **play a WAV file on your DE1-SoC FPGA using the 3.5mm audio jack**, the **easiest and fastest method** is to use the **Linux-side `aplay` command** with a supported Linux image and properly configured audio driver for the **Wolfson WM8731 codec**.
+
+---
+
+### ✅ Easiest Method: Use `aplay` with the default DE1-SoC Linux image
+
+#### **Step-by-step instructions:**
+
+---
+
+### **1. Prepare a Compatible Linux Image**
+
+Use the default **DE1-SoC Linux image** provided by Terasic that has audio drivers pre-configured.
+
+**Download DE1-SoC Linux Image:**
+
+```bash
+wget https://www.terasic.com.cn/downloads/cd-rom/de1-soc/DE1-SoC_Linux_FBSD_20200806.tar.gz
+```
+
+Unpack it:
+
+```bash
+tar -xzvf DE1-SoC_Linux_FBSD_20200806.tar.gz
+```
+
+Flash it to your SD card:
+
+```bash
+sudo dd if=DE1-SoC_FB.img of=/dev/sdX bs=1M conv=fsync
+sync
+```
+
+> Replace `/dev/sdX` with your actual SD card device (e.g., `/dev/sdb` — be very careful here).
+
+---
+
+### **2. Boot the FPGA with the SD Card**
+
+* Insert the SD card back into the DE1-SoC.
+* Power it on.
+* Connect to the board via UART or SSH (`root@de1soc` prompt).
+
+---
+
+### **3. Test the Audio Driver**
+
+Run:
+
+```bash
+aplay -l
+```
+
+You should see a **"Wolfson WM8731"** or similar card listed.
+
+If you don't see it:
+
+* Confirm that the audio codec is wired/connected properly.
+* Your Qsys design must include the **audio core** and the **I2C controller** for configuring the codec.
+
+---
+
+### **4. Copy a WAV File to the Board**
+
+From your host PC:
+
+```bash
+scp yourfile.wav root@de1soc.local:/root/
+```
+
+(Replace `yourfile.wav` with the path to your WAV file.)
+
+---
+
+### **5. Play the Audio**
+
+```bash
+aplay yourfile.wav
+```
+
+> Make sure the WAV file is 16-bit, 44.1kHz PCM stereo/mono — the Wolfson codec supports standard formats, but keep it simple.
+
+---
+
+### ✅ Tips:
+
+* Use headphones or speakers via 3.5mm jack (not line-in).
+* Confirm that the codec's I2C configuration logic is included in your Verilog or Qsys design.
+
+---
+
+Would you like help checking your current Qsys/Verilog setup to ensure audio support is correctly wired?
