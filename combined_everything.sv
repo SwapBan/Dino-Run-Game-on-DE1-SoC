@@ -25,6 +25,22 @@ input logic [31:0]  writedata,
   logic [16:0]  score;
   logic [3:0]  digit_ten_thou, digit_thou, digit_h, digit_t, digit_u;
     logic [7:0]  font_rom [0:9][0:7];
+     // === Frame Animations ===
+    logic [23:0] frame_counter;
+    logic [1:0]  sprite_state, sprite_state2;
+
+    logic [10:0] cloud_offset;
+    logic [23:0] cloud_counter;
+
+    logic [7:0] sky_r, sky_g, sky_b;
+    logic [23:0] sky_counter;
+    logic [3:0]  sky_phase;
+ // === Sun Color ===
+    logic [7:0] sun_r, sun_g, sun_b; // Declared sun color variables
+  
+    logic [10:0] sun_offset_x;
+    logic [10:0] sun_offset_y;
+    logic [23:0] sun_counter;
 
     initial begin
         // simple 8×8 font for digits 0–9
@@ -42,7 +58,9 @@ input logic [31:0]  writedata,
 
 
     logic [7:0]  a, b, c;
-
+// === Timer for Night Transition ===
+  logic [31:0] night_timer; // Timer to trigger night time
+    logic night_time; // Flag to indicate if it's nighttime
     // === Dino ===
     logic [15:0] dino_sprite_output;
     logic [15:0] dino_new_output;
@@ -126,6 +144,24 @@ logic [31:0] godzilla_timer;
             sprite_state   <= 0;
             motion_timer   <= 0;
             score          <= 0;
+            frame_counter <= 0;
+             sprite_state2 <= 0;
+            cloud_counter <= 0;
+            cloud_offset <= 0;
+            sky_counter <= 0;
+            sky_phase <= 0;
+            sky_r <= 8'd135;
+            sky_g <= 8'd206;
+            sky_b <= 8'd235;
+            sun_counter <= 0;
+            sun_offset_x <= 0;
+            sun_offset_y <= 0;
+            night_timer <= 32'd0;
+            night_time <= 0; // Start with day
+            sky_r <= 8'd135;
+            sky_g <= 8'd206;
+            sky_b <= 8'd235; // Day sky color
+            
             
 
           // … existing reset of positions, flags, etc. …
@@ -201,6 +237,63 @@ score <= (score == 17'd99999) ? 17'd0 : score + 1;                // count passe
                 collide(dino_x, dino_y, lava_x,   lava_y,   32,32,32,32) ||
                                   collide(dino_x, dino_y, ptr_x,    ptr_y,    32,32,32,32))) begin
                 game_over <= 1;
+
+                
+            end
+
+            if (frame_counter == 24'd5_000_000) begin
+                sprite_state <= sprite_state + 1;
+                sprite_state2 <= sprite_state2 + 1;
+                frame_counter <= 0;
+            end else begin
+                frame_counter <= frame_counter + 1;
+            end
+
+            // Cloud drifting
+            if (cloud_counter == 24'd8_000_000) begin
+                cloud_counter <= 0;
+                cloud_offset <= cloud_offset + 1;
+                if (cloud_offset > 1280) cloud_offset <= 0;
+            end else begin
+                cloud_counter <= cloud_counter + 1;
+            end
+
+
+        /* // Cloud drifting
+            if (night_timer == 24'd550_000_000) begin
+                night_timer <= 0;
+                //cloud_offset <= cloud_offset + 1;
+                
+            end else begin
+                night_timer <= night_timer + 1;
+            end*/
+
+
+            
+            // Change to night after 5 seconds (1250 million cycles)
+          
+         // Night Timer Logic (Alternating between day and night)
+         if (night_timer < 32'd100_000_000_000) begin
+            night_timer <= night_timer + 1;  // Increment the timer
+         end else if (night_timer == 32'd100_000_000_000) begin
+            night_time <= ~night_time;
+             night_timer <= 32'd0;
+         end
+            if (night_time) begin
+                sky_r <= 8'd10;  // Dark blue night sky
+                sky_g <= 8'd10;
+                sky_b <= 8'd40;
+             // Change Sun to white at night
+            sun_r <= 8'd255; // White sun
+            sun_g <= 8'd255;
+            sun_b <= 8'd255;
+            end else begin
+                sky_r <= 8'd135;
+                sky_g <= 8'd206;
+                sky_b <= 8'd235; // Day sky color
+                sun_r <= 8'd255; // Yellow sun
+                sun_g <= 8'd255;
+                sun_b <= 8'd0;
             end
         /*    if (collide(dino_x, dino_y, s_cac_x,  s_cac_y,  32,32,32,32) ||
     collide(dino_x, dino_y, group_x,  group_y, 64,32,32,32) ||
