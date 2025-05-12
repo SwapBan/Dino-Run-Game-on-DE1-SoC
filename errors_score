@@ -14,3 +14,15 @@ Error (10112): Ignored design unit "vga_counters" at vga_ball.sv(455) due to pre
 Error (10748): Verilog HDL error at vga_ball.sv(351): expression in variable declaration assignment to rx must be constant File: /homes/user/stud/spring25/as7525/Music/lab17/soc_system/synthesis/submodules/vga_ball.sv Line: 351
 Error (12152): Can't elaborate user hierarchy "soc_system:soc_system0|vga_ball:vga_ball_0" File: /homes/user/stud/spring25/as7525/Music/lab17/soc_system/synthesis/soc_system.v Line: 329
 
+
+
+
+
+Error (12002): Port "audio_0_external_interface_XCK" does not exist in macrofunction "soc_system0" File: /homes/user/stud/spring25/as7525/Music/lab13/soc_system_top.sv Line: 284
+Warning (12241): 35 hierarchies have connectivity warnings - see the Connectivity Checks report folder
+Info (144001): Generated suppressed messages file /homes/user/stud/spring25/as7525/Music/lab13/output_files/soc_system.map.smsg
+Error: Quartus Prime Analysis & Synthesis was unsuccessful. 1 error, 93 warnings
+    Error: Peak virtual memory: 882 megabytes
+    Error: Processing ended: Mon May 12 15:02:44 2025
+    Error: Elapsed time: 00:03:55
+    Error: Total CPU time (on all processors): 00:04:01
