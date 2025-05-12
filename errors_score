@@ -8,3 +8,9 @@ Error (10170): Verilog HDL syntax error at vga_ball.sv(442) near text: ")";  exp
 Error (10170): Verilog HDL syntax error at vga_ball.sv(449) near text: "end"; "end" without "begin" . Check for and fix any syntax errors that appear immediately before or at the specified keyword. The Intel FPGA Knowledge Database contains many articles with specific details on how to resolve this error. Visit the Knowledge Database at https://www.altera.com/support/support-resources/knowledge-base/search.html and search for this specific error message number. File: /homes/user/stud/spring25/as7525/Music/lab17/soc_system/synthesis/submodules/vga_ball.sv Line: 449
 Error (10112): Ignored design unit "vga_ball" at vga_ball.sv(3) due to previous errors File: /homes/user/stud/spring25/as7525/Music/lab17/soc_system/synthesis/submodules/vga_ball.sv Line: 3
 Error (10112): Ignored design unit "vga_counters" at vga_ball.sv(455) due to previous errors File: /homes/user/stud/spring25/as7525/Music/lab17/soc_system/synthesis/submodules/vga_ball.sv Line: 455
+
+
+
+Error (10748): Verilog HDL error at vga_ball.sv(351): expression in variable declaration assignment to rx must be constant File: /homes/user/stud/spring25/as7525/Music/lab17/soc_system/synthesis/submodules/vga_ball.sv Line: 351
+Error (12152): Can't elaborate user hierarchy "soc_system:soc_system0|vga_ball:vga_ball_0" File: /homes/user/stud/spring25/as7525/Music/lab17/soc_system/synthesis/soc_system.v Line: 329
+
