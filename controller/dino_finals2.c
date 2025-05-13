@@ -21,7 +21,7 @@
 // Physics settings
 #define GROUND_Y         248
 #define INITIAL_JUMP_V   -15     // Upward velocity
-#define MAX_FALL_SPEED   8       // Cap downward velocity
+#define MAX_FALL_SPEED   6       // Cap downward velocity
 #define GRAVITY_STEP     1       // Gravity acceleration per step
 #define GRAVITY_DELAY    2       // Apply gravity every N frames
 
