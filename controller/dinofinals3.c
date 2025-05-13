@@ -71,7 +71,7 @@ int main(void) {
 
         if (want_jump) {
             v_fixed = INITIAL_VELOCITY;
-            x += 3;
+            x += 23;
         }
 
         // Apply gravity only every GRAVITY_DELAY frames
