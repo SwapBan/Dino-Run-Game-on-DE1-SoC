@@ -22,8 +22,9 @@
 #define FIXED_SHIFT        4
 #define GROUND_Y_FIXED     (GROUND_Y << FIXED_SHIFT)
 
-#define INITIAL_VELOCITY   (-84)
-#define GRAVITY            1
+#define INITIAL_VELOCITY   (-84)      // High jump
+#define GRAVITY            1          // Gentle gravity
+#define GRAVITY_DELAY      6          // Delay before applying gravity again
 #define DELAY_US           5000
 
 int main(void) {
@@ -50,7 +51,8 @@ int main(void) {
 
     int y_fixed = GROUND_Y_FIXED;
     int v_fixed = 0;
-    int x = 100;  // Start horizontal position
+    int x = 100;
+    int gravity_timer = 0;
 
     unsigned char report[REPORT_LEN];
     int transferred, r;
@@ -69,10 +71,15 @@ int main(void) {
 
         if (want_jump) {
             v_fixed = INITIAL_VELOCITY;
-            x += 3;  // Move forward on jump
+            x += 3;
         }
 
-        v_fixed += GRAVITY;
+        // Apply gravity only every GRAVITY_DELAY frames
+        if (++gravity_timer >= GRAVITY_DELAY) {
+            v_fixed += GRAVITY;
+            gravity_timer = 0;
+        }
+
         y_fixed += v_fixed;
 
         if (y_fixed > GROUND_Y_FIXED) {
