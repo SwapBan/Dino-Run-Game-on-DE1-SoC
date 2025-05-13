@@ -434,7 +434,7 @@ always_ff @(posedge clk) begin
     a <= 8'd135; b <= 8'd206; c <= 8'd235;
 
     if (!game_over ) begin
-begin
+//begin
      
      // end
      // end
@@ -677,7 +677,7 @@ end
                 c <= {ptr_sprite_output[4:0],   3'b000};
             end
         end
-    if(vcount >= SCORE_Y && vcount < SCORE_Y+8)
+        if(vcount >= SCORE_Y && vcount < SCORE_Y+8) begin
         rx  = hcount - SCORE_X;
     idx = rx[9:4];
     cx  = rx[3:0];
