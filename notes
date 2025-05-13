@@ -1,0 +1,14 @@
+// Audio clock
+    .audio_pll_0_audio_clk_clk      (aud_clk),
+
+    // Audio signals to Wolfson codec
+    .audio_0_external_interface_ADCDAT   (AUD_ADCDAT),
+    .audio_0_external_interface_ADCLRCK  (AUD_ADCLRCK),
+    .audio_0_external_interface_BCLK     (AUD_BCLK),
+    .audio_0_external_interface_DACDAT   (AUD_DACDAT),
+    .audio_0_external_interface_DACLRCK  (AUD_DACLRCK),
+    .audio_0_external_interface_XCK      (AUD_XCK),
+
+    // I2C configuration lines
+    .audio_and_video_config_0_external_interface_SDAT (I2C_SDAT),
+    .audio_and_video_config_0_external_interface_SCLK (I2C_SCLK)
