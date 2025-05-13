@@ -8,24 +8,24 @@
 #include <libusb-1.0/libusb.h>
 #include "usbkeyboard.h"
 
-#define REPORT_LEN     8
+#define REPORT_LEN        8
 
-// Lightweight bridge base & register offsets
-#define LW_BRIDGE_BASE 0xFF200000
-#define MAP_SIZE       0x1000
-#define DINO_Y_OFFSET    0x0004
-#define DUCKING_OFFSET  (13 * 4)
-#define JUMPING_OFFSET  (14 * 4)
-#define REPLAY_OFFSET   (19 * 4)
+// Memory-mapped I/O offsets
+#define LW_BRIDGE_BASE    0xFF200000
+#define MAP_SIZE          0x1000
+#define DINO_Y_OFFSET     0x0004
+#define DUCKING_OFFSET    (13 * 4)
+#define JUMPING_OFFSET    (14 * 4)
+#define REPLAY_OFFSET     (19 * 4)
 
-// Physics
+// Physics constants
 #define GROUND_Y          248
-#define INITIAL_JUMP_V   -15
-#define GRAVITY_STEP       1
-#define GRAVITY_TICK_DELAY 5
-#define MAX_FALL_SPEED     5
+#define JUMP_VELOCITY     -8
+#define GRAVITY           1
+#define MAX_FALL_SPEED    2
 
 int main(void) {
+    // MMIO setup
     int fd = open("/dev/mem", O_RDWR | O_SYNC);
     if (fd < 0) { perror("open(/dev/mem)"); return 1; }
 
@@ -37,6 +37,7 @@ int main(void) {
     volatile uint32_t *jump_reg   = (uint32_t *)(lw_base + JUMPING_OFFSET);
     volatile uint32_t *replay_reg = (uint32_t *)(lw_base + REPLAY_OFFSET);
 
+    // USB setup
     struct libusb_device_handle *pad;
     uint8_t ep;
     pad = openkeyboard(&ep);
@@ -47,7 +48,7 @@ int main(void) {
         return 1;
     }
 
-    int y = GROUND_Y, v = 0, gravity_tick = 0;
+    int y = GROUND_Y, v = 0;
     unsigned char report[REPORT_LEN];
     int transferred, r;
 
@@ -63,23 +64,22 @@ int main(void) {
         bool want_duck = (y_axis == 0xFF && y == GROUND_Y);
         bool want_replay = (report[6] & 0x20);
 
-        if (want_jump) v = INITIAL_JUMP_V;
+        if (want_jump) v = JUMP_VELOCITY;
 
-        *jump_reg   = want_jump;
-        *duck_reg   = want_duck;
+        *jump_reg = want_jump;
+        *duck_reg = want_duck;
         *replay_reg = want_replay;
 
-        // Gravity applied every few ticks
-        if (++gravity_tick >= GRAVITY_TICK_DELAY) {
-            if (v < MAX_FALL_SPEED) v += GRAVITY_STEP;
-            gravity_tick = 0;
-        }
-
+        // Physics
+        if (v < MAX_FALL_SPEED) v += GRAVITY;
         y += v;
+
         if (y > GROUND_Y) { y = GROUND_Y; v = 0; }
 
         *dino_y_reg = (uint32_t)y;
-        usleep(10000);  // Slower game loop
+
+        // Slower movement (25 ms = ~40 fps)
+        usleep(25000);
     }
 
     libusb_close(pad);
