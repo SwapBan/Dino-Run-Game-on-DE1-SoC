@@ -435,15 +435,7 @@ always_ff @(posedge clk) begin
 
     if (!game_over && vcount >= SCORE_Y && vcount < SCORE_Y+8) begin
      // if()begin
-        rx  = hcount - SCORE_X;   // horizontal offset
-    idx = rx[9:4];            // rx/16 → which digit slot?
-    cx  = rx[3:0];            // rx%16 → column in slot
-    ry  = vcount - SCORE_Y;   // row in 8px font
-if (idx < N_DIGITS && cx < 8) begin
-        if (font_rom[bcd[idx]][ry][7 - cx]) begin
-            a <= FG_R; b <= FG_G; c <= FG_B; // draw pixel
-        end
-    end
+     
      // end
      // end
   /*    // split into hundreds, tens, units
@@ -693,6 +685,17 @@ end
                 b <= {replay_output[10:5],  2'b00};
                 c <= {replay_output[4:0],   3'b000};
             end
+        end
+         
+    end
+    rx  = hcount - SCORE_X;
+    idx = rx[9:4];
+    cx  = rx[3:0];
+    ry  = vcount - SCORE_Y;
+
+    if (vcount >= SCORE_Y && vcount < SCORE_Y + 8 && idx < N_DIGITS && cx < 8) begin
+        if (font_rom[bcd[idx]][ry][7 - cx]) begin
+            a <= FG_R; b <= FG_G; c <= FG_B;
         end
     end
 end
