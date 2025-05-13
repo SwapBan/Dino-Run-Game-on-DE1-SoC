@@ -433,8 +433,8 @@ end
 always_ff @(posedge clk) begin
     a <= 8'd135; b <= 8'd206; c <= 8'd235;
 
-    if (!game_over && vcount >= SCORE_Y && vcount < SCORE_Y+8) begin
-     // if()begin
+    if (!game_over ) begin
+begin
      
      // end
      // end
@@ -677,6 +677,17 @@ end
                 c <= {ptr_sprite_output[4:0],   3'b000};
             end
         end
+    if(vcount >= SCORE_Y && vcount < SCORE_Y+8)
+        rx  = hcount - SCORE_X;
+    idx = rx[9:4];
+    cx  = rx[3:0];
+    ry  = vcount - SCORE_Y;
+
+    if (vcount >= SCORE_Y && vcount < SCORE_Y + 8 && idx < N_DIGITS && cx < 8) begin
+        if (font_rom[bcd[idx]][ry][7 - cx]) begin
+            a <= FG_R; b <= FG_G; c <= FG_B;
+        end
+    end// if()
     end else begin
         if (hcount >= replay_x && hcount < replay_x + 160 && vcount >= replay_y && vcount < replay_y + 32) begin
             replay_addr <= (hcount - replay_x) + ((vcount - replay_y) * 160);
@@ -688,16 +699,7 @@ end
         end
          
     end
-    rx  = hcount - SCORE_X;
-    idx = rx[9:4];
-    cx  = rx[3:0];
-    ry  = vcount - SCORE_Y;
-
-    if (vcount >= SCORE_Y && vcount < SCORE_Y + 8 && idx < N_DIGITS && cx < 8) begin
-        if (font_rom[bcd[idx]][ry][7 - cx]) begin
-            a <= FG_R; b <= FG_G; c <= FG_B;
-        end
-    end
+    
 end
 
 assign {VGA_R, VGA_G, VGA_B} = {a, b, c};
