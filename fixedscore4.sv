@@ -684,15 +684,16 @@ end
             end
         end
     end else begin
-        if (hcount >= replay_x && hcount < replay_x + 160 && vcount >= replay_y && vcount < replay_y + 32) begin
-            replay_addr <= (hcount - replay_x) + ((vcount - replay_y) * 160);
-            if (is_visible(replay_output)) begin
-                a <= {replay_output[15:11], 3'b000};
-                b <= {replay_output[10:5],  2'b00};
-                c <= {replay_output[4:0],   3'b000};
-            end
+            if (game_over && hcount >= replay_x && hcount < replay_x + 160 &&
+        vcount >= replay_y && vcount < replay_y + 32) begin
+        replay_addr <= (hcount - replay_x) + ((vcount - replay_y) * 160);
+        if (is_visible(replay_output)) begin
+            a <= {replay_output[15:11], 3'b000};
+            b <= {replay_output[10:5],  2'b00};
+            c <= {replay_output[4:0],   3'b000};
         end
     end
+
 end
 
 assign {VGA_R, VGA_G, VGA_B} = {a, b, c};
