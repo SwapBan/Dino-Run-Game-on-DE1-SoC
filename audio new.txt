@@ -2,7 +2,7 @@ https://www.terasic.com.tw/cgi-bin/page/archive.pl?Language=English&No=836&PartN
 
 
 
-
+https://www.youtube.com/watch?v=zzIi7ErWhAA
 
 
 To **play a WAV file on your DE1-SoC FPGA using the 3.5mm audio jack**, the **easiest and fastest method** is to use the **Linux-side `aplay` command** with a supported Linux image and properly configured audio driver for the **Wolfson WM8731 codec**.
