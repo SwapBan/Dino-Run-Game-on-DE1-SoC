@@ -112,7 +112,7 @@ input logic [31:0]  writedata,
     logic [10:0] obstacle_speed = 1;
     logic [4:0]  passed_count;
     logic        game_over;
-    logic [1:0]  sprite_state;
+   // logic [1:0]  sprite_state;
 
     // === Power-up / Godzilla mode ===
 logic godzilla_mode;
@@ -444,6 +444,7 @@ if (idx < N_DIGITS && cx < 8) begin
             a <= FG_R; b <= FG_G; c <= FG_B; // draw pixel
         end
     end
+      end
      // end
   /*    // split into hundreds, tens, units
        digit_ten_thou = score / 10000;
