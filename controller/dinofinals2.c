@@ -8,24 +8,27 @@
 #include <libusb-1.0/libusb.h>
 #include "usbkeyboard.h"
 
-#define REPORT_LEN       8
-#define LW_BRIDGE_BASE   0xFF200000
-#define MAP_SIZE         0x1000
+#define REPORT_LEN         8
+#define LW_BRIDGE_BASE     0xFF200000
+#define MAP_SIZE           0x1000
 
-#define DINO_Y_OFFSET    0x0004
-#define DUCKING_OFFSET   (13 * 4)
-#define JUMPING_OFFSET   (14 * 4)
-#define REPLAY_OFFSET    (19 * 4)
+#define DINO_Y_OFFSET      (1 * 4)
+#define DUCKING_OFFSET     (13 * 4)
+#define JUMPING_OFFSET     (14 * 4)
+#define REPLAY_OFFSET      (19 * 4)
 
-#define GROUND_Y         248
-#define INITIAL_VELOCITY (-84)    // very high jump
-#define GRAVITY          2        // gentle pull
-#define GRAVITY_DELAY    6        // apply gravity every 6 frames
+#define GROUND_Y           248
+#define FIXED_SHIFT        4                   // 1 pixel = 16 units
+#define GROUND_Y_FIXED     (GROUND_Y << FIXED_SHIFT)
+
+#define INITIAL_VELOCITY   (-84)               // -4.0 in fixed-point (higher jump)
+#define GRAVITY            1                   // 1/16th pixel per loop
+#define DELAY_US           5000
 
 int main(void) {
     int fd = open("/dev/mem", O_RDWR | O_SYNC);
     if (fd < 0) { perror("open(/dev/mem)"); return 1; }
-    void *lw_base = mmap(NULL, MAP_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, LW_BRIDGE_BASE);
+    void *lw_base = mmap(NULL, MAP_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, LW_BRIDGE_BASE);
     if (lw_base == MAP_FAILED) { perror("mmap"); return 1; }
 
     volatile uint32_t *dino_y_reg = (uint32_t *)(lw_base + DINO_Y_OFFSET);
@@ -38,13 +41,13 @@ int main(void) {
     pad = openkeyboard(&ep);
     if (!pad) {
         fprintf(stderr, "Controller not found\n");
-        munmap(lw_base, MAP_SIZE); close(fd);
+        munmap(lw_base, MAP_SIZE);
+        close(fd);
         return 1;
     }
 
-    int y = GROUND_Y;
-    int v = 0;
-    int gravity_timer = 0;
+    int y_fixed = GROUND_Y_FIXED;
+    int v_fixed = 0;
 
     unsigned char report[REPORT_LEN];
     int transferred, r;
@@ -57,26 +60,26 @@ int main(void) {
         }
 
         uint8_t y_axis = report[4];
-        bool want_jump   = (y_axis == 0x00 && y == GROUND_Y);
-        bool want_duck   = (y_axis == 0xFF && y == GROUND_Y);
+        bool want_jump = (y_axis == 0x00 && y_fixed == GROUND_Y_FIXED);
+        bool want_duck = (y_axis == 0xFF && y_fixed == GROUND_Y_FIXED);
         bool want_replay = (report[6] & 0x20);
 
-        if (want_jump) v = INITIAL_VELOCITY;
+        if (want_jump) v_fixed = INITIAL_VELOCITY;
 
+        v_fixed += GRAVITY;
+        y_fixed += v_fixed;
+
+        if (y_fixed > GROUND_Y_FIXED) {
+            y_fixed = GROUND_Y_FIXED;
+            v_fixed = 0;
+        }
+
+        *dino_y_reg = y_fixed >> FIXED_SHIFT;
         *jump_reg = want_jump;
         *duck_reg = want_duck;
         *replay_reg = want_replay;
 
-        if (++gravity_timer >= GRAVITY_DELAY) {
-            v += GRAVITY;
-            gravity_timer = 0;
-        }
-
-        y += v;
-        if (y > GROUND_Y) { y = GROUND_Y; v = 0; }
-
-        *dino_y_reg = (uint32_t)y;
-        usleep(5000);
+        usleep(DELAY_US);
     }
 
     libusb_close(pad);
