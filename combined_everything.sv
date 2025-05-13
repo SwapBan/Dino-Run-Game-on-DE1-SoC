@@ -17,6 +17,7 @@ input logic [31:0]  writedata,
     localparam HACTIVE = 11'd1280;
     localparam SCORE_X = 120;
     localparam SCORE_Y = 10;
+ logic replay_button;
 
     // VGA TIMING
     logic [10:0] hcount;
@@ -194,6 +195,10 @@ logic [31:0] godzilla_timer;
                // 9'd16: cg_y <= writedata[9:0];
                 9'd17: lava_x <= writedata[9:0];   
                 9'd18: lava_y <= writedata[9:0];
+                 9'd19: replay_button <= writedata[0]; // trigger replay
+
+                //9'd19: controller_report[4] <= writedata[0]; 
+
             endcase
 
         end else if (!game_over) begin
@@ -328,7 +333,7 @@ if (godzilla_timer >= 32'd100_000_000_000) begin
 end
         end else begin
             // on replay, reset everything
-            if (controller_report[4]) begin
+            if (replay_button) begin
                 s_cac_x        <= 1200;
                 group_x        <= 1600;
                 lava_x         <= 1800;
@@ -336,6 +341,12 @@ end
                 obstacle_speed <= 1;
                 passed_count   <= 0;
                 game_over      <= 0;
+                score          <= 0;
+                motion_timer   <= 0;
+                godzilla_mode  <= 0;
+                godzilla_timer <= 0;
+                powerup_x      <= 800;
+                powerup_y      <= 248;
             end
         end
     end
