@@ -220,6 +220,20 @@ logic [31:0] godzilla_timer;
                 else
                     playing_gameover <= 0;
             end
+ // Avalon-ST streaming
+        if (L_READY) begin
+            L_DATA  <= audio_sample;
+            L_VALID <= (sample_clock == 0);
+        end else begin
+            L_VALID <= 0;
+        end
+
+        if (R_READY) begin
+            R_DATA  <= audio_sample;
+            R_VALID <= (sample_clock == 0);
+        end else begin
+            R_VALID <= 0;
+        end
 
         end else if (chipselect && write) begin
             case (address)
