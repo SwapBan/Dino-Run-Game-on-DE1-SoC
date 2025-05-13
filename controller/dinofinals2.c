@@ -10,7 +10,6 @@
 
 #define REPORT_LEN     8
 
-// MMIO base + offsets
 #define LW_BRIDGE_BASE 0xFF200000
 #define MAP_SIZE       0x1000
 #define DINO_Y_OFFSET    0x0004
@@ -18,11 +17,10 @@
 #define JUMPING_OFFSET   (14 * 4)
 #define REPLAY_OFFSET    (19 * 4)
 
-// Physics constants
 #define GROUND_Y        248
-#define GRAVITY         1
-#define INITIAL_VELOCITY -18
-#define FRAME_DELAY_US  16000  // 16 ms per frame (about 60 FPS)
+#define GRAVITY         1          // gravity added every Nth frame
+#define INITIAL_VELOCITY -18       // high jump start
+#define FRAME_DELAY_US  30000      // ~33 FPS (slower)
 
 int main(void) {
     int fd = open("/dev/mem", O_RDWR | O_SYNC);
@@ -47,6 +45,7 @@ int main(void) {
     }
 
     int y = GROUND_Y, v = 0;
+    int frame = 0;
     unsigned char report[REPORT_LEN];
     int transferred, r;
 
@@ -68,8 +67,8 @@ int main(void) {
         *duck_reg = want_duck;
         *replay_reg = want_replay;
 
-        // Update physics
-        v += GRAVITY;
+        // Slow gravity application every other frame
+        if (frame % 2 == 0) v += GRAVITY;
         y += v;
 
         if (y > GROUND_Y) {
@@ -79,6 +78,7 @@ int main(void) {
 
         *dino_y_reg = y;
         usleep(FRAME_DELAY_US);
+        frame++;
     }
 
     libusb_close(pad);
