@@ -20,7 +20,7 @@
 
 // Physics
 #define GROUND_Y        248         // Match Verilog default
-#define GRAVITY         3
+#define GRAVITY         -2
 
 int main(void) {
     // 1) MMIO setup
