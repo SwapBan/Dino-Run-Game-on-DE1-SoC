@@ -98,7 +98,8 @@ scp as7525@micro07.ee.columbia.edu:lab15/output_files/soc_system.rbf /mnt
 scp as7525@micro07.ee.columbia.edu:lab17/soc_system.dtb /mnt
 scp as7525@micro07.ee.columbia.edu:lab17/output_files/soc_system.rbf /mnt
 
-
+scp as7525@micro07.ee.columbia.edu:lab19/soc_system.dtb /mnt
+scp as7525@micro07.ee.columbia.edu:lab19/output_files/soc_system.rbf /mnt
 
 scp as7525@micro22.ee.columbia.edu:new/ps4_input.c /home
 scp as7525@micro07.ee.columbia.edu:new/test_hid.c /root/test_gamepad
@@ -112,6 +113,12 @@ scp as7525@micro20.ee.columbia.edu:new/dino_new.c /root/test_gamepad
 scp as7525@micro20.ee.columbia.edu:new/dino_move.c /root/test_gamepad
 scp as7525@micro20.ee.columbia.edu:new/motion1.c /root/test_gamepad
 scp as7525@micro20.ee.columbia.edu:new/motion3.c /root/test_gamepad
+scp as7525@micro07.ee.columbia.edu:new/dinofinals.c /root/test_gamepad
+scp as7525@micro07.ee.columbia.edu:new/dinofinals2.c /root/test_gamepad
+scp as7525@micro07.ee.columbia.edu:new/dinofinals3.c /root/test_gamepad
+scp as7525@micro07.ee.columbia.edu:new/dinofinals3.c /root/test_gamepad
+
+
 
 scp -r as7525@micro07.ee.columbia.edu:new/alsa-utils-1.2.3 /root/alsa
 scp as7525@micro07.ee.columbia.edu:new/test_tone.wav /root/alsa/alsa-utils-1.2.3
@@ -139,7 +146,9 @@ gcc -o dino_jump6 motion1.c usbkeyboard.c -std=gnu99 -lusb-1.0 -lm
 gcc -O2 -std=gnu99 -o dino_jump6 motion1.c
 gcc -o dino_jump6 dino_duck_new.c usbkeyboard.c -lusb-1.0 -lm
 gcc -o dino_jump7 dinoducknew.c usbkeyboard.c -lusb-1.0 -lm
-
+gcc -o dino_jump8 dinofinals.c usbkeyboard.c -lusb-1.0 -lm
+gcc -o dino_jump8 dinofinals2.c usbkeyboard.c -lusb-1.0 -lm
+gcc -o dino_jump8 dinofinals3.c usbkeyboard.c -lusb-1.0 -lm
 
 wget https://www.cs.columbia.edu/~sedwards/classes/2025/4840-spring/linux-headers-4.19.0.tar.gz
 
