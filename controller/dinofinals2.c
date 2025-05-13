@@ -17,10 +17,11 @@
 #define JUMPING_OFFSET   (14 * 4)
 #define REPLAY_OFFSET    (19 * 4)
 
-#define GROUND_Y        248
-#define GRAVITY         1
-#define INITIAL_VELOCITY -18
-#define FRAME_DELAY_US  40000  // ~25 FPS
+#define GROUND_Y         248
+#define INITIAL_VELOCITY -20
+#define GRAVITY          1
+#define GRAVITY_DELAY_FRAMES 5     // only apply gravity every 5 frames
+#define FRAME_DELAY_US   50000     // 20 FPS, slow frame rate = longer airtime
 
 int main(void) {
     int fd = open("/dev/mem", O_RDWR | O_SYNC);
@@ -66,8 +67,7 @@ int main(void) {
         *duck_reg = want_duck;
         *replay_reg = want_replay;
 
-        // Gravity applied every 3rd frame
-        if (frame % 3 == 0) v += GRAVITY;
+        if (frame % GRAVITY_DELAY_FRAMES == 0) v += GRAVITY;
 
         y += v;
         if (y > GROUND_Y) {
