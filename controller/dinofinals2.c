@@ -18,9 +18,9 @@
 #define REPLAY_OFFSET    (19 * 4)
 
 #define GROUND_Y        248
-#define GRAVITY         1          // gravity added every Nth frame
-#define INITIAL_VELOCITY -18       // high jump start
-#define FRAME_DELAY_US  30000      // ~33 FPS (slower)
+#define GRAVITY         1
+#define INITIAL_VELOCITY -18
+#define FRAME_DELAY_US  40000  // ~25 FPS
 
 int main(void) {
     int fd = open("/dev/mem", O_RDWR | O_SYNC);
@@ -44,8 +44,7 @@ int main(void) {
         return 1;
     }
 
-    int y = GROUND_Y, v = 0;
-    int frame = 0;
+    int y = GROUND_Y, v = 0, frame = 0;
     unsigned char report[REPORT_LEN];
     int transferred, r;
 
@@ -67,10 +66,10 @@ int main(void) {
         *duck_reg = want_duck;
         *replay_reg = want_replay;
 
-        // Slow gravity application every other frame
-        if (frame % 2 == 0) v += GRAVITY;
-        y += v;
+        // Gravity applied every 3rd frame
+        if (frame % 3 == 0) v += GRAVITY;
 
+        y += v;
         if (y > GROUND_Y) {
             y = GROUND_Y;
             v = 0;
