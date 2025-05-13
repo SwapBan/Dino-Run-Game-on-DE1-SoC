@@ -8,27 +8,27 @@
 #include <libusb-1.0/libusb.h>
 #include "usbkeyboard.h"
 
-#define REPORT_LEN       8
+#define REPORT_LEN     8
 
-// MMIO
-#define LW_BRIDGE_BASE   0xFF200000
-#define MAP_SIZE         0x1000
+// MMIO base + offsets
+#define LW_BRIDGE_BASE 0xFF200000
+#define MAP_SIZE       0x1000
 #define DINO_Y_OFFSET    0x0004
 #define DUCKING_OFFSET   (13 * 4)
 #define JUMPING_OFFSET   (14 * 4)
 #define REPLAY_OFFSET    (19 * 4)
 
-// Physics
-#define GROUND_Y         248
-#define GRAVITY          1
-#define JUMP_VELOCITY    -18
-#define FRAME_DELAY_US   30000  // ~30ms for slower motion
+// Physics constants
+#define GROUND_Y        248
+#define GRAVITY         1
+#define INITIAL_VELOCITY -18
+#define FRAME_DELAY_US  16000  // 16 ms per frame (about 60 FPS)
 
 int main(void) {
     int fd = open("/dev/mem", O_RDWR | O_SYNC);
     if (fd < 0) { perror("open(/dev/mem)"); return 1; }
 
-    void *lw_base = mmap(NULL, MAP_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, LW_BRIDGE_BASE);
+    void *lw_base = mmap(NULL, MAP_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, LW_BRIDGE_BASE);
     if (lw_base == MAP_FAILED) { perror("mmap"); return 1; }
 
     volatile uint32_t *dino_y_reg = (uint32_t *)(lw_base + DINO_Y_OFFSET);
@@ -62,17 +62,22 @@ int main(void) {
         bool want_duck = (y_axis == 0xFF && y == GROUND_Y);
         bool want_replay = (report[6] & 0x20);
 
-        if (want_jump) v = JUMP_VELOCITY;
+        if (want_jump) v = INITIAL_VELOCITY;
 
         *jump_reg = want_jump;
         *duck_reg = want_duck;
         *replay_reg = want_replay;
 
+        // Update physics
         v += GRAVITY;
         y += v;
-        if (y > GROUND_Y) { y = GROUND_Y; v = 0; }
 
-        *dino_y_reg = (uint32_t)y;
+        if (y > GROUND_Y) {
+            y = GROUND_Y;
+            v = 0;
+        }
+
+        *dino_y_reg = y;
         usleep(FRAME_DELAY_US);
     }
 
