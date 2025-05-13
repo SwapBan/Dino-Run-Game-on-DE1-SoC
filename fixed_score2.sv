@@ -39,6 +39,10 @@ input logic [31:0]  writedata,
     logic [7:0] sky_r, sky_g, sky_b;
     logic [23:0] sky_counter;
     logic [3:0]  sky_phase;
+     logic [9:0] rx;
+    logic [2:0] idx, ry;
+    logic [3:0] cx;
+
  // === Sun Color ===
     logic [7:0] sun_r, sun_g, sun_b; // Declared sun color variables
   
