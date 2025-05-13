@@ -688,6 +688,7 @@ end
             a <= FG_R; b <= FG_G; c <= FG_B;
         end
     end// if()
+        end
     end else begin
         if (hcount >= replay_x && hcount < replay_x + 160 && vcount >= replay_y && vcount < replay_y + 32) begin
             replay_addr <= (hcount - replay_x) + ((vcount - replay_y) * 160);
