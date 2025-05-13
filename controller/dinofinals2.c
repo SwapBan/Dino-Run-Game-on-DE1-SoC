@@ -8,21 +8,22 @@
 #include <libusb-1.0/libusb.h>
 #include "usbkeyboard.h"
 
-#define REPORT_LEN        8
-#define LW_BRIDGE_BASE    0xFF200000
-#define MAP_SIZE          0x1000
+#define REPORT_LEN         8
+#define LW_BRIDGE_BASE     0xFF200000
+#define MAP_SIZE           0x1000
 
-#define DINO_Y_OFFSET     (1 * 4)
-#define DUCKING_OFFSET    (13 * 4)
-#define JUMPING_OFFSET    (14 * 4)
-#define REPLAY_OFFSET     (19 * 4)
+#define DINO_Y_OFFSET      (1 * 4)
+#define DUCKING_OFFSET     (13 * 4)
+#define JUMPING_OFFSET     (14 * 4)
+#define REPLAY_OFFSET      (19 * 4)
 
-#define GROUND_Y          248
-#define FIXED_SHIFT       4                   // Simulate 4-bit fixed point
-#define GROUND_Y_FIXED    (GROUND_Y << FIXED_SHIFT)
-#define INITIAL_VELOCITY  (-28)               // -1.75 in fixed-point (−1.75 × 16 = -28)
-#define GRAVITY           1                   // 1/16th pixel per loop
-#define DELAY_US          5000
+#define GROUND_Y           248
+#define FIXED_SHIFT        4                   // 1 pixel = 16 units
+#define GROUND_Y_FIXED     (GROUND_Y << FIXED_SHIFT)
+
+#define INITIAL_VELOCITY   (-64)               // -4.0 in fixed-point (higher jump)
+#define GRAVITY            1                   // 1/16th pixel per loop
+#define DELAY_US           5000
 
 int main(void) {
     int fd = open("/dev/mem", O_RDWR | O_SYNC);
@@ -59,8 +60,8 @@ int main(void) {
         }
 
         uint8_t y_axis = report[4];
-        bool want_jump   = (y_axis == 0x00 && y_fixed == GROUND_Y_FIXED);
-        bool want_duck   = (y_axis == 0xFF && y_fixed == GROUND_Y_FIXED);
+        bool want_jump = (y_axis == 0x00 && y_fixed == GROUND_Y_FIXED);
+        bool want_duck = (y_axis == 0xFF && y_fixed == GROUND_Y_FIXED);
         bool want_replay = (report[6] & 0x20);
 
         if (want_jump) v_fixed = INITIAL_VELOCITY;
@@ -73,9 +74,9 @@ int main(void) {
             v_fixed = 0;
         }
 
-        *dino_y_reg = (uint32_t)(y_fixed >> FIXED_SHIFT);
-        *jump_reg   = want_jump;
-        *duck_reg   = want_duck;
+        *dino_y_reg = y_fixed >> FIXED_SHIFT;
+        *jump_reg = want_jump;
+        *duck_reg = want_duck;
         *replay_reg = want_replay;
 
         usleep(DELAY_US);
