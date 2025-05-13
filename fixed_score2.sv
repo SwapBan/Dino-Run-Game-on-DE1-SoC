@@ -433,8 +433,8 @@ end
 always_ff @(posedge clk) begin
     a <= 8'd135; b <= 8'd206; c <= 8'd235;
 
-    if (!game_over) begin
-      if(vcount >= SCORE_Y && vcount < SCORE_Y+8)begin
+    if (!game_over && vcount >= SCORE_Y && vcount < SCORE_Y+8) begin
+     // if()begin
         rx  = hcount - SCORE_X;   // horizontal offset
     idx = rx[9:4];            // rx/16 → which digit slot?
     cx  = rx[3:0];            // rx%16 → column in slot
@@ -444,7 +444,7 @@ if (idx < N_DIGITS && cx < 8) begin
             a <= FG_R; b <= FG_G; c <= FG_B; // draw pixel
         end
     end
-      end
+     // end
      // end
   /*    // split into hundreds, tens, units
        digit_ten_thou = score / 10000;
