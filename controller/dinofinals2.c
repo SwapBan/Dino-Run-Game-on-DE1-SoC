@@ -8,24 +8,23 @@
 #include <libusb-1.0/libusb.h>
 #include "usbkeyboard.h"
 
-#define REPORT_LEN        8
+#define REPORT_LEN       8
 
-// Memory-mapped I/O offsets
-#define LW_BRIDGE_BASE    0xFF200000
-#define MAP_SIZE          0x1000
-#define DINO_Y_OFFSET     0x0004
-#define DUCKING_OFFSET    (13 * 4)
-#define JUMPING_OFFSET    (14 * 4)
-#define REPLAY_OFFSET     (19 * 4)
+// MMIO
+#define LW_BRIDGE_BASE   0xFF200000
+#define MAP_SIZE         0x1000
+#define DINO_Y_OFFSET    0x0004
+#define DUCKING_OFFSET   (13 * 4)
+#define JUMPING_OFFSET   (14 * 4)
+#define REPLAY_OFFSET    (19 * 4)
 
-// Physics constants
-#define GROUND_Y          248
-#define JUMP_VELOCITY     -8
-#define GRAVITY           1
-#define MAX_FALL_SPEED    2
+// Physics
+#define GROUND_Y         248
+#define GRAVITY          1
+#define JUMP_VELOCITY    -18
+#define FRAME_DELAY_US   30000  // ~30ms for slower motion
 
 int main(void) {
-    // MMIO setup
     int fd = open("/dev/mem", O_RDWR | O_SYNC);
     if (fd < 0) { perror("open(/dev/mem)"); return 1; }
 
@@ -37,7 +36,6 @@ int main(void) {
     volatile uint32_t *jump_reg   = (uint32_t *)(lw_base + JUMPING_OFFSET);
     volatile uint32_t *replay_reg = (uint32_t *)(lw_base + REPLAY_OFFSET);
 
-    // USB setup
     struct libusb_device_handle *pad;
     uint8_t ep;
     pad = openkeyboard(&ep);
@@ -70,16 +68,12 @@ int main(void) {
         *duck_reg = want_duck;
         *replay_reg = want_replay;
 
-        // Physics
-        if (v < MAX_FALL_SPEED) v += GRAVITY;
+        v += GRAVITY;
         y += v;
-
         if (y > GROUND_Y) { y = GROUND_Y; v = 0; }
 
         *dino_y_reg = (uint32_t)y;
-
-        // Slower movement (25 ms = ~40 fps)
-        usleep(25000);
+        usleep(FRAME_DELAY_US);
     }
 
     libusb_close(pad);
