@@ -92,7 +92,7 @@ logic [15:0] audio_sample;
 
     logic [7:0]  a, b, c;
 // Night Transition
-  logic [31:0] night_timer; // Timer to trigger night time
+    logic [39:0] night_timer; // Timer to trigger night time
     logic night_time; // Flag to indicate if it's nighttime
    
     logic [15:0] dino_sprite_output;
@@ -141,7 +141,7 @@ logic [15:0] audio_sample;
   // Power-up (Godzilla mode)
 logic godzilla_mode;
 
-logic [31:0] godzilla_timer;
+    logic [39:0] godzilla_timer;
   //lfsr logic for random offset (obstacle positions)
     logic [5:0] lfsr;
     always_ff @(posedge clk or posedge reset) begin
@@ -295,9 +295,9 @@ score <= (score == 17'd99999) ? 17'd0 : score + 1;                // count passe
        
           
          // Night Timer Logic 
-         if (night_timer < 32'd100_000_000_000) begin
+            if (night_timer < 40'd1_500_000_000) begin
             night_timer <= night_timer + 1;  // Increment the timer
-         end else if (night_timer == 32'd100_000_000_000) begin
+         end else if (night_timer == 40'd1_500_000_000) begin
             night_time <= ~night_time;
              night_timer <= 32'd0;
          end
