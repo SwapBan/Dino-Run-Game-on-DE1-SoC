@@ -10,7 +10,7 @@
 
 #define REPORT_LEN     8
 
-// Lightweight bridge base & register offsets
+
 #define LW_BRIDGE_BASE 0xFF200000
 #define MAP_SIZE       0x1000
 #define DINO_Y_OFFSET    0x0004     // reg 1: vertical position
