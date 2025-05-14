@@ -101,6 +101,11 @@ scp as7525@micro07.ee.columbia.edu:lab17/output_files/soc_system.rbf /mnt
 scp as7525@micro07.ee.columbia.edu:lab19/soc_system.dtb /mnt
 scp as7525@micro07.ee.columbia.edu:lab19/output_files/soc_system.rbf /mnt
 
+
+scp as7525@micro07.ee.columbia.edu:lab21/soc_system.dtb /mnt
+scp as7525@micro07.ee.columbia.edu:lab21/output_files/soc_system.rbf /mnt
+
+
 scp as7525@micro22.ee.columbia.edu:new/ps4_input.c /home
 scp as7525@micro07.ee.columbia.edu:new/test_hid.c /root/test_gamepad
 scp as7525@micro07.ee.columbia.edu:new/usbkeyboard.c /root/test_game
