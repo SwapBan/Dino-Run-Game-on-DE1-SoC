@@ -318,7 +318,7 @@ score <= (score == 17'd99999) ? 17'd0 : score + 1;                // count passe
                 sun_b <= 8'd0;
             end
      
-            if (collide(dino_x, dino_y, powerup_x, powerup_y, ducking ? 16 : 32, 32, 32, 32)) begin
+            if (collide(dino_x, dino_y, powerup_x, powerup_y, 32, 32, 32, 32)) begin
     godzilla_mode <= 1;
     godzilla_timer <= 0;
     powerup_x <= 2000; // move off screen
