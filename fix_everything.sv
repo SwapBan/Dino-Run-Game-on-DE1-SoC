@@ -209,30 +209,38 @@ logic [31:0] godzilla_timer;
         playing_audio    <= 0;
         playing_gameover <= 0;
            // === Audio playback ===
-        if (sample_clock >= FAST_SAMPLE_PERIOD) begin
-            sample_clock <= 0;
+            if (sample_clock >= FAST_SAMPLE_PERIOD) begin
+                sample_clock <= 0;
 
-            // Game over sound has priority
-            if (playing_gameover) begin
-                audio_sample <= gameover_data[audio_index];
-                if (audio_index < 16532)
-                    audio_index <= audio_index + 1;
-                else
-                    playing_gameover <= 0;
+                if (playing_gameover) begin
+                    L_DATA <= gameover_data[audio_index];
+                    R_DATA <= gameover_data[audio_index];
+                    L_VALID <= L_READY;
+                    R_VALID <= R_READY;
+
+                    if (audio_index < 16532)
+                        audio_index <= audio_index + 1;
+                    else
+                        playing_gameover <= 0;
+                end else if (playing_audio) begin
+                    L_DATA <= audio_data[audio_index];
+                    R_DATA <= audio_data[audio_index];
+                    L_VALID <= L_READY;
+                    R_VALID <= R_READY;
+
+                    if (audio_index < 17554)
+                        audio_index <= audio_index + 1;
+                    else
+                        audio_index <= 0;
+                end else begin
+                    L_VALID <= 0;
+                    R_VALID <= 0;
+                end
+            end else begin
+                sample_clock <= sample_clock + 1;
+                L_VALID <= 0;
+                R_VALID <= 0;
             end
- // Avalon-ST streaming
-        if (L_READY) begin
-            L_DATA  <= audio_sample;
-            L_VALID <= (sample_clock == 0);
-        end else begin
-            L_VALID <= 0;
-        end
-
-        if (R_READY) begin
-            R_DATA  <= audio_sample;
-            R_VALID <= (sample_clock == 0);
-        end else begin
-            R_VALID <= 0;
         end
 
         end else if (chipselect && write) begin
