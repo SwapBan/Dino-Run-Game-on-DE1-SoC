@@ -57,7 +57,7 @@ logic [15:0] audio_sample;
     logic [7:0]  font_rom [0:9][0:7];
      // Frame Animation
     logic [23:0] frame_counter;
-    logic [1:0]  sprite_state, sprite_state2;
+    logic [1:0]  sprite_state;
 
     logic [10:0] cloud_offset;
     logic [23:0] cloud_counter;
@@ -178,7 +178,7 @@ logic [31:0] godzilla_timer;
             motion_timer   <= 0;
             score          <= 0;
             frame_counter <= 0;
-             sprite_state2 <= 0;
+             
             cloud_counter <= 0;
             cloud_offset <= 0;
             sky_counter <= 0;
@@ -276,7 +276,7 @@ score <= (score == 17'd99999) ? 17'd0 : score + 1;                // count passe
 
             if (frame_counter == 24'd5_000_000) begin
                 sprite_state <= sprite_state + 1;
-                sprite_state2 <= sprite_state2 + 1;
+               
                 frame_counter <= 0;
             end else begin
                 frame_counter <= frame_counter + 1;
