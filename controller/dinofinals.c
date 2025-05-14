@@ -23,7 +23,7 @@
 #define GRAVITY         -2
 
 int main(void) {
-    // 1) MMIO setup
+    //MMIO setup
     int fd = open("/dev/mem", O_RDWR | O_SYNC);
     if (fd < 0) { perror("open(/dev/mem)"); return 1; }
     void *lw_base = mmap(NULL, MAP_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, LW_BRIDGE_BASE);
@@ -33,7 +33,7 @@ int main(void) {
     volatile uint32_t *jump_reg   = (uint32_t *)(lw_base + JUMPING_OFFSET);
     volatile uint32_t *replay_reg = (uint32_t *)(lw_base + REPLAY_OFFSET);
 
-    // 2) USB gamepad setup via helper
+    //  USB gamepad setup via helper
     struct libusb_device_handle *pad;
     uint8_t ep;
     pad = openkeyboard(&ep);
@@ -44,7 +44,7 @@ int main(void) {
         return 1;
     }
 
-    // 3) Game loop
+    //  Game loop
     int y = GROUND_Y, v = 0;
     unsigned char report[REPORT_LEN];
     int transferred, r;
