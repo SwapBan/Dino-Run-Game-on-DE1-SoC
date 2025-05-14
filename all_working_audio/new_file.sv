@@ -72,9 +72,7 @@ logic [15:0] audio_sample;
  // Sun color
     logic [7:0] sun_r, sun_g, sun_b; //  sun color variables
   
-    logic [10:0] sun_offset_x;
-    logic [10:0] sun_offset_y;
-    logic [23:0] sun_counter;
+  
 
     initial begin
         // simple 8×8 font for digits 0–9
