@@ -1,10 +1,10 @@
 module dino_cac_tog_rom (
     input  logic        clk,
-    input  logic [11:0] address,          // More than enough for 2048 entries
-    output logic [15:0] data              // Must be 16 bits for RGB565
+    input  logic [11:0] address,          
+    output logic [15:0] data             
 );
 
-    logic [15:0] memory [0:2047];         // Matches your 64×32 sprite
+    logic [15:0] memory [0:2047];         
 
     initial begin
         $readmemh("better_cactus_64x32.hex", memory);
