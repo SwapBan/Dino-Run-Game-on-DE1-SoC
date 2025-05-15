@@ -1,5 +1,4 @@
-// === Dino Run: Full Game Logic with Obstacles, Collision, Replay ===
-// Includes lava, small cactus, group cactus, and animated pterodactyl
+// Dino Run code
 module vga_ball(
     input  logic        clk,
     input  logic        reset,
@@ -23,7 +22,7 @@ output logic        R_VALID
 
 );
 
-    // VGA timing constants
+    
     localparam HACTIVE = 11'd1280;
     localparam SCORE_X = 120;
     localparam SCORE_Y = 10;
@@ -36,9 +35,9 @@ end
 
    
 
+//audio sample variables
 
-
-logic [15:0] audio_data[0:9659];  // Replace NNN with number of samples - 1
+logic [15:0] audio_data[0:9659];  
 logic [17:0] audio_index;
 logic [15:0] sample_clock;
 logic [15:0] audio_sample;
@@ -48,17 +47,17 @@ logic [15:0] audio_sample;
     // VGA TIMING
     logic [10:0] hcount;
     logic [9:0]  vcount;
-      // === Score (0–999) ===
-      // === Score as 5-digit BCD ===
+      
+      //Score as 5-digit BCD 
    localparam int N_DIGITS = 5;
    logic [3:0] bcd [N_DIGITS-1:0];  // [0]=units … [4]=ten-thousands
 
   logic [16:0]  score;
   logic [3:0]  digit_ten_thou, digit_thou, digit_h, digit_t, digit_u;
     logic [7:0]  font_rom [0:9][0:7];
-     // === Frame Animations ===
+     // Frame Animation
     logic [23:0] frame_counter;
-    logic [1:0]  sprite_state, sprite_state2;
+    logic [1:0]  sprite_state;
 
     logic [10:0] cloud_offset;
     logic [23:0] cloud_counter;
@@ -70,12 +69,10 @@ logic [15:0] audio_sample;
     logic [2:0] idx, ry;
     logic [3:0] cx;
 
- // === Sun Color ===
-    logic [7:0] sun_r, sun_g, sun_b; // Declared sun color variables
+ // Sun color
+    logic [7:0] sun_r, sun_g, sun_b; //  sun color variables
   
-    logic [10:0] sun_offset_x;
-    logic [10:0] sun_offset_y;
-    logic [23:0] sun_counter;
+  
 
     initial begin
         // simple 8×8 font for digits 0–9
@@ -94,10 +91,10 @@ logic [15:0] audio_sample;
 
 
     logic [7:0]  a, b, c;
-// === Timer for Night Transition ===
-  logic [31:0] night_timer; // Timer to trigger night time
+// Night Transition
+    logic [39:0] night_timer; // Timer to trigger night time
     logic night_time; // Flag to indicate if it's nighttime
-    // === Dino ===
+   
     logic [15:0] dino_sprite_output;
     logic [15:0] dino_new_output;
     logic [9:0]  dino_sprite_addr;
@@ -110,7 +107,7 @@ logic [15:0] audio_sample;
     logic [15:0] dino_left_output, dino_right_output;
 
 
-    // === Obstacles ===
+    // Obstacles
     logic [10:0] s_cac_x = 1200, s_cac_y = 248;
     logic [10:0] group_x = 1600, group_y = 248;
     logic [10:0] lava_x   = 1800, lava_y   = 248;
@@ -134,18 +131,18 @@ logic [15:0] audio_sample;
     logic [9:0]  replay_addr;
     logic [10:0] replay_x = 560, replay_y = 200;
 
-    // === Motion ===
+    // Motion 
     logic [23:0] motion_timer;
     logic [10:0] obstacle_speed = 1;
     logic [4:0]  passed_count;
     logic        game_over;
    // logic [1:0]  sprite_state;
 
-    // === Power-up / Godzilla mode ===
+  // Power-up (Godzilla mode)
 logic godzilla_mode;
-//logic [23:0] godzilla_timer; // optional timer
-logic [31:0] godzilla_timer;
-    // === Random seed (6-bit LFSR) ===
+
+    logic [39:0] godzilla_timer;
+  //lfsr logic for random offset (obstacle positions)
     logic [5:0] lfsr;
     always_ff @(posedge clk or posedge reset) begin
         if (reset) begin
@@ -181,7 +178,7 @@ logic [31:0] godzilla_timer;
             motion_timer   <= 0;
             score          <= 0;
             frame_counter <= 0;
-             sprite_state2 <= 0;
+             
             cloud_counter <= 0;
             cloud_offset <= 0;
             sky_counter <= 0;
@@ -200,10 +197,8 @@ logic [31:0] godzilla_timer;
             
             
 
-          // … existing reset of positions, flags, etc. …
-        //score <= 10'd0;
             score <= 17'd0;
-            // === Power-up reset ===
+            // Power-up reset
             powerup_x      <= 800;
             powerup_y      <= 248;
             godzilla_mode  <= 0;
@@ -213,21 +208,10 @@ logic [31:0] godzilla_timer;
             case (address)
                 9'd0: dino_x <= writedata[9:0];
                 9'd1: dino_y <= writedata[9:0];
-               // 9'd2: jump_x <= writedata[9:0];
-                //9'd3: jump_y <= writedata[9:0];
-               // 9'd4: duck_x <= writedata[9:0];
-              //  9'd5: duck_y <= writedata[9:0];
-               // 9'd6: s_cac_x <= writedata[9:0];
-              //  9'd7: s_cac_y <= writedata[9:0];
-               // 9'd8: godzilla_x <= writedata[9:0];
-               // 9'd9: godzilla_y <= writedata[9:0];
-              //  9'd10: score   <= writedata[3:0];
-              //  9'd11: score_x <= writedata[7:0];
-               // 9'd12: score_y <= writedata[7:0];
+           
                 9'd13: ducking <= writedata[0];
                 9'd14: jumping <= writedata[0];
-               // 9'd15: cg_x <= writedata[9:0];   
-               // 9'd16: cg_y <= writedata[9:0];
+               
                 9'd17: lava_x <= writedata[9:0];   
                 9'd18: lava_y <= writedata[9:0];
                 9'd19: replay_button <= writedata[0]; // trigger replay
@@ -249,7 +233,7 @@ logic [31:0] godzilla_timer;
                 ptr_x   <= (ptr_x   <= obstacle_speed)
                            ? (HACTIVE + {{lfsr[5:2]},6'd0})
                            : ptr_x   - obstacle_speed;
-                // === Power-up movement ===
+                // Power-up movement
 powerup_x <= (powerup_x <= obstacle_speed)
              ? (HACTIVE + {{lfsr[4:0]}, 5'd0})
              : powerup_x - obstacle_speed;
@@ -292,7 +276,7 @@ score <= (score == 17'd99999) ? 17'd0 : score + 1;                // count passe
 
             if (frame_counter == 24'd5_000_000) begin
                 sprite_state <= sprite_state + 1;
-                sprite_state2 <= sprite_state2 + 1;
+               
                 frame_counter <= 0;
             end else begin
                 frame_counter <= frame_counter + 1;
@@ -308,23 +292,12 @@ score <= (score == 17'd99999) ? 17'd0 : score + 1;                // count passe
             end
 
 
-        /* // Cloud drifting
-            if (night_timer == 24'd550_000_000) begin
-                night_timer <= 0;
-                //cloud_offset <= cloud_offset + 1;
-                
-            end else begin
-                night_timer <= night_timer + 1;
-            end*/
-
-
-            
-            // Change to night after 5 seconds (1250 million cycles)
+       
           
-         // Night Timer Logic (Alternating between day and night)
-         if (night_timer < 32'd100_000_000_000) begin
+         // Night Timer Logic 
+            if (night_timer < 40'd1_500_000_000) begin
             night_timer <= night_timer + 1;  // Increment the timer
-         end else if (night_timer == 32'd100_000_000_000) begin
+         end else if (night_timer == 40'd1_500_000_000) begin
             night_time <= ~night_time;
              night_timer <= 32'd0;
          end
@@ -332,8 +305,8 @@ score <= (score == 17'd99999) ? 17'd0 : score + 1;                // count passe
                 sky_r <= 8'd10;  // Dark blue night sky
                 sky_g <= 8'd10;
                 sky_b <= 8'd40;
-             // Change Sun to white at night
-            sun_r <= 8'd255; // White sun
+             
+            sun_r <= 8'd255; // White moon
             sun_g <= 8'd255;
             sun_b <= 8'd255;
             end else begin
@@ -344,18 +317,13 @@ score <= (score == 17'd99999) ? 17'd0 : score + 1;                // count passe
                 sun_g <= 8'd255;
                 sun_b <= 8'd0;
             end
-        /*    if (collide(dino_x, dino_y, s_cac_x,  s_cac_y,  32,32,32,32) ||
-    collide(dino_x, dino_y, group_x,  group_y, 64,32,32,32) ||
-    collide(dino_x, dino_y, lava_x,   lava_y,   32,32,32,32) ||
-    collide(dino_x, dino_y, ptr_x, ptr_y, ducking ? 16 : 32, 32, 32, 32)) begin
-    game_over <= 1;
-end*/
-            if (collide(dino_x, dino_y, powerup_x, powerup_y, ducking ? 16 : 32, 32, 32, 32)) begin
+     
+            if (collide(dino_x, dino_y, powerup_x, powerup_y, 32, 32, 32, 32)) begin
     godzilla_mode <= 1;
     godzilla_timer <= 0;
     powerup_x <= 2000; // move off screen
 end
-            // === Godzilla destroys obstacles on collision ===
+            //Godzilla destroys 
 if (godzilla_mode) begin
     if (collide(dino_x, dino_y, s_cac_x, s_cac_y, 32, 32, 32, 32))
         s_cac_x <= 2000;//HACTIVE + 11'd300;
@@ -371,7 +339,7 @@ end
 
 
 
-// === Optional Godzilla mode timeout ===
+//Godzilla timeout
 if (godzilla_mode)
     godzilla_timer <= godzilla_timer + 1;
 
@@ -417,14 +385,14 @@ end
         .VGA_SYNC_n(VGA_SYNC_n)
     );
 
-    // SPRITE ROMS (unchanged) …
+    // SPRITE ROMS
     dino_s_cac_rom       s_cac_rom(.clk(clk), .address(scac_sprite_addr), .data(scac_sprite_output));
     dino_cac_tog_rom     cacti_group_rom(.clk(clk), .address(group_addr),      .data(group_output));
     dino_lava_rom        lava_rom(.clk(clk),   .address(lava_sprite_addr),  .data(lava_output));
     dino_pterodactyl_down_rom  ptero_up(.clk(clk), .address(ptr_sprite_addr), .data(ptr_up_output));
     dino_pterodactyl_up_rom    ptero_down(.clk(clk), .address(ptr_sprite_addr), .data(ptr_down_output));
 
-    // DINO ROM (unchanged) …
+    
    
 
    always_comb begin
@@ -453,7 +421,7 @@ end
     dino_right_leg_up_rom dino_rom2(.clk(clk), .address(dino_sprite_addr), .data(dino_right_output));
 
 
-    // REPLAY ROM (unchanged) …
+   
     dino_replay_rom replay_rom(.clk(clk), .address(replay_addr), .data(replay_output));
 
       dino_powerup_rom powerup_rom(.clk(clk), .address(powerup_sprite_addr), .data(powerup_sprite_output));
@@ -462,7 +430,7 @@ end
 
 
 
-    // PTR animation (unchanged) …
+    // Pterodactyl animation
     always_comb begin
         case (sprite_state)
             2'd0: ptr_sprite_output = ptr_up_output;
@@ -473,7 +441,7 @@ end
 
 
 
-    // DRAWING
+   
 always_ff @(posedge clk) begin
     a <= 8'd135; b <= 8'd206; c <= 8'd235;
 
@@ -489,7 +457,6 @@ end else begin
     sample_clock <= sample_clock + 1;
 end
 
-// Avalon-ST interface
 if (L_READY) begin
     L_DATA  <= audio_sample;
     L_VALID <= (sample_clock == 0);
@@ -511,91 +478,31 @@ end
     if (!game_over ) begin
 //begin
      
-     // end
-     // end
-  /*    // split into hundreds, tens, units
-       digit_ten_thou = score / 10000;
-digit_thou     = (score / 1000) % 10;
-digit_h        = (score / 100) % 10;
-digit_t        = (score / 10)  % 10;
-digit_u        = score % 10;
-
-// --- ten-thousands digit at (SCORE_X, SCORE_Y) ---
-if (hcount >= SCORE_X && hcount < SCORE_X + 8 &&
-    vcount >= SCORE_Y && vcount < SCORE_Y + 8 &&
-    font_rom[digit_ten_thou][vcount - SCORE_Y][7 - (hcount - SCORE_X)]) begin
-    a <= 8'h00; b <= 8'h00; c <= 8'h00;
-end
-
-// --- thousands digit at (SCORE_X+16, SCORE_Y) ---
-if (hcount >= SCORE_X + 16 && hcount < SCORE_X + 24 &&
-    vcount >= SCORE_Y && vcount < SCORE_Y + 8 &&
-    font_rom[digit_thou][vcount - SCORE_Y][7 - (hcount - (SCORE_X + 16))]) begin
-    a <= 8'h00; b <= 8'h00; c <= 8'h00;
-end
-
-// --- hundreds digit at (SCORE_X+32, SCORE_Y) ---
-        if (hcount >= SCORE_X + 32 && hcount < SCORE_X + 40 &&
-    vcount >= SCORE_Y && vcount < SCORE_Y + 8 &&
-    font_rom[digit_h][vcount - SCORE_Y][7 - (hcount - (SCORE_X + 32))]) begin
-    a <= 8'h00; b <= 8'h00; c <= 8'h00;
-end
-
-// --- tens digit at (SCORE_X+48, SCORE_Y) ---
-if (hcount >= SCORE_X + 48 && hcount < SCORE_X + 56 &&
-    vcount >= SCORE_Y && vcount < SCORE_Y + 8 &&
-    font_rom[digit_t][vcount - SCORE_Y][7 - (hcount - (SCORE_X + 48))]) begin
-    a <= 8'h00; b <= 8'h00; c <= 8'h00;
-end
-/ --- units digit at (SCORE_X+32, SCORE_Y) ---
-if (hcount >= SCORE_X + 32 && hcount < SCORE_X + 32 &&
-    vcount >= SCORE_Y      && vcount < SCORE_Y +  8 &&
-    font_rom[score%10]     [vcount - SCORE_Y][7 - (hcount - (SCORE_X+32))])
-begin
-  a <= 8'h00; b <= 8'h00; c <= 8'h00;
-end*/
-
-        /*// hundreds digit at (10,10)
-        if (hcount >= 10 && hcount < 18 && vcount >= 10 && vcount < 18 &&
-            font_rom[digit_h][vcount-10][7 - (hcount-10)]) begin
-            a <= 8'd0; b <= 8'd0; c <= 8'd0;
-        end
-
-        // tens digit at (20,10)
-        if (hcount >= 20 && hcount < 28 && vcount >= 10 && vcount < 18 &&
-            font_rom[digit_t][vcount-10][7 - (hcount-20)]) begin
-            a <= 8'd0; b <= 8'd0; c <= 8'd0;
-        end
-
-        // units digit at (30,10)
-        if (hcount >= 30 && hcount < 38 && vcount >= 10 && vcount < 18 &&
-            font_rom[digit_u][vcount-10][7 - (hcount-30)]) begin
-            a <= 8'd0; b <= 8'd0; c <= 8'd0;
-        end*/
+   
 
     if (vcount < 280) begin
         a <= sky_r;
         b <= sky_g;
         c <= sky_b;
     end else if (vcount > 300) begin
-        a <= 8'd100; // Darker brown ground stripe
+        a <= 8'd100; 
         b <= 8'd40;
         c <= 8'd10;
     end else begin
-        a <= 8'd139; // Light brown ground
+        a <= 8'd139; 
         b <= 8'd69;
         c <= 8'd19;
         
     end
 
-    // === Ground Line ===
+    //Ground Line 
     if (vcount == 280) begin
         a <= 8'd0;
         b <= 8'd0;
         c <= 8'd0;
     end
 
-    // === Sun with Soft Glow and Movement ===
+    
     if ((hcount-(1150-sun_offset_x))*(hcount-(1150-sun_offset_x)) +
         (vcount-(80+sun_offset_y))*(vcount-(80+sun_offset_y)) < 1200 &&
         (hcount-(1150-sun_offset_x))*(hcount-(1150-sun_offset_x)) +
@@ -611,7 +518,7 @@ end*/
         c <= sun_b;
     end
 
-    // === Clouds (with wraparound drift) ===
+    //
     // --- Cloud 1 ---
     if (((hcount-(235+cloud_offset))*(hcount-(235+cloud_offset)) + (vcount-70)*(vcount-70) < 100) ||
         ((hcount-(245+cloud_offset))*(hcount-(245+cloud_offset)) + (vcount-65)*(vcount-65) < 100) ||
@@ -667,7 +574,7 @@ end*/
         c <= 8'd245;
     end
 
-    // === Tiny Birds ===
+    // Tiny Birds
     if (((hcount > 300 && hcount < 305) && (vcount == 50)) ||
         ((hcount > 305 && hcount < 310) && (vcount == 51)) ||
         ((hcount > 310 && hcount < 315) && (vcount == 50)) ||
@@ -678,7 +585,7 @@ end*/
         b <= 8'd0;
         c <= 8'd0;
     end
-         // === Ground Rocks ===
+         //  Ground Rocks 
     if (vcount > 280 && vcount < 480) begin
         if ((hcount % 120 == 0 && vcount % 50 < 10) ||
             (hcount % 200 == 15 && vcount % 60 < 8)) begin
@@ -689,7 +596,7 @@ end*/
     end
 
         
-        // === Power-up sprite drawing ===
+        // Power-up sprite drawing
 if (hcount >= powerup_x && hcount < powerup_x + 32 &&
     vcount >= powerup_y && vcount < powerup_y + 32) begin
     powerup_sprite_addr <= (hcount - powerup_x) + ((vcount - powerup_y) * 32);
@@ -699,14 +606,7 @@ if (hcount >= powerup_x && hcount < powerup_x + 32 &&
         c <= {powerup_sprite_output[4:0],   3'b000};
     end
 end
-    /*    if (hcount >= dino_x && hcount < dino_x + 32 && vcount >= dino_y && vcount < dino_y + 32) begin
-            dino_sprite_addr <= (hcount - dino_x) + ((vcount - dino_y) * 32);
-            if (is_visible(dino_sprite_output)) begin
-                a <= {dino_sprite_output[15:11], 3'b000};
-                b <= {dino_sprite_output[10:5],  2'b00};
-                c <= {dino_sprite_output[4:0],   3'b000};
-            end
-        end*/
+    
         if (hcount >= dino_x && hcount < dino_x + 32 && vcount >= dino_y && vcount < dino_y + 32) begin
     if (godzilla_mode)
         godzilla_sprite_addr <= (hcount - dino_x) + ((vcount - dino_y) * 32);
@@ -752,24 +652,7 @@ end
                 c <= {ptr_sprite_output[4:0],   3'b000};
             end
         end
-       // === Draw Score Digits (fixed position, correct order) ===
-/*if (hcount >= SCORE_X && hcount < (SCORE_X + N_DIGITS * 16) &&
-    vcount >= SCORE_Y && vcount < SCORE_Y + 8) begin
-
-    rx  = hcount - SCORE_X;
-    idx = rx / 16;           // Digit index: 0 to 4
-    cx  = rx % 8;            // Pixel within digit (0 to 7)
-    ry  = vcount - SCORE_Y;
-
-    // Reverse order to make digits appear left-to-right (most to least significant)
-    if (idx < N_DIGITS && cx < 8) begin
-        if (font_rom[bcd[N_DIGITS - 1 - idx]][ry][7 - cx]) begin
-            a <= FG_R;
-            b <= FG_G;
-            c <= FG_B;
-        end
-    end
-end*/
+    
       if (vcount >= SCORE_Y && vcount < SCORE_Y + 8) begin
     if (hcount >= SCORE_X && hcount < (SCORE_X + N_DIGITS * 8)) begin
         rx  = hcount - SCORE_X;
