@@ -1,4 +1,10 @@
+**DINO RUN**
+
+
+
 Overview:
+
+
 Dino Run on the DE1-SoC is similar to the Google T-Rex runner but comes with our own tweaks. Our project uses an external Controller (Dragonrise Gamepad) for gaming and also has an audio background. 
 Hardware:.
 Sprites: Renders Sprites such as dinosaur, small cactus, cacti together, lava, pterodactyl, power-up, and replay using ROMs.
